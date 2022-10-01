@@ -1,4 +1,5 @@
-package com.example.appsfactory.data.model
+package com.example.appsfactory.data.model.top_albums
+
 
 import com.google.gson.annotations.SerializedName
 import androidx.annotation.Keep

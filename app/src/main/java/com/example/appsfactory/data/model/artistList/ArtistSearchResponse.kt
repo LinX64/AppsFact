@@ -1,4 +1,4 @@
-package com.example.appsfactory.data.model
+package com.example.appsfactory.data.model.artistList
 
 import com.google.gson.annotations.SerializedName
 import androidx.annotation.Keep
