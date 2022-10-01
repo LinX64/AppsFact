@@ -14,4 +14,11 @@ class MainRepository @Inject constructor(private val apiService: ApiService) {
         val response = apiService.artistSearch(artist).results.artistmatches
         emit(NetworkResult.Success(response))
     }.catch { e -> emit(NetworkResult.Error(e.message.toString())) }
+
+    suspend fun getTopAlbumsBasedOnArtist(artist: String) = flow {
+        emit(NetworkResult.Loading(true))
+
+        val response = apiService.getArtistTopAlbums(artist).topalbums.album
+        emit(NetworkResult.Success(response))
+    }.catch { e -> emit(NetworkResult.Error(e.message.toString())) }
 }
