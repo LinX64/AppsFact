@@ -1,4 +1,4 @@
-package com.example.appsfactory.ui.view.search
+package com.example.appsfactory.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
@@ -16,6 +16,11 @@ class SearchViewModel @Inject constructor(
 
     fun getArtist(artistName: String) = liveData(ioDispatcher) {
         val response = mainRepository.getArtist(artistName)
+        response.collect { emit(it) }
+    }
+
+    fun getTopAlbumsBasedOnArtist(artistName: String) = liveData(ioDispatcher) {
+        val response = mainRepository.getTopAlbumsBasedOnArtist(artistName)
         response.collect { emit(it) }
     }
 }
