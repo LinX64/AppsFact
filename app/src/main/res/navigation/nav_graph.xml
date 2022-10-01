@@ -10,6 +10,7 @@
         android:name="com.example.appsfactory.ui.view.main.MainFragment"
         android:label="MainFragment"
         tools:layout="@layout/fragment_main" />
+
     <fragment
         android:id="@+id/searchArtistFragment"
         android:name="com.example.appsfactory.ui.view.search.SearchArtistFragment"
@@ -19,9 +20,16 @@
             android:id="@+id/action_searchArtistFragment_to_topAlbumsFragment"
             app:destination="@id/topAlbumsFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/topAlbumsFragment"
         android:name="com.example.appsfactory.ui.view.top_albums.TopAlbumsFragment"
         android:label="TopAlbumsFragment"
-        tools:layout="@layout/fragment_top_albums" />
+        tools:layout="@layout/fragment_top_albums">
+        <argument
+            android:name="artistName"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+
 </navigation>
