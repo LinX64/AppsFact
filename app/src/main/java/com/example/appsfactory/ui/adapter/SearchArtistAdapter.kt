@@ -3,11 +3,11 @@ package com.example.appsfactory.ui.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.appsfactory.data.model.Artist
+import com.example.appsfactory.data.model.artistList.Artist
 import com.example.appsfactory.databinding.ArtistListItemBinding
 
 class SearchArtistAdapter(
-    private val onItemClicked: (Artist, String) -> Unit
+    private val onItemClicked: (Artist) -> Unit
 ) : RecyclerView.Adapter<SearchArtistAdapter.MyViewHolder>() {
     private var artists = ArrayList<Artist>()
 
@@ -20,9 +20,7 @@ class SearchArtistAdapter(
             binding.artist = artist
             binding.executePendingBindings()
 
-            binding.root.setOnClickListener {
-                onItemClicked(bindingAdapterPosition)
-            }
+            binding.root.setOnClickListener { onItemClicked(bindingAdapterPosition) }
         }
     }
 
@@ -33,7 +31,7 @@ class SearchArtistAdapter(
         val itemBinding =
             ArtistListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(itemBinding) {
-            onItemClicked(artists[it], artists[it].url)
+            onItemClicked(artists[it])
         }
     }
 
