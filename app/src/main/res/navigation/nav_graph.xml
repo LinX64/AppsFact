@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.example.appsfactory.ui.view.main.MainFragment"
+        android:label="MainFragment"
+        tools:layout="@layout/fragment_main" />
+    <fragment
+        android:id="@+id/searchArtistFragment"
+        android:name="com.example.appsfactory.ui.view.search.SearchArtistFragment"
+        android:label="SearchArtistFragment"
+        tools:layout="@layout/fragment_artist_search">
+        <action
+            android:id="@+id/action_searchArtistFragment_to_topAlbumsFragment"
+            app:destination="@id/topAlbumsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/topAlbumsFragment"
+        android:name="com.example.appsfactory.ui.view.top_albums.TopAlbumsFragment"
+        android:label="TopAlbumsFragment"
+        tools:layout="@layout/fragment_top_albums" />
+</navigation>
