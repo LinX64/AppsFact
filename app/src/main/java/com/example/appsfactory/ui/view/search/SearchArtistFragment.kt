@@ -1,35 +1,28 @@
 package com.example.appsfactory.ui.view.search
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.example.appsfactory.data.model.Artistmatches
+import androidx.navigation.fragment.findNavController
+import com.example.appsfactory.data.model.artistList.Artist
+import com.example.appsfactory.data.model.artistList.Artistmatches
 import com.example.appsfactory.databinding.FragmentArtistSearchBinding
 import com.example.appsfactory.ui.adapter.SearchArtistAdapter
-import com.example.appsfactory.util.*
+import com.example.appsfactory.ui.base.BaseFragment
+import com.example.appsfactory.ui.viewmodel.SearchViewModel
+import com.example.appsfactory.util.NetworkResult
+import com.example.appsfactory.util.hideSoftInput
+import com.example.appsfactory.util.inVisible
+import com.example.appsfactory.util.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SearchArtistFragment : Fragment() {
+class SearchArtistFragment :
+    BaseFragment<FragmentArtistSearchBinding>(FragmentArtistSearchBinding::inflate) {
 
-    private var _binding: FragmentArtistSearchBinding? = null
-    private val binding get() = _binding!!
-
-    private val searchArtistViewModel by activityViewModels<SearchViewModel>()
-    private val searchArtistAdapter by lazy { SearchArtistAdapter() }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentArtistSearchBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    private val searchViewModel by activityViewModels<SearchViewModel>()
+    private lateinit var searchArtistAdapter: SearchArtistAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -39,8 +32,18 @@ class SearchArtistFragment : Fragment() {
 
     private fun setupUI() {
         setupSearch()
+        setupRecyclerView()
+    }
 
+    private fun setupRecyclerView() {
+        searchArtistAdapter = SearchArtistAdapter(this::onArtistClicked)
         binding.recyclerView.adapter = searchArtistAdapter
+    }
+
+    private fun onArtistClicked(artist: Artist) {
+        val action =
+            SearchArtistFragmentDirections.actionSearchArtistFragmentToTopAlbumsFragment(artist.name)
+        findNavController().navigate(action)
     }
 
     private fun setupSearch() {
@@ -55,7 +58,7 @@ class SearchArtistFragment : Fragment() {
     }
 
     private fun setupObserver(artistName: String) {
-        searchArtistViewModel.getArtist(artistName).observe(viewLifecycleOwner) {
+        searchViewModel.getArtist(artistName).observe(viewLifecycleOwner) {
             when (it) {
                 is NetworkResult.Success -> {
                     binding.progressBar.inVisible()
