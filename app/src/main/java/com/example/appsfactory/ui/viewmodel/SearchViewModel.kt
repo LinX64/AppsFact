@@ -18,9 +18,4 @@ class SearchViewModel @Inject constructor(
         val response = mainRepository.getArtist(artistName)
         response.collect { emit(it) }
     }
-
-    fun getTopAlbumsBasedOnArtist(artistName: String) = liveData(ioDispatcher) {
-        val response = mainRepository.getTopAlbumsBasedOnArtist(artistName)
-        response.collect { emit(it) }
-    }
 }

@@ -11,7 +11,7 @@ import com.example.appsfactory.databinding.FragmentArtistSearchBinding
 import com.example.appsfactory.ui.adapter.SearchArtistAdapter
 import com.example.appsfactory.ui.base.BaseFragment
 import com.example.appsfactory.ui.viewmodel.SearchViewModel
-import com.example.appsfactory.util.NetworkResult
+import com.example.appsfactory.util.Resource
 import com.example.appsfactory.util.hideSoftInput
 import com.example.appsfactory.util.inVisible
 import com.example.appsfactory.util.visible
@@ -60,15 +60,15 @@ class SearchArtistFragment :
     private fun setupObserver(artistName: String) {
         searchViewModel.getArtist(artistName).observe(viewLifecycleOwner) {
             when (it) {
-                is NetworkResult.Success -> {
+                is Resource.Success -> {
                     binding.progressBar.inVisible()
                     setArtist(it.data)
                 }
-                is NetworkResult.Error -> {
+                is Resource.Error -> {
                     Toast.makeText(requireContext(), it.error, Toast.LENGTH_SHORT).show()
                     binding.progressBar.inVisible()
                 }
-                is NetworkResult.Loading -> binding.progressBar.visible()
+                is Resource.Loading -> binding.progressBar.visible()
             }
         }
     }
