@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import com.example.appsfactory.data.local.dao.AlbumsDao
 import com.example.appsfactory.data.local.entity.LocalAlbum
 
-@Database(version = 1, entities = [LocalAlbum::class])
+@Database(version = 1, entities = [LocalAlbum::class], exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun albumDao(): AlbumsDao

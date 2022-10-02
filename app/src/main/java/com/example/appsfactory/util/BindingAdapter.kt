@@ -10,6 +10,7 @@ object BindingAdapter {
     fun ImageView.loadImage(image: String) {
         Glide.with(this.context)
             .load(image)
+            .placeholder(android.R.drawable.ic_menu_gallery)
             .into(this)
     }
 }
