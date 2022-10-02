@@ -5,7 +5,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.example.appsfactory.data.local.entity.LocalAlbum
 import com.example.appsfactory.data.model.top_albums.Album
 import com.example.appsfactory.databinding.FragmentTopAlbumsBinding
 import com.example.appsfactory.ui.adapter.TopAlbumAdapter
@@ -48,13 +47,17 @@ class TopAlbumsFragment :
         val artist = album.artist.name
         val image = album.image[3].text
 
-        val action = TopAlbumsFragmentDirections.actionTopAlbumsFragmentToDetailFragment(name, artist, image, isBookmarked)
+        val action = TopAlbumsFragmentDirections.actionTopAlbumsFragmentToDetailFragment(
+            name,
+            artist,
+            image,
+            isBookmarked
+        )
         findNavController().navigate(action)
     }
 
     private fun getArtistNameAndObserve() {
-        //arguments?.getString("artistName")
-        val getArtistName = "Justin Bieber"
+        val getArtistName = arguments?.getString("name")
         if (getArtistName != null) observeTopAlbumsBasedOnArtistName(getArtistName)
     }
 

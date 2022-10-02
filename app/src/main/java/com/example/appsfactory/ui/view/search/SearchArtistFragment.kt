@@ -62,7 +62,7 @@ class SearchArtistFragment :
             when (it) {
                 is Resource.Success -> {
                     binding.progressBar.inVisible()
-                    setArtist(it.data)
+                    submitList(it.data)
                 }
                 is Resource.Error -> {
                     Toast.makeText(requireContext(), it.error, Toast.LENGTH_SHORT).show()
@@ -73,7 +73,7 @@ class SearchArtistFragment :
         }
     }
 
-    private fun setArtist(artists: Artistmatches) {
+    private fun submitList(artists: Artistmatches) {
         searchArtistAdapter.setData(artists.artist)
     }
 }
