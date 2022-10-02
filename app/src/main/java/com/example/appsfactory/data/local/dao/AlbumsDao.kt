@@ -14,5 +14,5 @@ interface AlbumsDao {
     suspend fun insertAlbum(albums: LocalAlbum)
 
     @Delete
-    suspend fun deleteAlbum(albums: LocalAlbum)
+    suspend fun deleteAlbum(album: LocalAlbum)
 }

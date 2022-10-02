@@ -34,12 +34,17 @@ class TopAlbumsFragment :
     }
 
     private fun setupRecyclerView() {
-        topAlbumsAdapter = TopAlbumAdapter(this::onAlbumClicked, this::onBookmarkClicked)
+        topAlbumsAdapter = TopAlbumAdapter(this::onAlbumClicked, this::onBookmarkClicked, this::onBookmarkRemoveClicked)
         binding.recyclerView.adapter = topAlbumsAdapter
     }
 
     private fun onBookmarkClicked(album: Album) {
         topAlbumsViewModel.onBookmarkClicked(album)
+        Toast.makeText(requireContext(), "Bookmarked!", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun onBookmarkRemoveClicked(album: Album) {
+        topAlbumsViewModel.onBookmarkRemoveClicked(album)
     }
 
     private fun onAlbumClicked(album: Album, isBookmarked: Boolean) {

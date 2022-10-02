@@ -11,7 +11,6 @@
     </data>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/albumCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -19,43 +18,55 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/tvTitle"
-                style="@style/TextAppearance.AppCompat.Title"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/albumInfoCard"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:lines="2"
-                android:text="@{album.name}"
-                app:layout_constraintEnd_toStartOf="@+id/bookmarkImageBtn"
-                app:layout_constraintStart_toEndOf="@+id/artistImage"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Justin Bieber top 50 album" />
-
-            <ImageView
-                android:id="@+id/artistImage"
-                loadImage="@{album.image[3].text}"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/bookmarkImageBtn"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:src="@tools:sample/avatars" />
+                app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/artistName"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:text="@{album.artist.name}"
-                app:layout_constraintStart_toEndOf="@+id/artistImage"
-                app:layout_constraintTop_toBottomOf="@+id/tvTitle"
-                tools:text="Justin Bieber" />
+                <TextView
+                    android:id="@+id/tvTitle"
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:lines="2"
+                    android:text="@{album.name}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/artistImage"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Justin Bieber top 50 album" />
+
+                <ImageView
+                    android:id="@+id/artistImage"
+                    loadImage="@{album.image[3].text}"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@tools:sample/avatars" />
+
+                <TextView
+                    android:id="@+id/artistName"
+                    style="@style/TextAppearance.AppCompat.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@{album.artist.name}"
+                    app:layout_constraintStart_toEndOf="@+id/artistImage"
+                    app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+                    tools:text="Justin Bieber" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageButton
                 android:id="@+id/bookmarkImageBtn"
@@ -69,7 +80,19 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_baseline_bookmark_border_24" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageButton
+                android:id="@+id/bookmarkRemoveBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@null"
+                android:minHeight="0dp"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_baseline_bookmark_24" />
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </layout>

@@ -6,10 +6,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.appsfactory.R
 import com.example.appsfactory.data.model.top_albums.Album
 import com.example.appsfactory.databinding.TopAlbumsListItemBinding
+import com.example.appsfactory.util.inVisible
+import com.example.appsfactory.util.visible
 
 class TopAlbumAdapter(
     private val onItemClicked: (Album, Boolean) -> Unit,
-    private val onBookmarkClicked: (Album) -> Unit
+    private val onBookmarkClicked: (Album) -> Unit,
+    private val onBookmarkRemoveClicked: (Album) -> Unit
 ) : RecyclerView.Adapter<TopAlbumAdapter.MyViewHolder>() {
     private var albumsList = ArrayList<Album>()
     private var isSelected = false
@@ -23,18 +26,32 @@ class TopAlbumAdapter(
             binding.album = album
             binding.executePendingBindings()
 
-            binding.root.setOnClickListener { onItemClicked(bindingAdapterPosition) }
+            binding.albumInfoCard.setOnClickListener { onItemClicked(bindingAdapterPosition) }
             binding.bookmarkImageBtn.setOnClickListener {
                 onBookmarkClicked(album)
                 onBookmark()
+            }
+            binding.bookmarkRemoveBtn.setOnClickListener {
+                onBookmarkRemoveClicked(album)
+                onBookmarkRemove()
             }
         }
 
         private fun onBookmark() {
             isSelected = !isSelected
 
-            if (isSelected) binding.bookmarkImageBtn.setImageResource(R.drawable.ic_baseline_bookmark_24) else
-                binding.bookmarkImageBtn.setImageResource(R.drawable.ic_baseline_bookmark_border_24)
+            if (isSelected) {
+                binding.bookmarkImageBtn.inVisible()
+                binding.bookmarkRemoveBtn.visible()
+            } else {
+                binding.bookmarkImageBtn.visible()
+                binding.bookmarkRemoveBtn.inVisible()
+            }
+        }
+
+        private fun onBookmarkRemove() {
+            binding.bookmarkRemoveBtn.inVisible()
+            binding.bookmarkImageBtn.visible()
         }
     }
 
@@ -44,10 +61,7 @@ class TopAlbumAdapter(
     ): MyViewHolder {
         val itemBinding =
             TopAlbumsListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MyViewHolder(itemBinding) {
-            onItemClicked(albumsList[it], isSelected)
-            onBookmarkClicked(albumsList[it])
-        }
+        return MyViewHolder(itemBinding) { onItemClicked(albumsList[it], isSelected) }
     }
 
     override fun getItemCount() = albumsList.size
