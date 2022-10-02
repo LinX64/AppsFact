@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:itemCount="10"
-        tools:listitem="@layout/artist_list_item" />
+        tools:listitem="@layout/top_albums_list_item" />
 
     <ProgressBar
         android:id="@+id/progressBar"

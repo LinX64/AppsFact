@@ -1,4 +1,4 @@
-package com.example.appsfactory.di
+package com.example.appsfactory.di.modules
 
 import androidx.viewbinding.BuildConfig
 import com.example.appsfactory.data.remote.api.ApiService
@@ -46,4 +46,5 @@ object AppModule {
     @Provides
     @Singleton
     fun provideApiService(retrofit: Retrofit): ApiService = retrofit.create(ApiService::class.java)
+
 }
