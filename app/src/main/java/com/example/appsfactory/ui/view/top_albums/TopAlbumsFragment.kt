@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.example.appsfactory.data.local.entity.LocalAlbum
 import com.example.appsfactory.data.model.top_albums.Album
 import com.example.appsfactory.databinding.FragmentTopAlbumsBinding
@@ -39,19 +40,16 @@ class TopAlbumsFragment :
     }
 
     private fun onBookmarkClicked(album: Album) {
-        val mAlbum = LocalAlbum(
-            id = album.playcount,
-            name = album.name,
-            artist = album.artist.name,
-            image = album.image[2].text,
-            url = album.url
-        )
-
-        topAlbumsViewModel.onBookmarkClicked(mAlbum)
+        topAlbumsViewModel.onBookmarkClicked(album)
     }
 
-    private fun onAlbumClicked(album: Album) {
-        Toast.makeText(requireContext(), album.name, Toast.LENGTH_SHORT).show()
+    private fun onAlbumClicked(album: Album, isBookmarked: Boolean) {
+        val name = album.name
+        val artist = album.artist.name
+        val image = album.image[3].text
+
+        val action = TopAlbumsFragmentDirections.actionTopAlbumsFragmentToDetailFragment(name, artist, image, isBookmarked)
+        findNavController().navigate(action)
     }
 
     private fun getArtistNameAndObserve() {

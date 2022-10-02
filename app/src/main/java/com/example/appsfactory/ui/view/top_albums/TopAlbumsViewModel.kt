@@ -5,6 +5,7 @@ import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.example.appsfactory.data.local.entity.LocalAlbum
 import com.example.appsfactory.data.local.repository.AlbumsRepository
+import com.example.appsfactory.data.model.top_albums.Album
 import com.example.appsfactory.data.remote.repository.MainRepository
 import com.example.appsfactory.di.IoDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,8 +25,16 @@ class TopAlbumsViewModel @Inject constructor(
         response.collect { emit(it) }
     }
 
-    fun onBookmarkClicked(album: LocalAlbum) = viewModelScope.launch(ioDispatcher) {
-        albumsRepository.insert(album)
+    fun onBookmarkClicked(album: Album) = viewModelScope.launch(ioDispatcher) {
+        val mAlbum = LocalAlbum(
+            id = album.playcount,
+            name = album.name,
+            artist = album.artist.name,
+            image = album.image[2].text,
+            url = album.url
+        )
+
+        albumsRepository.insert(mAlbum)
     }
 
     fun onBookmarkRemoveClicked(album: LocalAlbum) = viewModelScope.launch(ioDispatcher) {
