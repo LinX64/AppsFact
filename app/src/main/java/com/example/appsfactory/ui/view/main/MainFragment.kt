@@ -55,5 +55,4 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
             topAlbumsAdapter.setData(localAlbums)
         }
     }
-
 }

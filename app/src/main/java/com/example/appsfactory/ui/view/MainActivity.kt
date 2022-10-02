@@ -6,9 +6,11 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.appsfactory.R
 import com.example.appsfactory.databinding.ActivityMainBinding
@@ -58,15 +60,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        super.onOptionsItemSelected(item)
-        if (item.itemId == R.id.search_action) navController.navigate(R.id.searchArtistFragment)
-        return true
+        if (item.itemId == R.id.search_action) {
+            navController.navigate(R.id.searchArtistFragment)
+            return true
+        }
+        return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.main_menu, menu)
-        menu?.let { myMenu = it }
+        myMenu = menu!!
         return true
     }
 }
