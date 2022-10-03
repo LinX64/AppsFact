@@ -36,7 +36,7 @@
 
             <ImageView
                 android:id="@+id/artistImage"
-                loadImage="@{artist.image[3].text}"
+                loadImage="@{artist.image[0].text}"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 app:layout_constraintBottom_toBottomOf="parent"
