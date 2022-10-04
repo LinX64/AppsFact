@@ -12,6 +12,5 @@ import com.example.appsfactory.domain.repository.AlbumRepository
 import javax.inject.Inject
 
 class GetAlbumsUseCase @Inject constructor(private val albumRepository: AlbumRepository) {
-
-    suspend fun getAlbums() = albumRepository.getAlbums()
+    fun getAlbums() = albumRepository.getAlbums()
 }

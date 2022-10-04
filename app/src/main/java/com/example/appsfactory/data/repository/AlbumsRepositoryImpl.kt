@@ -13,7 +13,7 @@ import com.example.appsfactory.data.source.local.entity.LocalAlbum
 import com.example.appsfactory.domain.repository.AlbumRepository
 
 class AlbumRepositoryImpl(private val albumDao: AlbumsDao) : AlbumRepository {
-    override suspend fun getAlbums() = albumDao.getAllAlbums()
+    override fun getAlbums() = albumDao.getAllAlbums()
     override suspend fun insert(album: LocalAlbum) = albumDao.insertAlbum(album)
     override suspend fun delete(album: LocalAlbum) = albumDao.deleteAlbum(album)
 }
