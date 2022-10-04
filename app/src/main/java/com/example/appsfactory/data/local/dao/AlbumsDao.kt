@@ -15,4 +15,7 @@ interface AlbumsDao {
 
     @Delete
     suspend fun deleteAlbum(album: LocalAlbum)
+
+    @Query("DELETE FROM albums")
+    suspend fun deleteAll()
 }
