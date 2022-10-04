@@ -1,6 +1,7 @@
 package com.example.appsfactory.data.remote.api
 
 import com.example.appsfactory.BuildConfig.API_KEY
+import com.example.appsfactory.data.model.albumInfo.AlbumInfoResponse
 import com.example.appsfactory.data.model.artistList.ArtistSearchResponse
 import com.example.appsfactory.data.model.top_albums.TopAlbumsResponse
 import com.example.appsfactory.data.remote.util.Constants.FORMAT
@@ -22,4 +23,13 @@ interface ApiService {
         @Query("api_key") api_key: String = API_KEY,
         @Query("format") format: String = FORMAT
     ): TopAlbumsResponse
+
+    @GET("?method=album.getinfo")
+    suspend fun getAlbumInfo(
+        @Query("artist") artist: String,
+        @Query("album") album: String,
+        @Query("api_key") api_key: String = API_KEY,
+        @Query("format") format: String = FORMAT
+    ): AlbumInfoResponse
+
 }
