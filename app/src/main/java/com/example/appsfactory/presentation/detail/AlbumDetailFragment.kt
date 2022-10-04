@@ -25,10 +25,10 @@ class AlbumDetailFragment :
     }
 
     private fun setupObserver() {
-        /*val albumName = arguments?.getString("name").toString()
-        val artist = arguments?.getString("artistName").toString()*/
+        val albumName = arguments?.getString("name").toString()
+        val artist = arguments?.getString("artistName").toString()
 
-        detailViewModel.getAlbumInfo("Justice", "Justin Bieber").observe(viewLifecycleOwner) {
+        detailViewModel.getAlbumInfo(albumName, artist).observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> onSuccess(it.data)
                 is Resource.Error -> {
@@ -55,5 +55,4 @@ class AlbumDetailFragment :
             }
         }
     }
-
 }

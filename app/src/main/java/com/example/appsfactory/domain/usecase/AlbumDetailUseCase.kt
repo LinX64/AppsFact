@@ -11,8 +11,9 @@ package com.example.appsfactory.domain.usecase
 import com.example.appsfactory.domain.repository.MainRepository
 import javax.inject.Inject
 
-class SearchArtistUseCase @Inject constructor(
+class AlbumDetailUseCase @Inject constructor(
     private val mainRepository: MainRepository
 ) {
-    suspend operator fun invoke(artistName: String) = mainRepository.getArtist(artistName)
+    suspend operator fun invoke(artistName: String, albumName: String) =
+        mainRepository.getAlbumInfo(artistName, albumName)
 }

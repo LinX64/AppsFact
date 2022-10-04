@@ -6,8 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.appsfactory.data.source.local.entity.LocalAlbum
 import com.example.appsfactory.di.modules.IoDispatcher
 import com.example.appsfactory.domain.model.top_albums.TopAlbum
-import com.example.appsfactory.domain.repository.AlbumRepository
-import com.example.appsfactory.domain.repository.MainRepository
+import com.example.appsfactory.domain.usecase.GetTopAlbumsUseCase
+import com.example.appsfactory.domain.usecase.LocalAlbumsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
@@ -15,13 +15,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TopAlbumsViewModel @Inject constructor(
-    private val mainRepository: MainRepository,
-    private val albumsRepository: AlbumRepository,
+    private val topAlbumsUseCase: GetTopAlbumsUseCase,
+    private val localAlbumsUseCase: LocalAlbumsUseCase,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     fun getTopAlbumsBasedOnArtist(artistName: String) = liveData(ioDispatcher) {
-        val response = mainRepository.getTopAlbumsBasedOnArtist(artistName)
+        val response = topAlbumsUseCase.getTopAlbumsBasedOnArtist(artistName)
         response.collect { emit(it) }
     }
 
@@ -34,7 +34,7 @@ class TopAlbumsViewModel @Inject constructor(
             isSelected = true
         )
 
-        albumsRepository.insert(mAlbum)
+        localAlbumsUseCase.insert(mAlbum)
     }
 
     fun onBookmarkRemoveClicked(album: TopAlbum) = viewModelScope.launch(ioDispatcher) {
@@ -45,6 +45,6 @@ class TopAlbumsViewModel @Inject constructor(
             url = album.url,
             isSelected = false
         )
-        albumsRepository.delete(mAlbum)
+        localAlbumsUseCase.delete(mAlbum)
     }
 }

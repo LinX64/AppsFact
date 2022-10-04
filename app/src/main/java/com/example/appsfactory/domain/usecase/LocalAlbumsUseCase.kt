@@ -8,9 +8,14 @@
 
 package com.example.appsfactory.domain.usecase
 
+import com.example.appsfactory.data.source.local.entity.LocalAlbum
 import com.example.appsfactory.domain.repository.AlbumRepository
 import javax.inject.Inject
 
-class GetAlbumsUseCase @Inject constructor(private val albumRepository: AlbumRepository) {
+class LocalAlbumsUseCase @Inject constructor(
+    private val albumRepository: AlbumRepository
+) {
     fun getAlbums() = albumRepository.getAlbums()
+    suspend fun insert(album: LocalAlbum) = albumRepository.insert(album)
+    suspend fun delete(album: LocalAlbum) = albumRepository.delete(album)
 }
