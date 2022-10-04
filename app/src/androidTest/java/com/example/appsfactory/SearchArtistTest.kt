@@ -6,7 +6,7 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.appsfactory.ui.view.MainActivity
+import com.example.appsfactory.presentation.MainActivity
 import com.example.appsfactory.util.ToastMatcher
 import com.example.appsfactory.util.assertions.RecyclerViewItemCountAssertion
 import com.example.appsfactory.util.clickOnFirstItem

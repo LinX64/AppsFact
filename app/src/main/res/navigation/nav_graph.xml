@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.example.appsfactory.ui.view.main.MainFragment"
+        android:name="com.example.appsfactory.presentation.main.MainFragment"
         android:label="Home"
         tools:layout="@layout/fragment_main">
         <action
@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/searchArtistFragment"
-        android:name="com.example.appsfactory.ui.view.search.SearchArtistFragment"
+        android:name="com.example.appsfactory.presentation.search.SearchArtistFragment"
         android:label="Search Artist"
         tools:layout="@layout/fragment_artist_search">
         <action
@@ -33,7 +33,7 @@
 
     <fragment
         android:id="@+id/topAlbumsFragment"
-        android:name="com.example.appsfactory.ui.view.top_albums.TopAlbumsFragment"
+        android:name="com.example.appsfactory.presentation.top_albums.TopAlbumsFragment"
         android:label="Top Albums"
         tools:layout="@layout/fragment_top_albums">
 
@@ -50,19 +50,17 @@
 
     <fragment
         android:id="@+id/detailFragment"
-        android:name="com.example.appsfactory.ui.view.detail.AlbumDetailFragment"
+        android:name="com.example.appsfactory.presentation.detail.AlbumDetailFragment"
         android:label="Album Detail"
         tools:layout="@layout/fragment_album_detail">
 
         <argument
             android:name="name"
-            app:argType="string"
-            app:nullable="true" />
+            app:argType="string" />
 
         <argument
             android:name="artistName"
-            app:argType="string"
-            app:nullable="true" />
+            app:argType="string" />
 
     </fragment>
 

@@ -2,7 +2,7 @@ package com.example.appsfactory.di.modules
 
 import android.content.Context
 import androidx.room.Room
-import com.example.appsfactory.data.local.AppDatabase
+import com.example.appsfactory.data.source.local.AppDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

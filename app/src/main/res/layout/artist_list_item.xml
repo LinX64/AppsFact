@@ -7,7 +7,7 @@
 
         <variable
             name="artist"
-            type="com.example.appsfactory.data.model.artistList.Artist" />
+            type="com.example.appsfactory.domain.model.artistList.Artist" />
     </data>
 
     <androidx.cardview.widget.CardView

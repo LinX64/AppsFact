@@ -7,7 +7,7 @@
 
         <variable
             name="album"
-            type="com.example.appsfactory.data.model.top_albums.Album" />
+            type="com.example.appsfactory.domain.model.top_albums.TopAlbum" />
     </data>
 
     <androidx.cardview.widget.CardView
