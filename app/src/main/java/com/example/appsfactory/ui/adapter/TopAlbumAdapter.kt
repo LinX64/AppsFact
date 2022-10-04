@@ -3,14 +3,13 @@ package com.example.appsfactory.ui.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.appsfactory.R
 import com.example.appsfactory.data.model.top_albums.Album
 import com.example.appsfactory.databinding.TopAlbumsListItemBinding
 import com.example.appsfactory.util.inVisible
 import com.example.appsfactory.util.visible
 
 class TopAlbumAdapter(
-    private val onItemClicked: (Album, Boolean) -> Unit,
+    private val onItemClicked: (Album) -> Unit,
     private val onBookmarkClicked: (Album) -> Unit,
     private val onBookmarkRemoveClicked: (Album) -> Unit
 ) : RecyclerView.Adapter<TopAlbumAdapter.MyViewHolder>() {
@@ -61,7 +60,7 @@ class TopAlbumAdapter(
     ): MyViewHolder {
         val itemBinding =
             TopAlbumsListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MyViewHolder(itemBinding) { onItemClicked(albumsList[it], isSelected) }
+        return MyViewHolder(itemBinding) { onItemClicked(albumsList[it]) }
     }
 
     override fun getItemCount() = albumsList.size

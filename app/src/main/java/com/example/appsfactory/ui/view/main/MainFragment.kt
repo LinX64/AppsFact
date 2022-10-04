@@ -9,7 +9,6 @@ import com.example.appsfactory.databinding.FragmentMainBinding
 import com.example.appsfactory.ui.adapter.TopAlbumsAdapter
 import com.example.appsfactory.ui.base.BaseFragment
 import com.example.appsfactory.util.gone
-import com.example.appsfactory.util.inVisible
 import com.example.appsfactory.util.visible
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,16 +27,15 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
 
     private fun setupUI() {
         topAlbumsAdapter = TopAlbumsAdapter(this::onAlbumClicked)
-        binding.recyclerView.adapter = topAlbumsAdapter
+        binding.recyclerViewMain.adapter = topAlbumsAdapter
     }
 
     private fun onAlbumClicked(album: LocalAlbum) {
         val name = album.name
         val artist = album.artist
-        val image = album.image
 
         val action =
-            MainFragmentDirections.actionMainFragmentToDetailFragment(name, artist, image, true)
+            MainFragmentDirections.actionMainFragmentToDetailFragment(name, artist)
         findNavController().navigate(action)
     }
 
@@ -47,10 +45,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
 
     private fun submitList(localAlbums: List<LocalAlbum>) {
         if (localAlbums.isEmpty()) {
-            binding.recyclerView.inVisible()
+            binding.recyclerViewMain.gone()
             binding.emptyView.emptyViewLayout.visible()
         } else {
-            binding.recyclerView.visible()
+            binding.recyclerViewMain.visible()
             binding.emptyView.emptyViewLayout.gone()
             topAlbumsAdapter.setData(localAlbums)
         }

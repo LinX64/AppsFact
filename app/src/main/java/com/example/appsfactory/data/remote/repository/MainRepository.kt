@@ -21,4 +21,11 @@ class MainRepository @Inject constructor(private val apiService: ApiService) {
         val response = apiService.getArtistTopAlbums(artist).topalbums.album
         emit(Resource.Success(response))
     }.catch { e -> emit(Resource.Error(e.message.toString())) }
+
+    suspend fun getAlbumInfo(artist: String, album: String) = flow {
+        emit(Resource.Loading(true))
+
+        val response = apiService.getAlbumInfo(artist, album).album
+        emit(Resource.Success(response))
+    }.catch { e -> emit(Resource.Error(e.message.toString())) }
 }

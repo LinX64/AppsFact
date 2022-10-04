@@ -47,17 +47,18 @@ class SearchArtistFragment :
     }
 
     private fun setupSearch() {
-        binding.btnSend.setOnClickListener { searchArtist(it) }
+        binding.btnSend.setOnClickListener {
+            it.hideSoftInput()
+            val artistName = binding.editText.text.toString()
+
+            if (artistName.isNotEmpty())
+                setupObserver(artistName)
+            else Toast.makeText(requireContext(), "Please enter artist name", Toast.LENGTH_SHORT)
+                .show()
+        }
     }
 
-    private fun searchArtist(it: View) {
-        it.hideSoftInput()
-
-        val artistName = binding.editText.text.toString()
-        setupObserver(artistName)
-    }
-
-    private fun setupObserver(artistName: String) {
+    private fun setupObserver(artistName: String = "Justin Bieber") {
         searchViewModel.getArtist(artistName).observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {

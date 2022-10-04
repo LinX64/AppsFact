@@ -34,8 +34,12 @@ class TopAlbumsFragment :
     }
 
     private fun setupRecyclerView() {
-        topAlbumsAdapter = TopAlbumAdapter(this::onAlbumClicked, this::onBookmarkClicked, this::onBookmarkRemoveClicked)
-        binding.recyclerView.adapter = topAlbumsAdapter
+        topAlbumsAdapter = TopAlbumAdapter(
+            this::onAlbumClicked,
+            this::onBookmarkClicked,
+            this::onBookmarkRemoveClicked
+        )
+        binding.recyclerViewTopAlbums.adapter = topAlbumsAdapter
     }
 
     private fun onBookmarkClicked(album: Album) {
@@ -47,23 +51,20 @@ class TopAlbumsFragment :
         topAlbumsViewModel.onBookmarkRemoveClicked(album)
     }
 
-    private fun onAlbumClicked(album: Album, isBookmarked: Boolean) {
+    private fun onAlbumClicked(album: Album) {
         val name = album.name
         val artist = album.artist.name
-        val image = album.image[3].text
 
         val action = TopAlbumsFragmentDirections.actionTopAlbumsFragmentToDetailFragment(
             name,
-            artist,
-            image,
-            isBookmarked
+            artist
         )
         findNavController().navigate(action)
     }
 
     private fun getArtistNameAndObserve() {
         val getArtistName = arguments?.getString("name")
-        if (getArtistName != null) observeTopAlbumsBasedOnArtistName(getArtistName)
+        if (getArtistName?.isNotEmpty() == true) observeTopAlbumsBasedOnArtistName(getArtistName)
     }
 
     private fun observeTopAlbumsBasedOnArtistName(artistName: String) {
