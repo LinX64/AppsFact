@@ -7,20 +7,15 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.appsfactory.data.local.AppDatabase
 import com.example.appsfactory.data.local.dao.AlbumsDao
 import com.example.appsfactory.data.local.entity.LocalAlbum
 import com.example.appsfactory.ui.view.MainActivity
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.core.IsNot.not
 import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import javax.inject.Inject
@@ -57,6 +52,8 @@ class MainScreenTest {
         launchMainScreen()
 
         onView(withId(R.id.recyclerViewMain)).check(matches((isDisplayed())))
+
+        clearTables()
     }
 
     @Test
