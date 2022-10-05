@@ -47,12 +47,12 @@ class MainRepositoryImpl @Inject constructor(
             .flowOn(ioDispatcher)
 
     override suspend fun getAlbumInfo(
-        artistName: String,
-        album: String
+        albumName: String,
+        artistName: String
     ): Flow<ApiState<Album>> = flow {
         emit(ApiState.Loading(true))
 
-        val response = apiService.getAlbumInfo(artistName, album).album
+        val response = apiService.getAlbumInfo(albumName, artistName).album
         emit(ApiState.Success(response))
     }
         .catch { e -> emit(ApiState.Error(e.message.toString())) }

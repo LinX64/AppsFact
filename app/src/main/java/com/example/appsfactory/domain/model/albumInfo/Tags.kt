@@ -6,5 +6,5 @@ import com.google.gson.annotations.SerializedName
 @Keep
 data class Tags(
     @SerializedName("tag")
-    val tag: List<com.example.appsfactory.domain.model.albumInfo.Tag>
+    val tag: List<Tag>
 )

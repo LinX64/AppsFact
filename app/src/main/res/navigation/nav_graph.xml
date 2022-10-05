@@ -55,7 +55,7 @@
         tools:layout="@layout/fragment_album_detail">
 
         <argument
-            android:name="name"
+            android:name="albumName"
             app:argType="string" />
 
         <argument

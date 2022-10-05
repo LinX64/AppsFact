@@ -17,5 +17,5 @@ import kotlinx.coroutines.flow.Flow
 interface MainRepository {
     suspend fun getArtist(artistName: String): Flow<ApiState<Artistmatches>>
     suspend fun getTopAlbumsBasedOnArtist(artistName: String): Flow<ApiState<List<TopAlbum>>>
-    suspend fun getAlbumInfo(artistName: String, album: String): Flow<ApiState<Album>>
+    suspend fun getAlbumInfo(albumName: String, artistName: String): Flow<ApiState<Album>>
 }

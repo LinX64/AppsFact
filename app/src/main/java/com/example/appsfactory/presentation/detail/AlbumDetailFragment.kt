@@ -26,11 +26,11 @@ class AlbumDetailFragment :
     }
 
     private fun setupObserver() {
-        val albumName = arguments?.getString("name").toString()
-        val artist = arguments?.getString("artistName").toString()
+        val artistName = arguments?.getString("artistName").toString()
+        val albumName = arguments?.getString("albumName").toString()
 
         lifecycleScope.launchWhenCreated {
-            detailViewModel.getAlbumInfo(albumName, artist).observe(viewLifecycleOwner) { uiState ->
+            detailViewModel.getAlbumInfo(albumName, artistName).observe(viewLifecycleOwner) { uiState ->
                 when (uiState) {
                     is AlbumUiState.Loading -> binding.progressBar.visible()
                     is AlbumUiState.Success -> onSuccess(uiState.album)
