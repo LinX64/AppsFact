@@ -13,6 +13,6 @@ import javax.inject.Inject
 
 class GetTopAlbumsUseCase @Inject constructor(private val mainRepository: MainRepository) {
 
-    suspend operator fun invoke(artistName: String) =
+    suspend fun getTopAlbumsBasedOnArtist(artistName: String) =
         mainRepository.getTopAlbumsBasedOnArtist(artistName)
 }

@@ -23,7 +23,7 @@ import javax.inject.Inject
 @RunWith(AndroidJUnit4::class)
 class MainScreenTest {
 
-    lateinit var mainActivityScenario: ActivityScenario<MainActivity>
+    private lateinit var mainActivityScenario: ActivityScenario<MainActivity>
 
     @Inject
     lateinit var db: AppDatabase

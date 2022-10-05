@@ -4,15 +4,20 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.appsfactory.databinding.FragmentArtistSearchBinding
 import com.example.appsfactory.domain.model.artistList.Artist
+import com.example.appsfactory.domain.model.artistList.Artistmatches
 import com.example.appsfactory.presentation.base.BaseFragment
 import com.example.appsfactory.presentation.util.hideSoftInput
 import com.example.appsfactory.presentation.util.inVisible
 import com.example.appsfactory.presentation.util.visible
-import com.example.appsfactory.util.ApiState
+import com.example.appsfactory.util.UiState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SearchArtistFragment :
@@ -49,29 +54,44 @@ class SearchArtistFragment :
             val artistName = binding.editText.text.toString()
 
             if (artistName.isNotEmpty())
-                setupObserver(artistName)
+                getArtistByName(artistName)
             else Toast.makeText(requireContext(), "Please enter artist name", Toast.LENGTH_SHORT)
                 .show()
         }
     }
 
-    private fun setupObserver(artistName: String = "Justin Bieber") {
-        searchViewModel.getArtist(artistName).observe(viewLifecycleOwner) {
-            when (it) {
-                is ApiState.Success -> {
-                    binding.progressBar.inVisible()
-                    submitList(it.data)
+    private fun getArtistByName(artistName: String) {
+        searchViewModel.getArtist(artistName)
+
+        getArtistByNameState()
+    }
+
+    private fun getArtistByNameState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            searchViewModel.uiState.flowWithLifecycle(
+                viewLifecycleOwner.lifecycle,
+                Lifecycle.State.STARTED
+            ).collect { uiState ->
+                when (uiState) {
+                    is UiState.Loading -> binding.progressBar.visible()
+                    is UiState.Success -> onSuccess(uiState.data)
+                    is UiState.Error -> onError(uiState)
                 }
-                is ApiState.Error -> {
-                    Toast.makeText(requireContext(), it.error, Toast.LENGTH_SHORT).show()
-                    binding.progressBar.inVisible()
-                }
-                is ApiState.Loading -> binding.progressBar.visible()
             }
         }
     }
 
-    private fun submitList(artists: com.example.appsfactory.domain.model.artistList.Artistmatches) {
+    private fun onSuccess(data: Artistmatches) {
+        binding.progressBar.inVisible()
+        submitList(data)
+    }
+
+    private fun onError(uiState: UiState.Error) {
+        Toast.makeText(requireContext(), uiState.error, Toast.LENGTH_SHORT).show()
+        binding.progressBar.inVisible()
+    }
+
+    private fun submitList(artists: Artistmatches) {
         searchArtistAdapter.setData(artists.artist)
     }
 }

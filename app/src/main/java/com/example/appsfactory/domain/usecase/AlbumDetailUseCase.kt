@@ -14,6 +14,6 @@ import javax.inject.Inject
 class AlbumDetailUseCase @Inject constructor(
     private val mainRepository: MainRepository
 ) {
-    suspend operator fun invoke(albumName: String, artistName: String) =
+    suspend fun getAlbumInfo(albumName: String, artistName: String) =
         mainRepository.getAlbumInfo(albumName, artistName)
 }

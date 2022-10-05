@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.appsfactory.databinding.FragmentTopAlbumsBinding
@@ -11,7 +13,9 @@ import com.example.appsfactory.domain.model.top_albums.TopAlbum
 import com.example.appsfactory.presentation.base.BaseFragment
 import com.example.appsfactory.presentation.util.inVisible
 import com.example.appsfactory.presentation.util.visible
+import com.example.appsfactory.util.UiState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class TopAlbumsFragment :
@@ -67,26 +71,34 @@ class TopAlbumsFragment :
     }
 
     private fun observeTopAlbumsBasedOnArtistName(artistName: String) {
-        lifecycleScope.launchWhenCreated {
-            topAlbumsViewModel.getTopAlbumsBasedOnArtist(artistName)
-                .observe(viewLifecycleOwner) { uiState ->
-                    when (uiState) {
-                        is TopAlbumsUiState.Loading -> binding.progressBar.visible()
-                        is TopAlbumsUiState.Success -> onSuccess(uiState)
-                        is TopAlbumsUiState.Error -> onError(uiState)
-                    }
+        topAlbumsViewModel.getTopAlbumsBasedOnArtist(artistName)
+
+        getTopAlbumsState()
+    }
+
+    private fun getTopAlbumsState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            topAlbumsViewModel.uiState.flowWithLifecycle(
+                viewLifecycleOwner.lifecycle,
+                Lifecycle.State.STARTED
+            ).collect { uiState ->
+                when (uiState) {
+                    is UiState.Loading -> binding.progressBar.visible()
+                    is UiState.Success -> onSuccess(uiState.data)
+                    is UiState.Error -> onError(uiState)
                 }
+            }
         }
     }
 
-    private fun onSuccess(uiState: TopAlbumsUiState.Success) {
+    private fun onSuccess(data: List<TopAlbum>) {
         binding.progressBar.inVisible()
-        setAlbums(uiState.albums)
+        setAlbums(data)
     }
 
-    private fun onError(uiState: TopAlbumsUiState.Error) {
+    private fun onError(uiState: UiState.Error) {
         binding.progressBar.inVisible()
-        Toast.makeText(requireContext(), uiState.exception, Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), uiState.error, Toast.LENGTH_SHORT).show()
     }
 
     private fun setAlbums(albums: List<TopAlbum>) {

@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.appsfactory.data.source.local.entity.LocalAlbum
@@ -11,7 +13,9 @@ import com.example.appsfactory.databinding.FragmentMainBinding
 import com.example.appsfactory.presentation.base.BaseFragment
 import com.example.appsfactory.presentation.util.gone
 import com.example.appsfactory.presentation.util.visible
+import com.example.appsfactory.util.UiState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::inflate) {
@@ -23,7 +27,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
         super.onViewCreated(view, savedInstanceState)
 
         setupUI()
-        setupObserver()
+        getAlbums()
     }
 
     private fun setupUI() {
@@ -40,28 +44,32 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
         findNavController().navigate(action)
     }
 
-    private fun setupObserver() {
-        lifecycleScope.launchWhenCreated {
-            mainViewModel.uiState.collect { result ->
-                when (result) {
-                    is AlbumsUiState.Loading -> binding.progressBar.visible()
-                    is AlbumsUiState.Success -> onSuccess(result)
-                    is AlbumsUiState.Error -> onError(result)
+    private fun getAlbums() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            mainViewModel.uiState.flowWithLifecycle(
+                viewLifecycleOwner.lifecycle,
+                Lifecycle.State.STARTED
+            )
+                .collect { uiState ->
+                    when (uiState) {
+                        is UiState.Loading -> binding.progressBar.visible()
+                        is UiState.Success -> onSuccess(uiState)
+                        is UiState.Error -> onError(uiState)
+                    }
                 }
-            }
         }
     }
 
-    private fun onSuccess(result: AlbumsUiState.Success) {
+    private fun onSuccess(uiState: UiState.Success<List<LocalAlbum>>) {
         binding.progressBar.gone()
-        submitList(result.albums)
+        submitList(uiState.data)
     }
 
-    private fun onError(result: AlbumsUiState.Error) {
+    private fun onError(result: UiState.Error) {
         binding.progressBar.gone()
         Toast.makeText(
             requireContext(),
-            result.exception.message.toString(),
+            result.error,
             Toast.LENGTH_SHORT
         ).show()
     }

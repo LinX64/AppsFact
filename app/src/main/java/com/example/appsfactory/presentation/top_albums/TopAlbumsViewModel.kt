@@ -1,14 +1,14 @@
 package com.example.appsfactory.presentation.top_albums
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.example.appsfactory.data.source.local.entity.LocalAlbum
 import com.example.appsfactory.di.modules.IoDispatcher
 import com.example.appsfactory.domain.model.top_albums.TopAlbum
 import com.example.appsfactory.domain.usecase.GetTopAlbumsUseCase
 import com.example.appsfactory.domain.usecase.LocalAlbumsUseCase
+import com.example.appsfactory.presentation.base.BaseViewModel
 import com.example.appsfactory.util.ApiState
+import com.example.appsfactory.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
@@ -19,14 +19,14 @@ class TopAlbumsViewModel @Inject constructor(
     private val topAlbumsUseCase: GetTopAlbumsUseCase,
     private val localAlbumsUseCase: LocalAlbumsUseCase,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
-) : ViewModel() {
+) : BaseViewModel<List<TopAlbum>>() {
 
-    fun getTopAlbumsBasedOnArtist(artistName: String) = liveData(ioDispatcher) {
-        topAlbumsUseCase.invoke(artistName).collect {
+    fun getTopAlbumsBasedOnArtist(artistName: String) = viewModelScope.launch {
+        topAlbumsUseCase.getTopAlbumsBasedOnArtist(artistName).collect {
             when (it) {
-                is ApiState.Loading -> emit(TopAlbumsUiState.Loading(true))
-                is ApiState.Success -> emit(TopAlbumsUiState.Success(it.data))
-                is ApiState.Error -> emit(TopAlbumsUiState.Error(it.error.toString()))
+                is ApiState.Loading -> _uiState.value = UiState.Loading
+                is ApiState.Success -> _uiState.value = UiState.Success(it.data)
+                is ApiState.Error -> _uiState.value = UiState.Error(it.error.toString())
             }
         }
     }
@@ -53,10 +53,4 @@ class TopAlbumsViewModel @Inject constructor(
         )
         localAlbumsUseCase.delete(mAlbum)
     }
-}
-
-sealed class TopAlbumsUiState {
-    data class Loading(val isLoading: Boolean) : TopAlbumsUiState()
-    data class Success(val albums: List<TopAlbum>) : TopAlbumsUiState()
-    data class Error(val exception: String) : TopAlbumsUiState()
 }
