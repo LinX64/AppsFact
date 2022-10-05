@@ -1,3 +1,11 @@
+/*
+ * *
+ *  * Created by Mohsen on 10/5/22, 2:46 PM
+ *  * Copyright (c) 2022 . All rights reserved.
+ *  * Last modified 10/5/22, 2:45 PM
+ *
+ */
+
 package com.example.appsfactory.presentation.search
 
 import android.view.LayoutInflater

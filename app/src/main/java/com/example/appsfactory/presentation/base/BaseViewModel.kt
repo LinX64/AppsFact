@@ -16,25 +16,4 @@ import kotlinx.coroutines.flow.StateFlow
 open class BaseViewModel<T> : ViewModel() {
     protected val _uiState = MutableStateFlow<UiState<T>>(UiState.Loading)
     val uiState: StateFlow<UiState<T>> = _uiState
-
-    /*init {
-        when (uiState.value) {
-            is UiState.Loading -> _uiState.value = UiState.Loading
-            is UiState.Success -> _uiState.value = UiState.Success((uiState.value as UiState.Success<T>).data)
-            is UiState.Error -> _uiState.value = UiState.Error(uiState.value.error)
-        }
-    }
-
-    protected open fun onLoading() {
-        _uiState.value = UiState.Loading
-    }
-
-    protected open fun onSuccess(data: T) {
-        _uiState.value = UiState.Success(data)
-    }
-
-    protected open fun onError(error: Throwable) {
-        _uiState.value = UiState.Error(error.toString())
-    }*/
-
 }

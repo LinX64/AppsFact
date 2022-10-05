@@ -1,3 +1,11 @@
+/*
+ * *
+ *  * Created by Mohsen on 10/5/22, 2:49 PM
+ *  * Copyright (c) 2022 . All rights reserved.
+ *  * Last modified 10/5/22, 1:32 AM
+ *
+ */
+
 package com.example.appsfactory.presentation.util
 
 import android.content.Context

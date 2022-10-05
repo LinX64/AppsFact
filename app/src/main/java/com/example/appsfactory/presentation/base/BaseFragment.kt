@@ -1,3 +1,11 @@
+/*
+ * *
+ *  * Created by Mohsen on 10/5/22, 2:43 PM
+ *  * Copyright (c) 2022 . All rights reserved.
+ *  * Last modified 10/5/22, 11:50 AM
+ *
+ */
+
 package com.example.appsfactory.presentation.base
 
 import android.os.Bundle

@@ -24,12 +24,14 @@ class SearchViewModel @Inject constructor(
 ) : BaseViewModel<Artistmatches>() {
 
     fun getArtist(artistName: String) = viewModelScope.launch {
-        searchArtistUseCase.getArtist(artistName).collect {
-            when (it) {
-                is ApiState.Loading -> _uiState.value = UiState.Loading
-                is ApiState.Success -> _uiState.value = UiState.Success(it.data)
-                is ApiState.Error -> _uiState.value = UiState.Error(it.error.toString())
-            }
+        searchArtistUseCase.getArtist(artistName).collect { handleState(it) }
+    }
+
+    private fun handleState(it: ApiState<Artistmatches>) {
+        when (it) {
+            is ApiState.Loading -> _uiState.value = UiState.Loading
+            is ApiState.Success -> _uiState.value = UiState.Success(it.data)
+            is ApiState.Error -> _uiState.value = UiState.Error(it.error.toString())
         }
     }
 }

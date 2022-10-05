@@ -1,3 +1,11 @@
+/*
+ * *
+ *  * Created by Mohsen on 10/5/22, 2:48 PM
+ *  * Copyright (c) 2022 . All rights reserved.
+ *  * Last modified 10/5/22, 2:47 PM
+ *
+ */
+
 package com.example.appsfactory.presentation.top_albums
 
 import androidx.lifecycle.viewModelScope
@@ -22,12 +30,14 @@ class TopAlbumsViewModel @Inject constructor(
 ) : BaseViewModel<List<TopAlbum>>() {
 
     fun getTopAlbumsBasedOnArtist(artistName: String) = viewModelScope.launch {
-        topAlbumsUseCase.getTopAlbumsBasedOnArtist(artistName).collect {
-            when (it) {
-                is ApiState.Loading -> _uiState.value = UiState.Loading
-                is ApiState.Success -> _uiState.value = UiState.Success(it.data)
-                is ApiState.Error -> _uiState.value = UiState.Error(it.error.toString())
-            }
+        topAlbumsUseCase.getTopAlbumsBasedOnArtist(artistName).collect { handleState(it) }
+    }
+
+    private fun handleState(it: ApiState<List<TopAlbum>>) {
+        when (it) {
+            is ApiState.Loading -> _uiState.value = UiState.Loading
+            is ApiState.Success -> _uiState.value = UiState.Success(it.data)
+            is ApiState.Error -> _uiState.value = UiState.Error(it.error.toString())
         }
     }
 

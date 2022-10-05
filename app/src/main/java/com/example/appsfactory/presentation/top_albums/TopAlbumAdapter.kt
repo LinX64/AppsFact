@@ -1,3 +1,11 @@
+/*
+ * *
+ *  * Created by Mohsen on 10/5/22, 2:46 PM
+ *  * Copyright (c) 2022 . All rights reserved.
+ *  * Last modified 10/4/22, 2:55 PM
+ *
+ */
+
 package com.example.appsfactory.presentation.top_albums
 
 import android.view.LayoutInflater
