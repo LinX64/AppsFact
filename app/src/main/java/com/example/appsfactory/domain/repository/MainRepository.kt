@@ -11,11 +11,11 @@ package com.example.appsfactory.domain.repository
 import com.example.appsfactory.domain.model.albumInfo.Album
 import com.example.appsfactory.domain.model.artistList.Artistmatches
 import com.example.appsfactory.domain.model.top_albums.TopAlbum
-import com.example.appsfactory.util.NetworkResult
+import com.example.appsfactory.util.ApiState
 import kotlinx.coroutines.flow.Flow
 
 interface MainRepository {
-    suspend fun getArtist(artistName: String): Flow<NetworkResult<Artistmatches>>
-    suspend fun getTopAlbumsBasedOnArtist(artistName: String): Flow<NetworkResult<List<TopAlbum>>>
-    suspend fun getAlbumInfo(artistName: String, album: String): Flow<NetworkResult<Album>>
+    suspend fun getArtist(artistName: String): Flow<ApiState<Artistmatches>>
+    suspend fun getTopAlbumsBasedOnArtist(artistName: String): Flow<ApiState<List<TopAlbum>>>
+    suspend fun getAlbumInfo(artistName: String, album: String): Flow<ApiState<Album>>
 }

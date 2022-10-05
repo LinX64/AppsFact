@@ -6,11 +6,12 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.appsfactory.databinding.FragmentArtistSearchBinding
+import com.example.appsfactory.domain.model.artistList.Artist
 import com.example.appsfactory.presentation.base.BaseFragment
 import com.example.appsfactory.presentation.util.hideSoftInput
 import com.example.appsfactory.presentation.util.inVisible
 import com.example.appsfactory.presentation.util.visible
-import com.example.appsfactory.util.NetworkResult
+import com.example.appsfactory.util.ApiState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,7 +37,7 @@ class SearchArtistFragment :
         binding.recyclerView.adapter = searchArtistAdapter
     }
 
-    private fun onArtistClicked(artist: com.example.appsfactory.domain.model.artistList.Artist) {
+    private fun onArtistClicked(artist: Artist) {
         val action =
             SearchArtistFragmentDirections.actionSearchArtistFragmentToTopAlbumsFragment(artist.name)
         findNavController().navigate(action)
@@ -57,15 +58,15 @@ class SearchArtistFragment :
     private fun setupObserver(artistName: String = "Justin Bieber") {
         searchViewModel.getArtist(artistName).observe(viewLifecycleOwner) {
             when (it) {
-                is NetworkResult.Success -> {
+                is ApiState.Success -> {
                     binding.progressBar.inVisible()
                     submitList(it.data)
                 }
-                is NetworkResult.Error -> {
+                is ApiState.Error -> {
                     Toast.makeText(requireContext(), it.error, Toast.LENGTH_SHORT).show()
                     binding.progressBar.inVisible()
                 }
-                is NetworkResult.Loading -> binding.progressBar.visible()
+                is ApiState.Loading -> binding.progressBar.visible()
             }
         }
     }

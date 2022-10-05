@@ -5,7 +5,7 @@ import androidx.lifecycle.liveData
 import com.example.appsfactory.di.modules.IoDispatcher
 import com.example.appsfactory.domain.model.albumInfo.Album
 import com.example.appsfactory.domain.usecase.AlbumDetailUseCase
-import com.example.appsfactory.util.NetworkResult
+import com.example.appsfactory.util.ApiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
@@ -19,13 +19,12 @@ class DetailViewModel @Inject constructor(
     fun getAlbumInfo(albumName: String, artistName: String) = liveData(ioDispatcher) {
         albumDetailUseCase.invoke(albumName, artistName).collect {
             when (it) {
-                is NetworkResult.Loading -> emit(AlbumUiState.Loading(true))
-                is NetworkResult.Success -> emit(AlbumUiState.Success(it.data))
-                is NetworkResult.Error -> emit(AlbumUiState.Error(it.error.toString()))
+                is ApiState.Loading -> emit(AlbumUiState.Loading(true))
+                is ApiState.Success -> emit(AlbumUiState.Success(it.data))
+                is ApiState.Error -> emit(AlbumUiState.Error(it.error.toString()))
             }
         }
     }
-
 }
 
 sealed class AlbumUiState {

@@ -8,7 +8,7 @@ import com.example.appsfactory.di.modules.IoDispatcher
 import com.example.appsfactory.domain.model.top_albums.TopAlbum
 import com.example.appsfactory.domain.usecase.GetTopAlbumsUseCase
 import com.example.appsfactory.domain.usecase.LocalAlbumsUseCase
-import com.example.appsfactory.util.NetworkResult
+import com.example.appsfactory.util.ApiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
@@ -24,9 +24,9 @@ class TopAlbumsViewModel @Inject constructor(
     fun getTopAlbumsBasedOnArtist(artistName: String) = liveData(ioDispatcher) {
         topAlbumsUseCase.invoke(artistName).collect {
             when (it) {
-                is NetworkResult.Loading -> emit(TopAlbumsUiState.Loading(true))
-                is NetworkResult.Success -> emit(TopAlbumsUiState.Success(it.data))
-                is NetworkResult.Error -> emit(TopAlbumsUiState.Error(it.error.toString()))
+                is ApiState.Loading -> emit(TopAlbumsUiState.Loading(true))
+                is ApiState.Success -> emit(TopAlbumsUiState.Success(it.data))
+                is ApiState.Error -> emit(TopAlbumsUiState.Error(it.error.toString()))
             }
         }
     }

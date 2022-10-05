@@ -14,7 +14,7 @@ import com.example.appsfactory.domain.model.albumInfo.Album
 import com.example.appsfactory.domain.model.artistList.Artistmatches
 import com.example.appsfactory.domain.model.top_albums.TopAlbum
 import com.example.appsfactory.domain.repository.MainRepository
-import com.example.appsfactory.util.NetworkResult
+import com.example.appsfactory.util.ApiState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -27,34 +27,34 @@ class MainRepositoryImpl @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : MainRepository {
 
-    override suspend fun getArtist(artistName: String): Flow<NetworkResult<Artistmatches>> = flow {
-        emit(NetworkResult.Loading(true))
+    override suspend fun getArtist(artistName: String): Flow<ApiState<Artistmatches>> = flow {
+        emit(ApiState.Loading(true))
 
         val response = apiService.getArtist(artistName).results.artistmatches
-        emit(NetworkResult.Success(response))
+        emit(ApiState.Success(response))
     }
-        .catch { e -> emit(NetworkResult.Error(e.message.toString())) }
+        .catch { e -> emit(ApiState.Error(e.message.toString())) }
         .flowOn(ioDispatcher)
 
-    override suspend fun getTopAlbumsBasedOnArtist(artistName: String): Flow<NetworkResult<List<TopAlbum>>> =
+    override suspend fun getTopAlbumsBasedOnArtist(artistName: String): Flow<ApiState<List<TopAlbum>>> =
         flow {
-            emit(NetworkResult.Loading(true))
+            emit(ApiState.Loading(true))
 
             val response = apiService.getTopAlbumsBasedOnArtist(artistName).topalbums.album
-            emit(NetworkResult.Success(response))
+            emit(ApiState.Success(response))
         }
-            .catch { e -> emit(NetworkResult.Error(e.message.toString())) }
+            .catch { e -> emit(ApiState.Error(e.message.toString())) }
             .flowOn(ioDispatcher)
 
     override suspend fun getAlbumInfo(
         artistName: String,
         album: String
-    ): Flow<NetworkResult<Album>> = flow {
-        emit(NetworkResult.Loading(true))
+    ): Flow<ApiState<Album>> = flow {
+        emit(ApiState.Loading(true))
 
         val response = apiService.getAlbumInfo(artistName, album).album
-        emit(NetworkResult.Success(response))
+        emit(ApiState.Success(response))
     }
-        .catch { e -> emit(NetworkResult.Error(e.message.toString())) }
+        .catch { e -> emit(ApiState.Error(e.message.toString())) }
         .flowOn(ioDispatcher)
 }
