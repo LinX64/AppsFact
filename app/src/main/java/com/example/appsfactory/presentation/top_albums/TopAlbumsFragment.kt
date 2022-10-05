@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.appsfactory.databinding.FragmentTopAlbumsBinding
 import com.example.appsfactory.domain.model.top_albums.TopAlbum
 import com.example.appsfactory.presentation.base.BaseFragment
 import com.example.appsfactory.presentation.util.inVisible
 import com.example.appsfactory.presentation.util.visible
-import com.example.appsfactory.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -67,19 +67,26 @@ class TopAlbumsFragment :
     }
 
     private fun observeTopAlbumsBasedOnArtistName(artistName: String) {
-        topAlbumsViewModel.getTopAlbumsBasedOnArtist(artistName).observe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.Success -> {
-                    binding.progressBar.inVisible()
-                    setAlbums(it.data)
+        lifecycleScope.launchWhenCreated {
+            topAlbumsViewModel.getTopAlbumsBasedOnArtist(artistName)
+                .observe(viewLifecycleOwner) { uiState ->
+                    when (uiState) {
+                        is TopAlbumsUiState.Loading -> binding.progressBar.visible()
+                        is TopAlbumsUiState.Success -> onSuccess(uiState)
+                        is TopAlbumsUiState.Error -> onError(uiState)
+                    }
                 }
-                is Resource.Error -> {
-                    Toast.makeText(requireContext(), it.error, Toast.LENGTH_SHORT).show()
-                    binding.progressBar.inVisible()
-                }
-                is Resource.Loading -> binding.progressBar.visible()
-            }
         }
+    }
+
+    private fun onSuccess(uiState: TopAlbumsUiState.Success) {
+        binding.progressBar.inVisible()
+        setAlbums(uiState.albums)
+    }
+
+    private fun onError(uiState: TopAlbumsUiState.Error) {
+        binding.progressBar.inVisible()
+        Toast.makeText(requireContext(), uiState.exception, Toast.LENGTH_SHORT).show()
     }
 
     private fun setAlbums(albums: List<TopAlbum>) {

@@ -23,7 +23,7 @@ class SearchViewModel @Inject constructor(
 ) : ViewModel() {
 
     fun getArtist(artistName: String) = liveData(ioDispatcher) {
-        val response = searchArtistUseCase.getArtist(artistName)
+        val response = searchArtistUseCase.invoke(artistName)
         response.collect { emit(it) }
     }
 }

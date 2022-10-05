@@ -8,6 +8,7 @@ import com.example.appsfactory.di.modules.IoDispatcher
 import com.example.appsfactory.domain.model.top_albums.TopAlbum
 import com.example.appsfactory.domain.usecase.GetTopAlbumsUseCase
 import com.example.appsfactory.domain.usecase.LocalAlbumsUseCase
+import com.example.appsfactory.util.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
@@ -21,8 +22,13 @@ class TopAlbumsViewModel @Inject constructor(
 ) : ViewModel() {
 
     fun getTopAlbumsBasedOnArtist(artistName: String) = liveData(ioDispatcher) {
-        val response = topAlbumsUseCase.getTopAlbumsBasedOnArtist(artistName)
-        response.collect { emit(it) }
+        topAlbumsUseCase.invoke(artistName).collect {
+            when (it) {
+                is NetworkResult.Loading -> emit(TopAlbumsUiState.Loading(true))
+                is NetworkResult.Success -> emit(TopAlbumsUiState.Success(it.data))
+                is NetworkResult.Error -> emit(TopAlbumsUiState.Error(it.error.toString()))
+            }
+        }
     }
 
     fun onBookmarkClicked(album: TopAlbum) = viewModelScope.launch(ioDispatcher) {
@@ -47,4 +53,10 @@ class TopAlbumsViewModel @Inject constructor(
         )
         localAlbumsUseCase.delete(mAlbum)
     }
+}
+
+sealed class TopAlbumsUiState {
+    data class Loading(val isLoading: Boolean) : TopAlbumsUiState()
+    data class Success(val albums: List<TopAlbum>) : TopAlbumsUiState()
+    data class Error(val exception: String) : TopAlbumsUiState()
 }

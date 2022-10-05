@@ -10,7 +10,7 @@ import com.example.appsfactory.presentation.base.BaseFragment
 import com.example.appsfactory.presentation.util.hideSoftInput
 import com.example.appsfactory.presentation.util.inVisible
 import com.example.appsfactory.presentation.util.visible
-import com.example.appsfactory.util.Resource
+import com.example.appsfactory.util.NetworkResult
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -57,15 +57,15 @@ class SearchArtistFragment :
     private fun setupObserver(artistName: String = "Justin Bieber") {
         searchViewModel.getArtist(artistName).observe(viewLifecycleOwner) {
             when (it) {
-                is Resource.Success -> {
+                is NetworkResult.Success -> {
                     binding.progressBar.inVisible()
                     submitList(it.data)
                 }
-                is Resource.Error -> {
+                is NetworkResult.Error -> {
                     Toast.makeText(requireContext(), it.error, Toast.LENGTH_SHORT).show()
                     binding.progressBar.inVisible()
                 }
-                is Resource.Loading -> binding.progressBar.visible()
+                is NetworkResult.Loading -> binding.progressBar.visible()
             }
         }
     }

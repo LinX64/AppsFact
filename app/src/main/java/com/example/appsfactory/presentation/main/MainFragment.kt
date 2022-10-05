@@ -2,7 +2,9 @@ package com.example.appsfactory.presentation.main
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.appsfactory.data.source.local.entity.LocalAlbum
 import com.example.appsfactory.databinding.FragmentMainBinding
@@ -39,7 +41,29 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     }
 
     private fun setupObserver() {
-        mainViewModel.getBookmarkedAlbums().observe(viewLifecycleOwner) { submitList(it) }
+        lifecycleScope.launchWhenCreated {
+            mainViewModel.uiState.collect { result ->
+                when (result) {
+                    is AlbumsUiState.Loading -> binding.progressBar.visible()
+                    is AlbumsUiState.Success -> onSuccess(result)
+                    is AlbumsUiState.Error -> onError(result)
+                }
+            }
+        }
+    }
+
+    private fun onSuccess(result: AlbumsUiState.Success) {
+        binding.progressBar.gone()
+        submitList(result.albums)
+    }
+
+    private fun onError(result: AlbumsUiState.Error) {
+        binding.progressBar.gone()
+        Toast.makeText(
+            requireContext(),
+            result.exception.message.toString(),
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     private fun submitList(localAlbums: List<LocalAlbum>) {

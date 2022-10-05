@@ -4,12 +4,13 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.appsfactory.databinding.FragmentAlbumDetailBinding
+import com.example.appsfactory.domain.model.albumInfo.Album
 import com.example.appsfactory.presentation.base.BaseFragment
 import com.example.appsfactory.presentation.util.inVisible
 import com.example.appsfactory.presentation.util.visible
-import com.example.appsfactory.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,20 +29,18 @@ class AlbumDetailFragment :
         val albumName = arguments?.getString("name").toString()
         val artist = arguments?.getString("artistName").toString()
 
-        detailViewModel.getAlbumInfo(albumName, artist).observe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.Success -> onSuccess(it.data)
-                is Resource.Error -> {
-                    Toast.makeText(requireContext(), it.error, Toast.LENGTH_SHORT).show()
-                    println("Error: ${it.error}")
-                    binding.progressBar.inVisible()
+        lifecycleScope.launchWhenCreated {
+            detailViewModel.getAlbumInfo(albumName, artist).observe(viewLifecycleOwner) { uiState ->
+                when (uiState) {
+                    is AlbumUiState.Loading -> binding.progressBar.visible()
+                    is AlbumUiState.Success -> onSuccess(uiState.album)
+                    is AlbumUiState.Error -> onError(uiState)
                 }
-                is Resource.Loading -> binding.progressBar.visible()
             }
         }
     }
 
-    private fun onSuccess(album: com.example.appsfactory.domain.model.albumInfo.Album) {
+    private fun onSuccess(album: Album) {
         binding.apply {
             progressBar.inVisible()
 
@@ -55,4 +54,10 @@ class AlbumDetailFragment :
             }
         }
     }
+
+    private fun onError(uiState: AlbumUiState.Error) {
+        Toast.makeText(requireContext(), uiState.exception, Toast.LENGTH_SHORT).show()
+        binding.progressBar.inVisible()
+    }
+
 }
