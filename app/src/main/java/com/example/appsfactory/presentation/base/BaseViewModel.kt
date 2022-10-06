@@ -13,7 +13,7 @@ import com.example.appsfactory.util.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-open class BaseViewModel<T> : ViewModel() {
+abstract class BaseViewModel<T> : ViewModel() {
     protected val _uiState = MutableStateFlow<UiState<T>>(UiState.Loading)
     val uiState: StateFlow<UiState<T>> = _uiState
 }
