@@ -47,8 +47,6 @@ class DetailScreenTest {
             .allowMainThreadQueries()
             .build()
 
-        clearTables()
-
         albumsDao = db.albumDao()
     }
 
