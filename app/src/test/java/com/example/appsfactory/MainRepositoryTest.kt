@@ -31,17 +31,18 @@ class MainRepositoryTest {
     private val albumName = "Purpose (Deluxe)"
 
     @Test
-    fun `WHEN Get Search Is Successful THEN Should check with Actual Name`(): Unit = runBlocking {
-        //Given
-        val mockResponse = StubData.mockGetSearchArtistWithJson(getSearchArtistResponse)
-        val mockApiService = mockGetSearchArtistCallWithResponse(mockResponse)
-        val repository = MainRepositoryImpl(mockApiService, Dispatchers.IO)
+    fun `WHEN Get Search Call Is Successful THEN Should check with Actual Name`(): Unit =
+        runBlocking {
+            //Given
+            val mockResponse = StubData.mockGetSearchArtistWithJson(getSearchArtistResponse)
+            val mockApiService = mockGetSearchArtistCallWithResponse(mockResponse)
+            val repository = MainRepositoryImpl(mockApiService, Dispatchers.IO)
 
-        //When
-        val expectedJustin =
-            mockResponse.results.artistmatches.artist.find { it.name == artistName }?.name
+            //When
+            val expectedJustin =
+                mockResponse.results.artistmatches.artist.find { it.name == artistName }?.name
 
-        repository.getArtist(artistName).collect {
+            repository.getArtist(artistName).collect {
             //Then
             if (it is ApiState.Success) {
                 val actualName = it.data.artist.find { it.name == artistName }?.name
@@ -51,7 +52,7 @@ class MainRepositoryTest {
     }
 
     @Test
-    fun `WHEN Get Top Albums Is Successful THEN Should check with Actual Name`(): Unit =
+    fun `WHEN Get Top Albums Call Is Successful THEN Should check with Actual Name`(): Unit =
         runBlocking {
             //Given
             val mockResponse = StubData.mockGetTopAlbumWithJson(getTopAlbumResponse)
@@ -71,7 +72,7 @@ class MainRepositoryTest {
         }
 
     @Test
-    fun `WHEN Get Album Info Is Successful THEN Should check with Actual Name`(): Unit =
+    fun `WHEN Get Album Info Call Is Successful THEN Should check with Actual Name`(): Unit =
         runBlocking {
             //Given
             val mockResponse = StubData.mockGetAlbumInfoWithJson(getAlbumInfoResponse)

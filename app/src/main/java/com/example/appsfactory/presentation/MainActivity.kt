@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -44,14 +45,14 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            //disableSearchAction(destination)
+            disableSearchAction(destination)
         }
     }
 
-    /*private fun disableSearchAction(destination: NavDestination) {
+    private fun disableSearchAction(destination: NavDestination) {
         if (destination.id != R.id.mainFragment) myMenu.findItem(R.id.search_action).isVisible =
             false
-    }*/
+    }
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
