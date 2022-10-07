@@ -30,6 +30,24 @@ The project consists of 4 different `Fragment`s with a single `Activity`. It use
 3. Search Artist - where it searches for artists based on a name.
 4. Top albums - when user clicks on an album, the apps navigates to top albums to show the top albums of that specific artist.
 
+
+**Navigation:**
+
+<p align="center">
+<img src="https://i.imgur.com/zS63MnP.png" height="420" />
+</>
+
+**Screens and UI:**
+
+<p align="center">
+
+<img src="https://i.imgur.com/lwLmmND.png" height="512" />
+<img src="https://i.imgur.com/uprWkdm.png" height="512" />
+<img src="https://i.imgur.com/Lj3Wzw4.png" height="512" />
+<img src="https://i.imgur.com/VuZxxGy.png" height="512" />
+  
+</p>
+
 ### Tests
 
 **Automated test:** I wrote the tests for all of the mentioned screens which checks for most of the situation a user may face.
