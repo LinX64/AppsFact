@@ -7,8 +7,8 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "albums")
 data class LocalAlbum(
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    val id: Int = 0,
+    @ColumnInfo(name = "count")
+    val count: Int,
     @ColumnInfo(name = "name")
     val name: String,
     @ColumnInfo(name = "artist")

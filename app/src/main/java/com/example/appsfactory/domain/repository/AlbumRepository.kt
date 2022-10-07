@@ -14,5 +14,5 @@ import kotlinx.coroutines.flow.Flow
 interface AlbumRepository {
     fun getAllTopAlbums(): Flow<List<LocalAlbum>>
     suspend fun update(name: String, isBookmarked: Boolean)
-    suspend fun delete(album: LocalAlbum)
+    suspend fun delete(id: Int)
 }

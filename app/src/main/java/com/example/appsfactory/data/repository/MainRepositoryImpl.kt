@@ -44,9 +44,10 @@ class MainRepositoryImpl(
                 if (it is ApiState.Success) {
                     val albums = it.data.map { album ->
                         LocalAlbum(
-                            name = album.name,
-                            artist = album.artist.name,
-                            image = album.image[0].text
+                            album.playcount,
+                            album.name,
+                            album.artist.name,
+                            album.image[0].text
                         )
                     }
                     appDb.topAlbumDao().insertAll(albums)

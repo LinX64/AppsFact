@@ -8,7 +8,6 @@
 
 package com.example.appsfactory.domain.usecase
 
-import com.example.appsfactory.data.source.local.entity.LocalAlbum
 import com.example.appsfactory.domain.repository.AlbumRepository
 import javax.inject.Inject
 
@@ -20,5 +19,5 @@ class LocalAlbumsUseCase @Inject constructor(
     suspend fun update(name: String, isBookmarked: Boolean) =
         albumRepository.update(name, isBookmarked)
 
-    suspend fun delete(album: LocalAlbum) = albumRepository.delete(album)
+    suspend fun delete(id: Int) = albumRepository.delete(id)
 }

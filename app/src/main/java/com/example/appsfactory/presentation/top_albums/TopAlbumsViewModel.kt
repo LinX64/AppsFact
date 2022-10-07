@@ -9,7 +9,6 @@
 package com.example.appsfactory.presentation.top_albums
 
 import androidx.lifecycle.viewModelScope
-import com.example.appsfactory.data.source.local.entity.LocalAlbum
 import com.example.appsfactory.di.modules.IoDispatcher
 import com.example.appsfactory.domain.model.top_albums.TopAlbum
 import com.example.appsfactory.domain.usecase.GetTopAlbumsUseCase
@@ -46,11 +45,6 @@ class TopAlbumsViewModel @Inject constructor(
     }
 
     fun onBookmarkRemoveClicked(album: TopAlbum) = viewModelScope.launch(ioDispatcher) {
-        val mAlbum = LocalAlbum(
-            name = album.name,
-            artist = album.artist.name,
-            image = album.image[2].text
-        )
-        localAlbumsUseCase.delete(mAlbum)
+        localAlbumsUseCase.delete(album.playcount)
     }
 }

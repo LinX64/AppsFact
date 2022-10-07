@@ -1,6 +1,9 @@
 package com.example.appsfactory.data.source.local.dao
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import com.example.appsfactory.data.source.local.entity.LocalAlbum
 import kotlinx.coroutines.flow.Flow
 
@@ -16,8 +19,8 @@ interface TopAlbumsDao {
     @Query("UPDATE albums SET isBookmarked = :isBookmarked WHERE name = :name")
     suspend fun update(name: String, isBookmarked: Boolean)
 
-    @Delete
-    suspend fun deleteAlbum(album: LocalAlbum)
+    @Query("DELETE FROM albums WHERE count = :id")
+    suspend fun deleteAlbum(id: Int)
 
     @Query("DELETE FROM albums")
     suspend fun deleteAll()

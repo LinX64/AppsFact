@@ -9,7 +9,6 @@
 package com.example.appsfactory.data.repository
 
 import com.example.appsfactory.data.source.local.dao.TopAlbumsDao
-import com.example.appsfactory.data.source.local.entity.LocalAlbum
 import com.example.appsfactory.domain.repository.AlbumRepository
 
 class AlbumRepositoryImpl(private val albumDao: TopAlbumsDao) : AlbumRepository {
@@ -21,5 +20,5 @@ class AlbumRepositoryImpl(private val albumDao: TopAlbumsDao) : AlbumRepository 
         isBookmarked: Boolean
     ) = albumDao.update(name, isBookmarked)
 
-    override suspend fun delete(album: LocalAlbum) = albumDao.deleteAlbum(album)
+    override suspend fun delete(id: Int) = albumDao.deleteAlbum(id)
 }
