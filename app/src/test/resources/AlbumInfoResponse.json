@@ -1,0 +1,137 @@
+{
+  "album": {
+    "artist": "Justin Bieber",
+    "mbid": "",
+    "tags": {
+      "tag": [
+        {
+          "url": "https://www.last.fm/tag/pop",
+          "name": "pop"
+        },
+        {
+          "url": "https://www.last.fm/tag/2015",
+          "name": "2015"
+        },
+        {
+          "url": "https://www.last.fm/tag/tropical+house",
+          "name": "tropical house"
+        },
+        {
+          "url": "https://www.last.fm/tag/justin+bieber",
+          "name": "justin bieber"
+        },
+        {
+          "url": "https://www.last.fm/tag/dance",
+          "name": "dance"
+        }
+      ]
+    },
+    "playcount": "19892100",
+    "image": [
+      {
+        "size": "small",
+        "#text": "https://lastfm.freetls.fastly.net/i/u/34s/b7b8bdcf48864d6bdc6d4a266e7cc435.jpg"
+      },
+      {
+        "size": "medium",
+        "#text": "https://lastfm.freetls.fastly.net/i/u/64s/b7b8bdcf48864d6bdc6d4a266e7cc435.jpg"
+      },
+      {
+        "size": "large",
+        "#text": "https://lastfm.freetls.fastly.net/i/u/174s/b7b8bdcf48864d6bdc6d4a266e7cc435.jpg"
+      },
+      {
+        "size": "extralarge",
+        "#text": "https://lastfm.freetls.fastly.net/i/u/300x300/b7b8bdcf48864d6bdc6d4a266e7cc435.jpg"
+      },
+      {
+        "size": "mega",
+        "#text": "https://lastfm.freetls.fastly.net/i/u/300x300/b7b8bdcf48864d6bdc6d4a266e7cc435.jpg"
+      },
+      {
+        "size": "",
+        "#text": "https://lastfm.freetls.fastly.net/i/u/300x300/b7b8bdcf48864d6bdc6d4a266e7cc435.jpg"
+      }
+    ],
+    "tracks": {
+      "track": [
+        {
+          "streamable": {
+            "fulltrack": "0",
+            "#text": "0"
+          },
+          "duration": null,
+          "url": "https://www.last.fm/music/Justin+Bieber/Purpose+(Deluxe)/Mark+My+Words",
+          "name": "Mark My Words",
+          "@attr": {
+            "rank": 1
+          },
+          "artist": {
+            "url": "https://www.last.fm/music/Justin+Bieber",
+            "name": "Justin Bieber",
+            "mbid": "e0140a67-e4d1-4f13-8a01-364355bee46e"
+          }
+        },
+        {
+          "streamable": {
+            "fulltrack": "0",
+            "#text": "0"
+          },
+          "duration": null,
+          "url": "https://www.last.fm/music/Justin+Bieber/Purpose+(Deluxe)/I%27ll+Show+You",
+          "name": "I'll Show You",
+          "@attr": {
+            "rank": 2
+          },
+          "artist": {
+            "url": "https://www.last.fm/music/Justin+Bieber",
+            "name": "Justin Bieber",
+            "mbid": "e0140a67-e4d1-4f13-8a01-364355bee46e"
+          }
+        },
+        {
+          "streamable": {
+            "fulltrack": "0",
+            "#text": "0"
+          },
+          "duration": null,
+          "url": "https://www.last.fm/music/Justin+Bieber/Purpose+(Deluxe)/What+Do+You+Mean%3F",
+          "name": "What Do You Mean?",
+          "@attr": {
+            "rank": 3
+          },
+          "artist": {
+            "url": "https://www.last.fm/music/Justin+Bieber",
+            "name": "Justin Bieber",
+            "mbid": "e0140a67-e4d1-4f13-8a01-364355bee46e"
+          }
+        },
+        {
+          "streamable": {
+            "fulltrack": "0",
+            "#text": "0"
+          },
+          "duration": 203,
+          "url": "https://www.last.fm/music/Justin+Bieber/Purpose+(Deluxe)/Trust",
+          "name": "Trust",
+          "@attr": {
+            "rank": 4
+          },
+          "artist": {
+            "url": "https://www.last.fm/music/Justin+Bieber",
+            "name": "Justin Bieber",
+            "mbid": "e0140a67-e4d1-4f13-8a01-364355bee46e"
+          }
+        }
+      ]
+    },
+    "url": "https://www.last.fm/music/Justin+Bieber/Purpose+(Deluxe)",
+    "name": "Purpose (Deluxe)",
+    "listeners": "905831",
+    "wiki": {
+      "published": "05 May 2016, 04:44",
+      "summary": "Purpose is the fourth studio album by Canadian singer Justin Bieber, released on November 13, 2015, by Def Jam Recordings. The album was preceded by the release of the lead single What Do You Mean? in August 28, 2015. Sorry was released as the second single from the album on October 23, 2015. I'll Show You was released as promotional single on November 1, 2015. Love Yourself was released as third single in November 09, 2015 and Company as fourth in March 08, 2016. The album serves as the follow-up to Bieber's previous studio album Believe (2012). <a href=\"https://www.last.fm/music/Justin+Bieber/Purpose+(Deluxe)\">Read more on Last.fm</a>.",
+      "content": "Purpose is the fourth studio album by Canadian singer Justin Bieber, released on November 13, 2015, by Def Jam Recordings. The album was preceded by the release of the lead single What Do You Mean? in August 28, 2015. Sorry was released as the second single from the album on October 23, 2015. I'll Show You was released as promotional single on November 1, 2015. Love Yourself was released as third single in November 09, 2015 and Company as fourth in March 08, 2016. The album serves as the follow-up to Bieber's previous studio album Believe (2012). <a href=\"https://www.last.fm/music/Justin+Bieber/Purpose+(Deluxe)\">Read more on Last.fm</a>. User-contributed text is available under the Creative Commons By-SA License; additional terms may apply."
+    }
+  }
+}
