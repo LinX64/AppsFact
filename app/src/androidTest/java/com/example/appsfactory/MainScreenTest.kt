@@ -9,7 +9,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.appsfactory.data.source.local.AppDatabase
-import com.example.appsfactory.data.source.local.dao.AlbumsDao
+import com.example.appsfactory.data.source.local.dao.TopAlbumsDao
 import com.example.appsfactory.data.source.local.entity.LocalAlbum
 import com.example.appsfactory.presentation.MainActivity
 import kotlinx.coroutines.runBlocking
@@ -29,7 +29,7 @@ class MainScreenTest {
     lateinit var db: AppDatabase
 
     @Inject
-    lateinit var albumsDao: AlbumsDao
+    lateinit var albumsDao: TopAlbumsDao
 
     @Before
     fun setup() {
@@ -42,7 +42,7 @@ class MainScreenTest {
             .allowMainThreadQueries()
             .build()
 
-        albumsDao = db.albumDao()
+        albumsDao = db.topAlbumDao()
     }
 
     @Test
@@ -66,14 +66,15 @@ class MainScreenTest {
     }
 
     private suspend fun insertDummyData() {
-        val album = LocalAlbum(
-            name = "album",
-            artist = "artist",
-            image = "image",
-            url = "url",
-            isSelected = true
-        )
-        albumsDao.insertAlbum(album)
+        val albums = List(10) {
+            LocalAlbum(
+                name = "Album $it",
+                artist = "Artist $it",
+                image = "https://lastfm.freetls.fastly.net/i/u/174s/2a96cbd8b46e442fc41c2b86b821562f.png",
+                isBookmarked = false
+            )
+        }
+        albumsDao.insertAll(albums)
     }
 
     private fun clearTables() {

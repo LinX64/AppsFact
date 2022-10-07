@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.*
 
 class MainRepositoryImpl(
     private val apiService: ApiService,
-    private val appDatabase: AppDatabase
+    private val appDb: AppDatabase
 ) : MainRepository {
 
     override suspend fun getArtist(artistName: String): Flow<ApiState<Artistmatches>> = flow {
@@ -40,19 +40,19 @@ class MainRepositoryImpl(
             val response = apiService.getTopAlbumsBasedOnArtist(artistName).topalbums.album
             emit(ApiState.Success(response))
         }
-            .catch { e -> emit(ApiState.Error(e.message.toString())) }
             .onEach {
                 if (it is ApiState.Success) {
                     val albums = it.data.map { album ->
                         LocalAlbum(
                             name = album.name,
                             artist = album.artist.name,
-                            image = album.image[2].text
+                            image = album.image[0].text
                         )
                     }
-                    appDatabase.topAlbumDao().insertAll(albums)
+                    appDb.topAlbumDao().insertAll(albums)
                 }
             }
+            .catch { e -> emit(ApiState.Error(e.message.toString())) }
             .flowOn(Dispatchers.IO)
 
     override suspend fun getAlbumInfo(
