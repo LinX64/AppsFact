@@ -9,7 +9,9 @@
 package com.example.appsfactory.presentation.top_albums
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appsfactory.databinding.TopAlbumsListItemBinding
 import com.example.appsfactory.domain.model.top_albums.TopAlbum
@@ -22,7 +24,6 @@ class TopAlbumAdapter(
     private val onBookmarkRemoveClicked: (TopAlbum) -> Unit
 ) : RecyclerView.Adapter<TopAlbumAdapter.MyViewHolder>() {
     private var albumsList = ArrayList<TopAlbum>()
-    private var isSelected = false
 
     inner class MyViewHolder(
         private val binding: TopAlbumsListItemBinding,
@@ -36,7 +37,7 @@ class TopAlbumAdapter(
             binding.albumInfoCard.setOnClickListener { onItemClicked(bindingAdapterPosition) }
             binding.bookmarkImageBtn.setOnClickListener {
                 onBookmarkClicked(album)
-                onBookmark()
+                onBookmark(it)
             }
             binding.bookmarkRemoveBtn.setOnClickListener {
                 onBookmarkRemoveClicked(album)
@@ -44,10 +45,8 @@ class TopAlbumAdapter(
             }
         }
 
-        private fun onBookmark() {
-            isSelected = !isSelected
-
-            if (isSelected) {
+        private fun onBookmark(it: View?) {
+            if (it?.isVisible == true) {
                 binding.bookmarkImageBtn.inVisible()
                 binding.bookmarkRemoveBtn.visible()
             } else {
