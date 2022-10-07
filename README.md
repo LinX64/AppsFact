@@ -41,10 +41,10 @@ The project consists of 4 different `Fragment`s with a single `Activity`. It use
 
 <p align="center">
 
-<img src="https://i.imgur.com/lwLmmND.png" height="512" />
-<img src="https://i.imgur.com/uprWkdm.png" height="512" />
-<img src="https://i.imgur.com/Lj3Wzw4.png" height="512" />
-<img src="https://i.imgur.com/VuZxxGy.png" height="512" />
+<img src="https://i.imgur.com/lwLmmND.png" height="420" />
+<img src="https://i.imgur.com/uprWkdm.png" height="420" />
+<img src="https://i.imgur.com/Lj3Wzw4.png" height="420" />
+<img src="https://i.imgur.com/VuZxxGy.png" height="420" />
   
 </p>
 
