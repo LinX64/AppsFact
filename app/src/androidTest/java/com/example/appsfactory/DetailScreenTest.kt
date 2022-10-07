@@ -28,7 +28,7 @@ import javax.inject.Inject
 class DetailScreenTest {
 
     private lateinit var mainActivityScenario: ActivityScenario<MainActivity>
-    private val searchQuery = "Eminem"
+    private val searchQuery = "Justin Bieber"
 
     @Inject
     lateinit var db: AppDatabase
@@ -99,10 +99,10 @@ class DetailScreenTest {
     private suspend fun insertDummyData() {
         val albums = List(10) {
             LocalAlbum(
+                count = 0,
                 name = "Album $it",
                 artist = "Artist $it",
-                image = "https://lastfm.freetls.fastly.net/i/u/174s/2a96cbd8b46e442fc41c2b86b821562f.png",
-                isBookmarked = false
+                image = "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
             )
         }
         albumsDao.insertAll(albums)
