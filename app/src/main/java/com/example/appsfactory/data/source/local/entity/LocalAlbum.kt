@@ -15,8 +15,6 @@ data class LocalAlbum(
     val artist: String,
     @ColumnInfo(name = "image")
     val image: String,
-    @ColumnInfo(name = "url")
-    val url: String,
-    @ColumnInfo(name = "isSelected")
-    val isSelected: Boolean = false
+    @ColumnInfo(name = "isBookmarked")
+    val isBookmarked: Boolean = false,
 )

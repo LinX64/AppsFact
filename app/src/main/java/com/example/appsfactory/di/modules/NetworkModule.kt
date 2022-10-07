@@ -11,7 +11,8 @@ package com.example.appsfactory.di.modules
 import androidx.viewbinding.BuildConfig
 import com.example.appsfactory.data.repository.AlbumRepositoryImpl
 import com.example.appsfactory.data.repository.MainRepositoryImpl
-import com.example.appsfactory.data.source.local.dao.AlbumsDao
+import com.example.appsfactory.data.source.local.AppDatabase
+import com.example.appsfactory.data.source.local.dao.TopAlbumsDao
 import com.example.appsfactory.data.source.remote.ApiService
 import com.example.appsfactory.domain.repository.AlbumRepository
 import com.example.appsfactory.domain.repository.MainRepository
@@ -75,13 +76,14 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideMainRepository(
-        apiService: ApiService
-    ): MainRepository = MainRepositoryImpl(apiService, providesIoDispatcher())
+        apiService: ApiService,
+        appDatabase: AppDatabase
+    ): MainRepository = MainRepositoryImpl(apiService, appDatabase)
 
     @Singleton
     @Provides
     fun provideAlbumRepository(
-        albumsDao: AlbumsDao
+        albumsDao: TopAlbumsDao
     ): AlbumRepository = AlbumRepositoryImpl(albumsDao)
 
     @IoDispatcher

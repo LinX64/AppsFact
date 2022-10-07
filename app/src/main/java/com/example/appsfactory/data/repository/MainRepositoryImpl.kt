@@ -8,23 +8,20 @@
 
 package com.example.appsfactory.data.repository
 
+import com.example.appsfactory.data.source.local.AppDatabase
+import com.example.appsfactory.data.source.local.entity.LocalAlbum
 import com.example.appsfactory.data.source.remote.ApiService
-import com.example.appsfactory.di.modules.IoDispatcher
 import com.example.appsfactory.domain.model.albumInfo.Album
 import com.example.appsfactory.domain.model.artistList.Artistmatches
 import com.example.appsfactory.domain.model.top_albums.TopAlbum
 import com.example.appsfactory.domain.repository.MainRepository
 import com.example.appsfactory.util.ApiState
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 
-class MainRepositoryImpl @Inject constructor(
+class MainRepositoryImpl(
     private val apiService: ApiService,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    private val appDatabase: AppDatabase
 ) : MainRepository {
 
     override suspend fun getArtist(artistName: String): Flow<ApiState<Artistmatches>> = flow {
@@ -34,7 +31,7 @@ class MainRepositoryImpl @Inject constructor(
         emit(ApiState.Success(response))
     }
         .catch { e -> emit(ApiState.Error(e.message.toString())) }
-        .flowOn(ioDispatcher)
+        .flowOn(Dispatchers.IO)
 
     override suspend fun getTopAlbumsBasedOnArtist(artistName: String): Flow<ApiState<List<TopAlbum>>> =
         flow {
@@ -44,7 +41,19 @@ class MainRepositoryImpl @Inject constructor(
             emit(ApiState.Success(response))
         }
             .catch { e -> emit(ApiState.Error(e.message.toString())) }
-            .flowOn(ioDispatcher)
+            .onEach {
+                if (it is ApiState.Success) {
+                    val albums = it.data.map { album ->
+                        LocalAlbum(
+                            name = album.name,
+                            artist = album.artist.name,
+                            image = album.image[2].text
+                        )
+                    }
+                    appDatabase.topAlbumDao().insertAll(albums)
+                }
+            }
+            .flowOn(Dispatchers.IO)
 
     override suspend fun getAlbumInfo(
         albumName: String,
@@ -56,5 +65,5 @@ class MainRepositoryImpl @Inject constructor(
         emit(ApiState.Success(response))
     }
         .catch { e -> emit(ApiState.Error(e.message.toString())) }
-        .flowOn(ioDispatcher)
+        .flowOn(Dispatchers.IO)
 }

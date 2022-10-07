@@ -15,7 +15,10 @@ import javax.inject.Inject
 class LocalAlbumsUseCase @Inject constructor(
     private val albumRepository: AlbumRepository
 ) {
-    fun getAlbums() = albumRepository.getAlbums()
-    suspend fun insert(album: LocalAlbum) = albumRepository.insert(album)
+    fun getAllTopAlbums() = albumRepository.getAllTopAlbums()
+
+    suspend fun update(name: String, isBookmarked: Boolean) =
+        albumRepository.update(name, isBookmarked)
+
     suspend fun delete(album: LocalAlbum) = albumRepository.delete(album)
 }

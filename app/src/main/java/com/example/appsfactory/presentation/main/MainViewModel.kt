@@ -25,7 +25,7 @@ class MainViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             albumsUseCase
-                .getAlbums()
+                .getAllTopAlbums()
                 .collect { album -> _uiState.value = UiState.Success(album) }
         }
     }

@@ -8,12 +8,17 @@
 
 package com.example.appsfactory.data.repository
 
-import com.example.appsfactory.data.source.local.dao.AlbumsDao
+import com.example.appsfactory.data.source.local.dao.TopAlbumsDao
 import com.example.appsfactory.data.source.local.entity.LocalAlbum
 import com.example.appsfactory.domain.repository.AlbumRepository
 
-class AlbumRepositoryImpl(private val albumDao: AlbumsDao) : AlbumRepository {
-    override fun getAlbums() = albumDao.getAllAlbums()
-    override suspend fun insert(album: LocalAlbum) = albumDao.insertAlbum(album)
+class AlbumRepositoryImpl(private val albumDao: TopAlbumsDao) : AlbumRepository {
+    override fun getAllTopAlbums() = albumDao.getAllAlbums()
+
+    override suspend fun update(
+        name: String,
+        isBookmarked: Boolean
+    ) = albumDao.update(name, isBookmarked)
+
     override suspend fun delete(album: LocalAlbum) = albumDao.deleteAlbum(album)
 }

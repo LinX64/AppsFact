@@ -42,24 +42,14 @@ class TopAlbumsViewModel @Inject constructor(
     }
 
     fun onBookmarkClicked(album: TopAlbum) = viewModelScope.launch(ioDispatcher) {
-        val mAlbum = LocalAlbum(
-            name = album.name,
-            artist = album.artist.name,
-            image = album.image[2].text,
-            url = album.url,
-            isSelected = true
-        )
-
-        localAlbumsUseCase.insert(mAlbum)
+        localAlbumsUseCase.update(album.name, true)
     }
 
     fun onBookmarkRemoveClicked(album: TopAlbum) = viewModelScope.launch(ioDispatcher) {
         val mAlbum = LocalAlbum(
             name = album.name,
             artist = album.artist.name,
-            image = album.image[2].text,
-            url = album.url,
-            isSelected = false
+            image = album.image[2].text
         )
         localAlbumsUseCase.delete(mAlbum)
     }

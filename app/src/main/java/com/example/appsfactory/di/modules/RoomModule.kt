@@ -34,5 +34,5 @@ object RoomModule {
 
     @Singleton
     @Provides
-    fun provideAlbumDao(appDb: AppDatabase) = appDb.albumDao()
+    fun provideTopAlbumDao(appDb: AppDatabase) = appDb.topAlbumDao()
 }

@@ -12,7 +12,7 @@ import com.example.appsfactory.data.source.local.entity.LocalAlbum
 import kotlinx.coroutines.flow.Flow
 
 interface AlbumRepository {
-    fun getAlbums(): Flow<List<LocalAlbum>>
-    suspend fun insert(album: LocalAlbum)
+    fun getAllTopAlbums(): Flow<List<LocalAlbum>>
+    suspend fun update(name: String, isBookmarked: Boolean)
     suspend fun delete(album: LocalAlbum)
 }

@@ -5,13 +5,16 @@ import com.example.appsfactory.data.source.local.entity.LocalAlbum
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface AlbumsDao {
+interface TopAlbumsDao {
 
     @Query("SELECT * FROM albums")
     fun getAllAlbums(): Flow<List<LocalAlbum>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAlbum(albums: LocalAlbum)
+    suspend fun insertAll(albums: List<LocalAlbum>)
+
+    @Query("UPDATE albums SET isBookmarked = :isBookmarked WHERE name = :name")
+    suspend fun update(name: String, isBookmarked: Boolean)
 
     @Delete
     suspend fun deleteAlbum(album: LocalAlbum)
