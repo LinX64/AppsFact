@@ -8,9 +8,6 @@
 
 package com.example.appsfactory.di.modules
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkInfo
 import androidx.viewbinding.BuildConfig
 import com.example.appsfactory.data.repository.AlbumRepositoryImpl
 import com.example.appsfactory.data.repository.MainRepositoryImpl
@@ -22,7 +19,6 @@ import com.example.appsfactory.util.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -75,15 +71,6 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideMoshiConverterFactory(): GsonConverterFactory = GsonConverterFactory.create()
-
-    @Provides
-    @Singleton
-    fun provideIsNetworkAvailable(@ApplicationContext context: Context): Boolean {
-        val connectivityManager =
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
-        return activeNetwork != null && activeNetwork.isConnected
-    }
 
     @Provides
     @Singleton
