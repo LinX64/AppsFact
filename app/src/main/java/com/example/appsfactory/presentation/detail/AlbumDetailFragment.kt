@@ -77,7 +77,6 @@ class AlbumDetailFragment :
 
     private fun onError(error: String) {
         binding.progressBar.gone()
-        binding.emptyView.emptyViewLayout.visible()
         Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
     }
 }

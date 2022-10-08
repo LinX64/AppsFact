@@ -16,6 +16,7 @@ import com.example.appsfactory.domain.repository.AlbumInfoRepository
 import com.example.appsfactory.util.ApiState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
+import okio.IOException
 
 class AlbumInfoRepositoryImpl(
     private val apiService: ApiService,
@@ -30,30 +31,30 @@ class AlbumInfoRepositoryImpl(
     ): Flow<ApiState<AlbumInfoEntity>> = flow {
         emit(ApiState.Loading(true))
 
-        when (isNetworkAvailable) {
-            true -> {
-                val album = apiService.getAlbumInfo(albumName, artistName).album
-                val albumEntity = AlbumInfoEntity(
-                    album.playcount.toInt(),
-                    album.name,
-                    album.artist,
-                    album.image[3].text,
-                    album.tracks.track.toString(),
-                    album.wiki.summary
-                )
+        if (isNetworkAvailable) {
+            val album = apiService.getAlbumInfo(albumName, artistName).album
+            val albumEntity = AlbumInfoEntity(
+                album.playcount.toInt(),
+                album.name,
+                album.artist,
+                album.image[2].text,
+                album.tracks.track.toString(),
+                album.wiki.summary
+            )
 
-                appDb.albumInfoDao().insert(albumEntity)
-                emit(ApiState.Success(albumEntity))
-            }
-            false -> {
-                // retrieve data from db if available
-                appDb.albumInfoDao().getAlbumInfo(albumName, artistName)
-                    .filterNotNull()
-                    .collect { emit(ApiState.Success(it)) }
-            }
+            appDb.albumInfoDao().insert(albumEntity)
+            emit(ApiState.Success(albumEntity))
         }
+        // retrieve data from db if available
+        appDb.albumInfoDao().getAlbumInfo(albumName, artistName)
+            .filterNotNull()
+            .collect { emit(ApiState.Success(it)) }
     }
-        .catch { e -> emit(ApiState.Error(e.message.toString())) }
+        .catch { e ->
+            if (e is IOException) emit(ApiState.Error("No Internet Connection")) else emit(
+                ApiState.Error(e.message.toString())
+            )
+        }
         .flowOn(ioDispatcher)
 
     override suspend fun delete() = appDb.albumInfoDao().deleteAll()

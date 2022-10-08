@@ -29,10 +29,8 @@ class MainRepositoryImpl(
     override suspend fun getArtist(artistName: String): Flow<ApiState<Artistmatches>> = flow {
         emit(ApiState.Loading(true))
 
-        if (isNetworkAvailable) {
-            val artist = apiService.getArtist(artistName).results.artistmatches
-            emit(ApiState.Success(artist))
-        } else emit(ApiState.Error("No internet connection"))
+        val artist = apiService.getArtist(artistName).results.artistmatches
+        emit(ApiState.Success(artist))
     }
         .catch { e -> emit(ApiState.Error(e.message.toString())) }
         .flowOn(ioDispatcher)
@@ -41,10 +39,8 @@ class MainRepositoryImpl(
         flow {
             emit(ApiState.Loading(true))
 
-            if (isNetworkAvailable) {
-                val response = apiService.getTopAlbumsBasedOnArtist(artistName).topalbums.album
-                emit(ApiState.Success(response))
-            } else emit(ApiState.Error("No internet connection"))
+            val response = apiService.getTopAlbumsBasedOnArtist(artistName).topalbums.album
+            emit(ApiState.Success(response))
         }
             .onEach {
                 if (it is ApiState.Success) {
