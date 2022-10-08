@@ -17,9 +17,9 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.appsfactory.data.source.local.entity.AlbumInfoEntity
-import com.example.appsfactory.databinding.FragmentAlbumDetailBinding
+import com.example.appsfactory.databinding.FragmentAlbumInfoBinding
 import com.example.appsfactory.presentation.base.BaseFragment
-import com.example.appsfactory.presentation.util.inVisible
+import com.example.appsfactory.presentation.util.gone
 import com.example.appsfactory.presentation.util.visible
 import com.example.appsfactory.util.UiState
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class AlbumDetailFragment :
-    BaseFragment<FragmentAlbumDetailBinding>(FragmentAlbumDetailBinding::inflate) {
+    BaseFragment<FragmentAlbumInfoBinding>(FragmentAlbumInfoBinding::inflate) {
 
     private val detailViewModel by activityViewModels<DetailViewModel>()
 
@@ -62,20 +62,26 @@ class AlbumDetailFragment :
 
     private fun onSuccess(album: AlbumInfoEntity) {
         binding.apply {
-            progressBar.inVisible()
+            progressBar.gone()
 
             album.apply {
                 titleTV.text = albumName
                 txtArtist.text = artistName
-                txtArtist.text = tracks[0].toString()
                 txtContent.text = wiki
 
-                Glide.with(requireContext()).load(image[0]).into(imageView)
+                /*val listType: Type = object : TypeToken<List<String?>?>() {}.type
+                val mTracks  = Gson().fromJson<List<String>>(tracks, listType)
+                txtTracks.text = mTracks.forEach {
+                    "$it
+                }*/
+
+                Glide.with(requireContext()).load(image).into(imageView)
             }
         }
     }
 
     private fun onError(error: String) {
+        binding.progressBar.gone()
         binding.emptyView.emptyViewLayout.visible()
         Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
     }

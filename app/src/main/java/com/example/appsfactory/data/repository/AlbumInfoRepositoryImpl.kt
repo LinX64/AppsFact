@@ -14,10 +14,7 @@ import com.example.appsfactory.data.source.remote.ApiService
 import com.example.appsfactory.domain.repository.AlbumInfoRepository
 import com.example.appsfactory.util.ApiState
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.*
 
 class AlbumInfoRepositoryImpl(
     private val apiService: ApiService,
@@ -29,23 +26,31 @@ class AlbumInfoRepositoryImpl(
         albumName: String,
         artistName: String
     ): Flow<ApiState<AlbumInfoEntity>> = flow {
+        emit(ApiState.Loading(true))
 
-        if (isNetworkAvailable) {
-            val album = apiService.getAlbumInfo(albumName, artistName).album
-            val albumEntity = AlbumInfoEntity(
-                0,
-                album.name,
-                album.artist,
-                album.image[0].text,
-                album.tracks.track.toString(),
-                album.wiki.summary
-            )
+        when (isNetworkAvailable) {
+            true -> {
+                val album = apiService.getAlbumInfo(albumName, artistName).album
+                val albumEntity = AlbumInfoEntity(
+                    album.playcount.toInt(),
+                    album.name,
+                    album.artist,
+                    album.image[3].text,
+                    album.tracks.track.toString(),
+                    album.wiki.summary
+                )
 
-            appDb.albumInfoDao().insert(albumEntity)
-        } else emit(ApiState.Error("No Internet Connection"))
+                appDb.albumInfoDao().insert(albumEntity)
+                emit(ApiState.Success(albumEntity))
+            }
+            false -> emit(ApiState.Error("No internet connection"))
+        }
 
-        appDb.albumInfoDao().getAlbumInfo(albumName, artistName)
-            .collect { emit(ApiState.Success(it)) }
+        // retrieve data from db if available
+        val getAlbumInfo = appDb.albumInfoDao().getAlbumInfo(albumName, artistName)
+        getAlbumInfo.filterNotNull().collect { albumInfo ->
+            emit(ApiState.Success(albumInfo))
+        }
     }
         .catch { e -> emit(ApiState.Error(e.message.toString())) }
         .flowOn(Dispatchers.IO)

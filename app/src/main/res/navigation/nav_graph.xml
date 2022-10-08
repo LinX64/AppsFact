@@ -12,6 +12,7 @@
         tools:layout="@layout/fragment_main">
         <action
             android:id="@+id/action_mainFragment_to_detailFragment"
+            app:popUpToInclusive="false"
             app:destination="@id/detailFragment" />
         <action
             android:id="@+id/action_mainFragment_to_searchArtistFragment"
@@ -52,7 +53,7 @@
         android:id="@+id/detailFragment"
         android:name="com.example.appsfactory.presentation.detail.AlbumDetailFragment"
         android:label="Album Detail"
-        tools:layout="@layout/fragment_album_detail">
+        tools:layout="@layout/fragment_album_info">
 
         <argument
             android:name="albumName"

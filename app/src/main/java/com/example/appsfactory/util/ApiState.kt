@@ -11,5 +11,5 @@ package com.example.appsfactory.util
 sealed class ApiState<T> {
     data class Loading<T>(val loading: Boolean) : ApiState<T>()
     data class Success<T>(val data: T) : ApiState<T>()
-    data class Error<T>(val error: String?) : ApiState<T>()
+    data class Error<T>(val error: String) : ApiState<T>()
 }

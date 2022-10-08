@@ -9,10 +9,8 @@
 package com.example.appsfactory.presentation.top_albums
 
 import androidx.lifecycle.viewModelScope
-import com.example.appsfactory.data.source.local.AppDatabase
 import com.example.appsfactory.di.modules.IoDispatcher
 import com.example.appsfactory.domain.model.top_albums.TopAlbum
-import com.example.appsfactory.domain.usecase.AlbumInfoUseCase
 import com.example.appsfactory.domain.usecase.GetTopAlbumsUseCase
 import com.example.appsfactory.domain.usecase.LocalAlbumsUseCase
 import com.example.appsfactory.presentation.base.BaseViewModel
@@ -27,8 +25,6 @@ import javax.inject.Inject
 class TopAlbumsViewModel @Inject constructor(
     private val topAlbumsUseCase: GetTopAlbumsUseCase,
     private val localAlbumsUseCase: LocalAlbumsUseCase,
-    private val albumInfoUseCase: AlbumInfoUseCase,
-    private val appDatabase: AppDatabase,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : BaseViewModel<List<TopAlbum>>() {
 
@@ -50,6 +46,5 @@ class TopAlbumsViewModel @Inject constructor(
 
     fun onBookmarkRemoveClicked(album: TopAlbum) = viewModelScope.launch(ioDispatcher) {
         localAlbumsUseCase.delete(album.playcount)
-        // TODO: 10/5/2021 remove from local db
     }
 }

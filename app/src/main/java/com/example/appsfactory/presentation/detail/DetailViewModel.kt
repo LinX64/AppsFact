@@ -30,8 +30,8 @@ class DetailViewModel @Inject constructor(
     private fun handleState(it: ApiState<AlbumInfoEntity>) {
         when (it) {
             is ApiState.Success -> _uiState.value = UiState.Success(it.data)
-            is ApiState.Error -> _uiState.value = UiState.Error(it.error.toString())
-            else -> _uiState.value = UiState.Loading
+            is ApiState.Error -> _uiState.value = UiState.Error(it.error)
+            is ApiState.Loading -> _uiState.value = UiState.Loading
         }
     }
 }

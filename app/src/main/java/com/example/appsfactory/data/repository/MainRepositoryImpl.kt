@@ -20,14 +20,17 @@ import kotlinx.coroutines.flow.*
 
 class MainRepositoryImpl(
     private val apiService: ApiService,
-    private val appDb: AppDatabase
+    private val appDb: AppDatabase,
+    private val isNetworkAvailable: Boolean
 ) : MainRepository {
 
     override suspend fun getArtist(artistName: String): Flow<ApiState<Artistmatches>> = flow {
         emit(ApiState.Loading(true))
 
-        val response = apiService.getArtist(artistName).results.artistmatches
-        emit(ApiState.Success(response))
+        if (isNetworkAvailable) {
+            val artist = apiService.getArtist(artistName).results.artistmatches
+            emit(ApiState.Success(artist))
+        } else emit(ApiState.Error("No internet connection"))
     }
         .catch { e -> emit(ApiState.Error(e.message.toString())) }
         .flowOn(Dispatchers.IO)
@@ -36,8 +39,10 @@ class MainRepositoryImpl(
         flow {
             emit(ApiState.Loading(true))
 
-            val response = apiService.getTopAlbumsBasedOnArtist(artistName).topalbums.album
-            emit(ApiState.Success(response))
+            if (isNetworkAvailable) {
+                val response = apiService.getTopAlbumsBasedOnArtist(artistName).topalbums.album
+                emit(ApiState.Success(response))
+            } else emit(ApiState.Error("No internet connection"))
         }
             .onEach {
                 if (it is ApiState.Success) {
@@ -46,7 +51,7 @@ class MainRepositoryImpl(
                             album.playcount,
                             album.name,
                             album.artist.name,
-                            album.image[0].text
+                            album.image[2].text
                         )
                     }
                     appDb.topAlbumDao().insertAll(albums)

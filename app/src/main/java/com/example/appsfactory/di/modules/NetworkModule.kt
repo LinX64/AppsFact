@@ -83,8 +83,9 @@ object NetworkModule {
     @Singleton
     fun provideMainRepository(
         apiService: ApiService,
-        appDatabase: AppDatabase
-    ): MainRepository = MainRepositoryImpl(apiService, appDatabase)
+        appDatabase: AppDatabase,
+        isNetworkAvailable: Boolean
+    ): MainRepository = MainRepositoryImpl(apiService, appDatabase, isNetworkAvailable)
 
     @Singleton
     @Provides
