@@ -10,7 +10,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.appsfactory.data.source.local.AppDatabase
 import com.example.appsfactory.data.source.local.dao.TopAlbumsDao
-import com.example.appsfactory.data.source.local.entity.LocalAlbum
+import com.example.appsfactory.data.source.local.entity.AlbumEntity
 import com.example.appsfactory.presentation.MainActivity
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.core.IsNot.not
@@ -67,11 +67,12 @@ class MainScreenTest {
 
     private suspend fun insertDummyData() {
         val albums = List(10) {
-            LocalAlbum(
-                count = 0,
+            AlbumEntity(
+                0,
                 name = "Album $it",
                 artist = "Artist $it",
-                image = "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png"
+                image = "https://lastfm.freetls.fastly.net/i/u/34s/2a96cbd8b46e442fc41c2be3b5b7e943.png",
+                isBookmarked = false
             )
         }
         albumsDao.insertAll(albums)

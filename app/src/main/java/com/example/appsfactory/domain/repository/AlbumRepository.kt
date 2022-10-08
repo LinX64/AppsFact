@@ -8,11 +8,14 @@
 
 package com.example.appsfactory.domain.repository
 
-import com.example.appsfactory.data.source.local.entity.LocalAlbum
+import com.example.appsfactory.data.source.local.entity.AlbumEntity
 import kotlinx.coroutines.flow.Flow
 
 interface AlbumRepository {
-    fun getAllTopAlbums(): Flow<List<LocalAlbum>>
+
+    fun getBookmarkedAlbums(): Flow<List<AlbumEntity>>
+
     suspend fun update(name: String, isBookmarked: Boolean)
+
     suspend fun delete(id: Int)
 }

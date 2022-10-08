@@ -9,9 +9,8 @@
 package com.example.appsfactory.data.repository
 
 import com.example.appsfactory.data.source.local.AppDatabase
-import com.example.appsfactory.data.source.local.entity.LocalAlbum
+import com.example.appsfactory.data.source.local.entity.AlbumEntity
 import com.example.appsfactory.data.source.remote.ApiService
-import com.example.appsfactory.domain.model.albumInfo.Album
 import com.example.appsfactory.domain.model.artistList.Artistmatches
 import com.example.appsfactory.domain.model.top_albums.TopAlbum
 import com.example.appsfactory.domain.repository.MainRepository
@@ -43,7 +42,7 @@ class MainRepositoryImpl(
             .onEach {
                 if (it is ApiState.Success) {
                     val albums = it.data.map { album ->
-                        LocalAlbum(
+                        AlbumEntity(
                             album.playcount,
                             album.name,
                             album.artist.name,
@@ -55,16 +54,4 @@ class MainRepositoryImpl(
             }
             .catch { e -> emit(ApiState.Error(e.message.toString())) }
             .flowOn(Dispatchers.IO)
-
-    override suspend fun getAlbumInfo(
-        albumName: String,
-        artistName: String
-    ): Flow<ApiState<Album>> = flow {
-        emit(ApiState.Loading(true))
-
-        val response = apiService.getAlbumInfo(albumName, artistName).album
-        emit(ApiState.Success(response))
-    }
-        .catch { e -> emit(ApiState.Error(e.message.toString())) }
-        .flowOn(Dispatchers.IO)
 }

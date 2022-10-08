@@ -8,11 +8,15 @@
 
 package com.example.appsfactory.domain.usecase
 
+import com.example.appsfactory.domain.model.top_albums.TopAlbum
 import com.example.appsfactory.domain.repository.MainRepository
+import com.example.appsfactory.util.ApiState
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetTopAlbumsUseCase @Inject constructor(private val mainRepository: MainRepository) {
 
-    suspend fun getTopAlbumsBasedOnArtist(artistName: String) =
-        mainRepository.getTopAlbumsBasedOnArtist(artistName)
+    suspend fun getTopAlbumsBasedOnArtist(artistName: String): Flow<ApiState<List<TopAlbum>>> {
+        return mainRepository.getTopAlbumsBasedOnArtist(artistName)
+    }
 }

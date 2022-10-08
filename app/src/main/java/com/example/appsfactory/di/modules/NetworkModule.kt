@@ -8,18 +8,24 @@
 
 package com.example.appsfactory.di.modules
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import androidx.viewbinding.BuildConfig
+import com.example.appsfactory.data.repository.AlbumInfoRepositoryImpl
 import com.example.appsfactory.data.repository.AlbumRepositoryImpl
 import com.example.appsfactory.data.repository.MainRepositoryImpl
 import com.example.appsfactory.data.source.local.AppDatabase
 import com.example.appsfactory.data.source.local.dao.TopAlbumsDao
 import com.example.appsfactory.data.source.remote.ApiService
+import com.example.appsfactory.domain.repository.AlbumInfoRepository
 import com.example.appsfactory.domain.repository.AlbumRepository
 import com.example.appsfactory.domain.repository.MainRepository
 import com.example.appsfactory.util.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -85,6 +91,23 @@ object NetworkModule {
     fun provideAlbumRepository(
         albumsDao: TopAlbumsDao
     ): AlbumRepository = AlbumRepositoryImpl(albumsDao)
+
+    @Singleton
+    @Provides
+    fun provideAlbumInfoRepository(
+        apiService: ApiService,
+        appDatabase: AppDatabase,
+        isNetworkAvailable: Boolean
+    ): AlbumInfoRepository = AlbumInfoRepositoryImpl(apiService, appDatabase, isNetworkAvailable)
+
+    @Provides
+    @Singleton
+    fun provideIsNetworkAvailable(@ApplicationContext context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
+        return activeNetwork != null && activeNetwork.isConnected
+    }
 
     @IoDispatcher
     @Provides

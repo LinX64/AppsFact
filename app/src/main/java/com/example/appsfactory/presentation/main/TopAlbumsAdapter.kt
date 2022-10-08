@@ -11,20 +11,20 @@ package com.example.appsfactory.presentation.main
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.appsfactory.data.source.local.entity.LocalAlbum
+import com.example.appsfactory.data.source.local.entity.AlbumEntity
 import com.example.appsfactory.databinding.AlbumsListItemBinding
 
 class TopAlbumsAdapter(
-    private val onItemClicked: (LocalAlbum) -> Unit
+    private val onItemClicked: (AlbumEntity) -> Unit
 ) : RecyclerView.Adapter<TopAlbumsAdapter.MyViewHolder>() {
-    private var albumsList = ArrayList<LocalAlbum>()
+    private var albumsList = ArrayList<AlbumEntity>()
 
     inner class MyViewHolder(
         private val binding: AlbumsListItemBinding,
         private val onItemClicked: (Int) -> Unit
     ) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(album: LocalAlbum) {
+        fun bind(album: AlbumEntity) {
             binding.album = album
             binding.executePendingBindings()
 
@@ -48,7 +48,7 @@ class TopAlbumsAdapter(
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) =
         holder.bind(albumsList[position])
 
-    fun setData(albums: List<LocalAlbum>) {
+    fun setData(albums: List<AlbumEntity>) {
         albumsList.clear()
         albumsList.addAll(albums)
         notifyDataSetChanged()

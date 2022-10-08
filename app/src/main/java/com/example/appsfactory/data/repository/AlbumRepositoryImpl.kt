@@ -1,8 +1,8 @@
 /*
  * *
- *  * Created by Mohsen on 10/4/22, 1:28 PM
+ *  * Created by Mohsen on 10/8/22, 3:51 AM
  *  * Copyright (c) 2022 . All rights reserved.
- *  * Last modified 10/4/22, 1:28 PM
+ *  * Last modified 10/8/22, 3:51 AM
  *
  */
 
@@ -13,7 +13,7 @@ import com.example.appsfactory.domain.repository.AlbumRepository
 
 class AlbumRepositoryImpl(private val albumDao: TopAlbumsDao) : AlbumRepository {
 
-    override fun getAllTopAlbums() = albumDao.getAllAlbums()
+    override fun getBookmarkedAlbums() = albumDao.getBookmarkedAlbums()
 
     override suspend fun update(
         name: String,

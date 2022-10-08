@@ -9,8 +9,8 @@
 package com.example.appsfactory.presentation.detail
 
 import androidx.lifecycle.viewModelScope
-import com.example.appsfactory.domain.model.albumInfo.Album
-import com.example.appsfactory.domain.usecase.AlbumDetailUseCase
+import com.example.appsfactory.data.source.local.entity.AlbumInfoEntity
+import com.example.appsfactory.domain.usecase.AlbumInfoUseCase
 import com.example.appsfactory.presentation.base.BaseViewModel
 import com.example.appsfactory.util.ApiState
 import com.example.appsfactory.util.UiState
@@ -20,19 +20,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    private val albumDetailUseCase: AlbumDetailUseCase
-) : BaseViewModel<Album>() {
+    private val albumInfoUseCase: AlbumInfoUseCase
+) : BaseViewModel<AlbumInfoEntity>() {
 
     fun getAlbumInfo(albumName: String, artistName: String) = viewModelScope.launch {
-        albumDetailUseCase.getAlbumInfo(albumName, artistName).collect { handleState(it) }
+        albumInfoUseCase.getAlbumInfo(albumName, artistName).collect { handleState(it) }
     }
 
-    private fun handleState(it: ApiState<Album>) {
+    private fun handleState(it: ApiState<AlbumInfoEntity>) {
         when (it) {
-            is ApiState.Loading -> _uiState.value = UiState.Loading
             is ApiState.Success -> _uiState.value = UiState.Success(it.data)
             is ApiState.Error -> _uiState.value = UiState.Error(it.error.toString())
+            else -> _uiState.value = UiState.Loading
         }
     }
-
 }
