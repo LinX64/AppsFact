@@ -11,15 +11,17 @@ package com.example.appsfactory.data.repository
 import com.example.appsfactory.data.source.local.AppDatabase
 import com.example.appsfactory.data.source.local.entity.AlbumInfoEntity
 import com.example.appsfactory.data.source.remote.ApiService
+import com.example.appsfactory.di.modules.IoDispatcher
 import com.example.appsfactory.domain.repository.AlbumInfoRepository
 import com.example.appsfactory.util.ApiState
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
 
 class AlbumInfoRepositoryImpl(
     private val apiService: ApiService,
     private val appDb: AppDatabase,
-    private val isNetworkAvailable: Boolean
+    private val isNetworkAvailable: Boolean,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : AlbumInfoRepository {
 
     override suspend fun getAlbumInfo(
@@ -43,17 +45,16 @@ class AlbumInfoRepositoryImpl(
                 appDb.albumInfoDao().insert(albumEntity)
                 emit(ApiState.Success(albumEntity))
             }
-            false -> emit(ApiState.Error("No internet connection"))
-        }
-
-        // retrieve data from db if available
-        val getAlbumInfo = appDb.albumInfoDao().getAlbumInfo(albumName, artistName)
-        getAlbumInfo.filterNotNull().collect { albumInfo ->
-            emit(ApiState.Success(albumInfo))
+            false -> {
+                // retrieve data from db if available
+                appDb.albumInfoDao().getAlbumInfo(albumName, artistName)
+                    .filterNotNull()
+                    .collect { emit(ApiState.Success(it)) }
+            }
         }
     }
         .catch { e -> emit(ApiState.Error(e.message.toString())) }
-        .flowOn(Dispatchers.IO)
+        .flowOn(ioDispatcher)
 
     override suspend fun delete() = appDb.albumInfoDao().deleteAll()
 }

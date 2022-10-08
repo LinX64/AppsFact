@@ -15,8 +15,8 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appsfactory.databinding.TopAlbumsListItemBinding
 import com.example.appsfactory.domain.model.top_albums.TopAlbum
-import com.example.appsfactory.presentation.util.inVisible
-import com.example.appsfactory.presentation.util.visible
+import com.example.appsfactory.util.inVisible
+import com.example.appsfactory.util.visible
 
 class TopAlbumAdapter(
     private val onItemClicked: (TopAlbum) -> Unit,

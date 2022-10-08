@@ -23,8 +23,10 @@ class SearchViewModel @Inject constructor(
     private val searchArtistUseCase: SearchArtistUseCase
 ) : BaseViewModel<Artistmatches>() {
 
-    fun getArtist(artistName: String) = viewModelScope.launch {
-        searchArtistUseCase.getArtist(artistName).collect { handleState(it) }
+    fun getArtist(artistName: String) {
+        viewModelScope.launch {
+            searchArtistUseCase.getArtist(artistName).collect { handleState(it) }
+        }
     }
 
     private fun handleState(it: ApiState<Artistmatches>) {

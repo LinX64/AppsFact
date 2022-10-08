@@ -13,15 +13,15 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
 import com.example.appsfactory.data.source.local.entity.AlbumInfoEntity
 import com.example.appsfactory.databinding.FragmentAlbumInfoBinding
 import com.example.appsfactory.presentation.base.BaseFragment
-import com.example.appsfactory.presentation.util.gone
-import com.example.appsfactory.presentation.util.visible
 import com.example.appsfactory.util.UiState
+import com.example.appsfactory.util.gone
+import com.example.appsfactory.util.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -47,16 +47,17 @@ class AlbumDetailFragment :
 
     private fun getAlbumDetailState() {
         viewLifecycleOwner.lifecycleScope.launch {
-            detailViewModel.uiState.flowWithLifecycle(
-                viewLifecycleOwner.lifecycle,
-                Lifecycle.State.STARTED
-            ).collect {
-                when (it) {
-                    is UiState.Loading -> binding.progressBar.visible()
-                    is UiState.Success -> onSuccess(it.data)
-                    is UiState.Error -> onError(it.error)
-                }
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                detailViewModel.uiState.collect { uiState -> updateUI(uiState) }
             }
+        }
+    }
+
+    private fun updateUI(uiState: UiState<AlbumInfoEntity>) {
+        when (uiState) {
+            is UiState.Loading -> binding.progressBar.visible()
+            is UiState.Success -> onSuccess(uiState.data)
+            is UiState.Error -> onError(uiState.error)
         }
     }
 
@@ -68,12 +69,6 @@ class AlbumDetailFragment :
                 titleTV.text = albumName
                 txtArtist.text = artistName
                 txtContent.text = wiki
-
-                /*val listType: Type = object : TypeToken<List<String?>?>() {}.type
-                val mTracks  = Gson().fromJson<List<String>>(tracks, listType)
-                txtTracks.text = mTracks.forEach {
-                    "$it
-                }*/
 
                 Glide.with(requireContext()).load(image).into(imageView)
             }

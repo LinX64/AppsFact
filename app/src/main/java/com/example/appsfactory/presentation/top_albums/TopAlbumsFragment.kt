@@ -19,9 +19,9 @@ import androidx.navigation.fragment.findNavController
 import com.example.appsfactory.databinding.FragmentTopAlbumsBinding
 import com.example.appsfactory.domain.model.top_albums.TopAlbum
 import com.example.appsfactory.presentation.base.BaseFragment
-import com.example.appsfactory.presentation.util.inVisible
-import com.example.appsfactory.presentation.util.visible
 import com.example.appsfactory.util.UiState
+import com.example.appsfactory.util.inVisible
+import com.example.appsfactory.util.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -86,16 +86,18 @@ class TopAlbumsFragment :
 
     private fun getTopAlbumsState() {
         viewLifecycleOwner.lifecycleScope.launch {
-            topAlbumsViewModel.uiState.flowWithLifecycle(
-                viewLifecycleOwner.lifecycle,
-                Lifecycle.State.STARTED
-            ).collect { uiState ->
-                when (uiState) {
-                    is UiState.Loading -> binding.progressBar.visible()
-                    is UiState.Success -> onSuccess(uiState.data)
-                    is UiState.Error -> onError(uiState)
-                }
-            }
+            topAlbumsViewModel
+                .uiState
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+                .collect { uiState -> updateUI(uiState) }
+        }
+    }
+
+    private fun updateUI(uiState: UiState<List<TopAlbum>>) {
+        when (uiState) {
+            is UiState.Loading -> binding.progressBar.visible()
+            is UiState.Success -> onSuccess(uiState.data)
+            is UiState.Error -> onError(uiState)
         }
     }
 

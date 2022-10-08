@@ -16,8 +16,8 @@ interface TopAlbumsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(albums: List<AlbumEntity>)
 
-    @Query("UPDATE albums SET isBookmarked = :isBookmarked WHERE name = :name")
-    suspend fun update(name: String, isBookmarked: Boolean)
+    @Query("UPDATE albums SET isBookmarked = :isBookmarked WHERE id = :albumId")
+    suspend fun update(albumId: Int, isBookmarked: Int)
 
     @Query("DELETE FROM albums WHERE id = :id")
     suspend fun deleteAlbum(id: Int)

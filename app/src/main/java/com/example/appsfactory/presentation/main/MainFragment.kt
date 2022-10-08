@@ -13,15 +13,15 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.appsfactory.data.source.local.entity.AlbumEntity
 import com.example.appsfactory.databinding.FragmentMainBinding
 import com.example.appsfactory.presentation.base.BaseFragment
-import com.example.appsfactory.presentation.util.gone
-import com.example.appsfactory.presentation.util.visible
 import com.example.appsfactory.util.UiState
+import com.example.appsfactory.util.gone
+import com.example.appsfactory.util.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -54,17 +54,17 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
 
     private fun getAlbums() {
         viewLifecycleOwner.lifecycleScope.launch {
-            mainViewModel.uiState.flowWithLifecycle(
-                viewLifecycleOwner.lifecycle,
-                Lifecycle.State.STARTED
-            )
-                .collect { uiState ->
-                    when (uiState) {
-                        is UiState.Loading -> binding.progressBar.visible()
-                        is UiState.Success -> onSuccess(uiState)
-                        is UiState.Error -> onError(uiState)
-                    }
-                }
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mainViewModel.uiState.collect { uiState -> updateUI(uiState) }
+            }
+        }
+    }
+
+    private fun updateUI(uiState: UiState<List<AlbumEntity>>) {
+        when (uiState) {
+            is UiState.Loading -> binding.progressBar.visible()
+            is UiState.Success -> onSuccess(uiState)
+            is UiState.Error -> onError(uiState.error)
         }
     }
 
@@ -73,13 +73,9 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
         submitList(uiState.data)
     }
 
-    private fun onError(result: UiState.Error) {
+    private fun onError(error: String) {
         binding.progressBar.gone()
-        Toast.makeText(
-            requireContext(),
-            result.error,
-            Toast.LENGTH_SHORT
-        ).show()
+        Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
     }
 
     private fun submitList(localAlbums: List<AlbumEntity>) {

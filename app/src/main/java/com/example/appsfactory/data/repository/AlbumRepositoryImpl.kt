@@ -16,9 +16,9 @@ class AlbumRepositoryImpl(private val albumDao: TopAlbumsDao) : AlbumRepository 
     override fun getBookmarkedAlbums() = albumDao.getBookmarkedAlbums()
 
     override suspend fun update(
-        name: String,
-        isBookmarked: Boolean
-    ) = albumDao.update(name, isBookmarked)
+        albumId: Int,
+        isBookmarked: Int
+    ) = albumDao.update(albumId, isBookmarked)
 
     override suspend fun delete(id: Int) = albumDao.deleteAlbum(id)
 }

@@ -18,6 +18,7 @@ import com.example.appsfactory.util.ApiState
 import com.example.appsfactory.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,7 +30,9 @@ class TopAlbumsViewModel @Inject constructor(
 ) : BaseViewModel<List<TopAlbum>>() {
 
     fun getTopAlbumsBasedOnArtist(artistName: String) = viewModelScope.launch {
-        topAlbumsUseCase.getTopAlbumsBasedOnArtist(artistName).collect { handleState(it) }
+        topAlbumsUseCase.getTopAlbumsBasedOnArtist(artistName)
+            .distinctUntilChanged()
+            .collect { handleState(it) }
     }
 
     private fun handleState(it: ApiState<List<TopAlbum>>) {
@@ -41,7 +44,7 @@ class TopAlbumsViewModel @Inject constructor(
     }
 
     fun onBookmarkClicked(album: TopAlbum) = viewModelScope.launch(ioDispatcher) {
-        localAlbumsUseCase.update(album.name, true)
+        localAlbumsUseCase.update(album.playcount, 1)
     }
 
     fun onBookmarkRemoveClicked(album: TopAlbum) = viewModelScope.launch(ioDispatcher) {

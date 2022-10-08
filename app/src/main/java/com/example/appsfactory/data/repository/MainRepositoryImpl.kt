@@ -11,17 +11,19 @@ package com.example.appsfactory.data.repository
 import com.example.appsfactory.data.source.local.AppDatabase
 import com.example.appsfactory.data.source.local.entity.AlbumEntity
 import com.example.appsfactory.data.source.remote.ApiService
+import com.example.appsfactory.di.modules.IoDispatcher
 import com.example.appsfactory.domain.model.artistList.Artistmatches
 import com.example.appsfactory.domain.model.top_albums.TopAlbum
 import com.example.appsfactory.domain.repository.MainRepository
 import com.example.appsfactory.util.ApiState
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
 
 class MainRepositoryImpl(
     private val apiService: ApiService,
     private val appDb: AppDatabase,
-    private val isNetworkAvailable: Boolean
+    private val isNetworkAvailable: Boolean,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : MainRepository {
 
     override suspend fun getArtist(artistName: String): Flow<ApiState<Artistmatches>> = flow {
@@ -33,7 +35,7 @@ class MainRepositoryImpl(
         } else emit(ApiState.Error("No internet connection"))
     }
         .catch { e -> emit(ApiState.Error(e.message.toString())) }
-        .flowOn(Dispatchers.IO)
+        .flowOn(ioDispatcher)
 
     override suspend fun getTopAlbumsBasedOnArtist(artistName: String): Flow<ApiState<List<TopAlbum>>> =
         flow {
@@ -58,5 +60,5 @@ class MainRepositoryImpl(
                 }
             }
             .catch { e -> emit(ApiState.Error(e.message.toString())) }
-            .flowOn(Dispatchers.IO)
+            .flowOn(ioDispatcher)
 }
