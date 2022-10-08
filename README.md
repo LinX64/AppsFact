@@ -48,11 +48,4 @@ The project consists of 4 different `Fragment`s with a single `Activity`. It use
   
 </p>
 
-### Tests
-
-**Automated test:** I wrote the tests for all of the mentioned screens which checks for most of the situation a user may face.
-
-**Unit test:** It has a unit test for the `MainRepository` class, where all of the calls to server are being done in there. P.S: I already wrote the test for the database operations (CRUD).
-
-
 
