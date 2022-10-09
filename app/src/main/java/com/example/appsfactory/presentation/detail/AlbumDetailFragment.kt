@@ -19,9 +19,9 @@ import com.bumptech.glide.Glide
 import com.example.appsfactory.data.source.local.entity.AlbumInfoEntity
 import com.example.appsfactory.databinding.FragmentAlbumInfoBinding
 import com.example.appsfactory.presentation.base.BaseFragment
+import com.example.appsfactory.presentation.util.gone
+import com.example.appsfactory.presentation.util.visible
 import com.example.appsfactory.util.UiState
-import com.example.appsfactory.util.gone
-import com.example.appsfactory.util.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

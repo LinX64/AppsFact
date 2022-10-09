@@ -43,7 +43,9 @@ class TopAlbumsTest {
         waitAndRetry {
             onView(withId(R.id.recyclerViewTopAlbums)).check(
                 RecyclerViewItemCountAssertion { it > 0 })
+        }
 
+        waitAndRetry {
             onView(withId(R.id.recyclerViewTopAlbums)).perform(clickOnFirstItem())
         }
 

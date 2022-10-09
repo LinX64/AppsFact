@@ -17,8 +17,9 @@ class LocalAlbumsUseCase @Inject constructor(
 
     fun getBookmarkedAlbums() = albumRepository.getBookmarkedAlbums()
 
-    suspend fun update(albumId: Int, isBookmarked: Int) =
+    suspend fun update(albumId: Int, isBookmarked: Int) {
         albumRepository.update(albumId, isBookmarked)
+    }
 
     suspend fun delete(id: Int) = albumRepository.delete(id)
 }

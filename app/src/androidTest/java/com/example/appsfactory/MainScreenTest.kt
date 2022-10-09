@@ -1,5 +1,6 @@
 package com.example.appsfactory
 
+import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
@@ -33,14 +34,7 @@ class MainScreenTest {
 
     @Before
     fun setup() {
-        db = Room.databaseBuilder(
-            getApplicationContext(),
-            AppDatabase::class.java,
-            "apps_factory_db"
-        )
-            .fallbackToDestructiveMigration()
-            .allowMainThreadQueries()
-            .build()
+        setupDb()
 
         albumsDao = db.topAlbumDao()
     }
@@ -72,7 +66,7 @@ class MainScreenTest {
                 name = "Album $it",
                 artist = "Artist $it",
                 image = "https://lastfm.freetls.fastly.net/i/u/34s/2a96cbd8b46e442fc41c2be3b5b7e943.png",
-                isBookmarked = false
+                isBookmarked = 1
             )
         }
         albumsDao.insertAll(albums)
@@ -88,6 +82,17 @@ class MainScreenTest {
 
     private fun closeMainScreen() {
         mainActivityScenario.close()
+    }
+
+    private fun setupDb() {
+        val context = getApplicationContext<Context>()
+        db = Room.databaseBuilder(
+            context,
+            AppDatabase::class.java,
+            "apps_factory_db"
+        )
+            .allowMainThreadQueries()
+            .build()
     }
 
     @After

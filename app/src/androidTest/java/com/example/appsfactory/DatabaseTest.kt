@@ -114,10 +114,13 @@ class DatabaseTest {
 
     private fun setupDb() {
         val context = ApplicationProvider.getApplicationContext<Context>()
-        db = Room.inMemoryDatabaseBuilder(
+        db = Room.databaseBuilder(
             context,
-            AppDatabase::class.java
-        ).build()
+            AppDatabase::class.java,
+            "apps_factory_db"
+        )
+            .allowMainThreadQueries()
+            .build()
     }
 
     @After

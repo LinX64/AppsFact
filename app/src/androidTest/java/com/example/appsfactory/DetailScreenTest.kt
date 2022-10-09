@@ -1,5 +1,6 @@
 package com.example.appsfactory
 
+import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
@@ -12,11 +13,11 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.appsfactory.data.source.local.AppDatabase
 import com.example.appsfactory.data.source.local.dao.TopAlbumsDao
-import com.example.appsfactory.data.source.local.entity.AlbumEntity
 import com.example.appsfactory.presentation.MainActivity
 import com.example.appsfactory.util.assertions.RecyclerViewItemCountAssertion
 import com.example.appsfactory.util.clickOnFirstItem
 import com.example.appsfactory.util.waitAndRetry
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -38,43 +39,24 @@ class DetailScreenTest {
 
     @Before
     fun setup() {
-        db = Room.databaseBuilder(
-            ApplicationProvider.getApplicationContext(),
-            AppDatabase::class.java,
-            "apps_factory_db"
-        )
-            .fallbackToDestructiveMigration()
-            .allowMainThreadQueries()
-            .build()
-
+        setupDb()
+        clearTables()
         albumsDao = db.topAlbumDao()
     }
 
     @Test
-    fun whenThereIsAnAlbumAvailableOnMain_Then_ShouldGoToDetailScreen(): Unit = runBlocking {
-        insertDummyData()
-
-        launchMainActivity()
-
-        waitAndRetry { onView(withId(R.id.recyclerViewMain)).perform(clickOnFirstItem()) }
-
-        onView(withId(R.id.artistName)).check(matches(isDisplayed()))
-    }
-
-    @Test
     fun whenAnAlbumFound_Then_ShouldGoToTopAlbumAndAlbumDetail(): Unit = runBlocking {
-        insertDummyData()
-
         launchMainActivityAndSearch()
 
         waitAndRetry { onView(withId(R.id.recyclerView)).perform(clickOnFirstItem()) }
 
         waitAndRetry {
-            onView(withId(R.id.recyclerViewTopAlbums)).check(
-                RecyclerViewItemCountAssertion { it > 0 })
+            onView(withId(R.id.recyclerViewTopAlbums)).check(RecyclerViewItemCountAssertion { it > 0 })
         }
 
         waitAndRetry { onView(withId(R.id.recyclerViewTopAlbums)).perform(clickOnFirstItem()) }
+
+        delay(1000)
 
         onView(withId(R.id.titleTV)).check(matches(isDisplayed()))
     }
@@ -96,17 +78,15 @@ class DetailScreenTest {
         onView(withId(R.id.btnSend)).perform(click())
     }
 
-    private suspend fun insertDummyData() {
-        val albums = List(10) {
-            AlbumEntity(
-                0,
-                name = "Album $it",
-                artist = "Artist $it",
-                image = "https://lastfm.freetls.fastly.net/i/u/34s/2a96cbd8b46e442fc41c2be3b5b7e943.png",
-                isBookmarked = false
-            )
-        }
-        albumsDao.insertAll(albums)
+    private fun setupDb() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        db = Room.databaseBuilder(
+            context,
+            AppDatabase::class.java,
+            "apps_factory_db"
+        )
+            .allowMainThreadQueries()
+            .build()
     }
 
     private fun clearTables() {

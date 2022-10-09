@@ -22,11 +22,9 @@ class MainViewModel @Inject constructor(
     private val albumsUseCase: LocalAlbumsUseCase
 ) : BaseViewModel<List<AlbumEntity>>() {
 
-    init {
-        viewModelScope.launch {
-            albumsUseCase
-                .getBookmarkedAlbums()
-                .collect { album -> _uiState.value = UiState.Success(album) }
-        }
+    fun getAlbums() = viewModelScope.launch {
+        albumsUseCase
+            .getBookmarkedAlbums()
+            .collect { album -> _uiState.value = UiState.Success(album) }
     }
 }

@@ -19,9 +19,9 @@ import androidx.navigation.fragment.findNavController
 import com.example.appsfactory.data.source.local.entity.AlbumEntity
 import com.example.appsfactory.databinding.FragmentMainBinding
 import com.example.appsfactory.presentation.base.BaseFragment
+import com.example.appsfactory.presentation.util.gone
+import com.example.appsfactory.presentation.util.visible
 import com.example.appsfactory.util.UiState
-import com.example.appsfactory.util.gone
-import com.example.appsfactory.util.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -53,6 +53,8 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     }
 
     private fun getAlbums() {
+        mainViewModel.getAlbums()
+
         viewLifecycleOwner.lifecycleScope.launch {
             mainViewModel
                 .uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
@@ -62,19 +64,19 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
 
     private fun updateUI(uiState: UiState<List<AlbumEntity>>) {
         when (uiState) {
-            is UiState.Loading -> binding.progressBar.visible()
+            is UiState.Loading -> binding.mainProgressBar.visible()
             is UiState.Success -> onSuccess(uiState)
             is UiState.Error -> onError(uiState.error)
         }
     }
 
     private fun onSuccess(uiState: UiState.Success<List<AlbumEntity>>) {
-        binding.progressBar.gone()
+        binding.mainProgressBar.gone()
         submitList(uiState.data)
     }
 
     private fun onError(error: String) {
-        binding.progressBar.gone()
+        binding.mainProgressBar.gone()
         Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
     }
 

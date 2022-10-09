@@ -32,7 +32,7 @@
         tools:visibility="visible" />
 
     <ProgressBar
-        android:id="@+id/progressBar"
+        android:id="@+id/mainProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"

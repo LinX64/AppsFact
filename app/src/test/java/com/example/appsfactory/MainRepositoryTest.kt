@@ -9,26 +9,39 @@
 package com.example.appsfactory
 
 import com.example.appsfactory.data.repository.MainRepositoryImpl
+import com.example.appsfactory.data.source.local.AppDatabase
+import com.example.appsfactory.data.source.local.dao.TopAlbumsDao
+import com.example.appsfactory.data.source.local.entity.AlbumEntity
 import com.example.appsfactory.data.source.remote.ApiService
-import com.example.appsfactory.domain.model.albumInfo.AlbumInfoResponse
 import com.example.appsfactory.domain.model.artistList.SearchArtistResponse
 import com.example.appsfactory.domain.model.top_albums.TopAlbumsResponse
 import com.example.appsfactory.util.ApiState
 import com.example.appsfactory.util.StubData
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 import org.mockito.kotlin.mock
+import javax.inject.Inject
 import kotlin.test.assertEquals
 
+@RunWith(JUnit4::class)
 class MainRepositoryTest {
 
     private val getSearchArtistResponse = StubData.getJson("SearchArtistResponse.json")
     private val getTopAlbumResponse = StubData.getJson("TopAlbumsResponse.json")
-    private val getAlbumInfoResponse = StubData.getJson("AlbumInfoResponse.json")
 
     private val artistName = "Justin Bieber"
     private val albumName = "Purpose (Deluxe)"
+
+    @Inject
+    lateinit var db: AppDatabase
+
+    @Inject
+    lateinit var albumsDao: TopAlbumsDao
 
     @Test
     fun `WHEN Get Search Call Is Successful THEN Should check with Actual Name`(): Unit =
@@ -36,59 +49,53 @@ class MainRepositoryTest {
             //Given
             val mockResponse = StubData.mockGetSearchArtistWithJson(getSearchArtistResponse)
             val mockApiService = mockGetSearchArtistCallWithResponse(mockResponse)
-            val repository = MainRepositoryImpl(mockApiService, Dispatchers.IO)
+            val repository = MainRepositoryImpl(mockApiService, db, Dispatchers.IO)
 
             //When
             val expectedJustin =
                 mockResponse.results.artistmatches.artist.find { it.name == artistName }?.name
-
             repository.getArtist(artistName).collect {
-            //Then
-            if (it is ApiState.Success) {
-                val actualName = it.data.artist.find { it.name == artistName }?.name
-                assertEquals(actualName, expectedJustin)
+                //Then
+                if (it is ApiState.Success) {
+                    val actualName = it.data.artist.find { it.name == artistName }?.name
+                    assertEquals(actualName, expectedJustin)
+                }
             }
         }
-    }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `WHEN Get Top Albums Call Is Successful THEN Should check with Actual Name`(): Unit =
-        runBlocking {
+    fun `WHEN Get Top Albums Call Is Successful THEN Should check with Actual Name From Database`() =
+        runTest {
             //Given
+
             val mockResponse = StubData.mockGetTopAlbumWithJson(getTopAlbumResponse)
             val mockApiService = mockGetTopAlbumsCallWithResponse(mockResponse)
-            val repository = MainRepositoryImpl(mockApiService, Dispatchers.IO)
+            val repository = MainRepositoryImpl(mockApiService, db, Dispatchers.IO)
 
             //When
             val expected = mockResponse.topalbums.album.find { it.name == albumName }?.name
-
-            repository.getTopAlbumsBasedOnArtist(artistName).collect {
+            repository.getTopAlbumsBasedOnArtist(artistName).collect { apiState ->
                 //Then
-                if (it is ApiState.Success) {
-                    val actualName = it.data.find { it.name == albumName }?.name
+                if (apiState is ApiState.Success) {
+                    val actualName = apiState.data.find { it.name == albumName }?.name
                     assertEquals(actualName, expected)
                 }
             }
         }
 
-    @Test
-    fun `WHEN Get Album Info Call Is Successful THEN Should check with Actual Name`(): Unit =
-        runBlocking {
-            //Given
-            val mockResponse = StubData.mockGetAlbumInfoWithJson(getAlbumInfoResponse)
-            val mockApiService = mockGetAlbumInfoCallWithResponse(mockResponse)
-            val repository = MainRepositoryImpl(mockApiService, Dispatchers.IO)
-
-            //When
-            val expected = mockResponse.album.name
-            repository.getAlbumInfo(artistName, albumName).collect {
-                //Then
-                if (it is ApiState.Success) {
-                    val actualName = it.data.name
-                    assertEquals(actualName, expected)
-                }
-            }
+    private suspend fun insertDummyData() {
+        val albums = List(1) {
+            AlbumEntity(
+                0,
+                name = albumName,
+                artist = artistName,
+                image = "https://lastfm.freetls.fastly.net/i/u/34s/2a96cbd8b46e442fc41c2be3b5b7e943.png",
+                isBookmarked = false
+            )
         }
+        albumsDao.insertAll(albums)
+    }
 
     private fun mockGetSearchArtistCallWithResponse(res: SearchArtistResponse): ApiService =
         runBlocking {
@@ -101,13 +108,6 @@ class MainRepositoryTest {
         runBlocking {
             return@runBlocking mock<ApiService> {
                 onBlocking { getTopAlbumsBasedOnArtist(artistName) }.thenReturn(res)
-            }
-        }
-
-    private fun mockGetAlbumInfoCallWithResponse(res: AlbumInfoResponse): ApiService =
-        runBlocking {
-            return@runBlocking mock<ApiService> {
-                onBlocking { getAlbumInfo(artistName, albumName) }.thenReturn(res)
             }
         }
 }
