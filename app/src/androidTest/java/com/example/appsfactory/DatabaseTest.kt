@@ -12,18 +12,22 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.appsfactory.data.source.local.AppDatabase
+import com.example.appsfactory.data.source.local.dao.AlbumInfoDao
 import com.example.appsfactory.data.source.local.dao.TopAlbumsDao
 import com.example.appsfactory.data.source.local.entity.AlbumEntity
-import kotlinx.coroutines.*
+import com.example.appsfactory.data.source.local.entity.AlbumInfoEntity
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.IOException
 import javax.inject.Inject
 
 @RunWith(AndroidJUnit4::class)
 class DatabaseTest {
+
+    private val artistName = "Justin Bieber"
+    private val albumName = "Purpose (Deluxe)"
 
     @Inject
     lateinit var db: AppDatabase
@@ -31,60 +35,92 @@ class DatabaseTest {
     @Inject
     lateinit var albumsDao: TopAlbumsDao
 
+    @Inject
+    lateinit var albumInfoDao: AlbumInfoDao
+
     @Before
     fun setUp() {
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        db = Room.inMemoryDatabaseBuilder(
-            context, AppDatabase::class.java
-        )
-            .allowMainThreadQueries()
-            .build()
+        setupDb()
 
         albumsDao = db.topAlbumDao()
+        albumInfoDao = db.albumInfoDao()
     }
 
     @Test
-    fun testInsertAlbums() = runBlocking {
-        val job = async(Dispatchers.IO) {
-            insertDummyData()
-        }
+    fun testInsertTopAlbum() = runBlocking {
+        insertTopAlbum()
 
-        finishTheJob(job)
+        albumsDao.getBookmarkedAlbums().collect {
+            val expected = it.first().name
+            assert(expected == albumName)
+        }
     }
 
     @Test
     fun testDeleteAlbums() = runBlocking {
-        val job = async(Dispatchers.IO) {
-            db.clearAllTables()
-        }
+        clearTables()
 
-        finishTheJob(job)
+        albumsDao.getBookmarkedAlbums().collect {
+            assert(it.isEmpty())
+        }
     }
 
-    private suspend fun insertDummyData() {
-        val albums = List(10) {
+    @Test
+    fun testAlbumInfoInsert() = runBlocking {
+        insertDummyAlbumInfo()
+
+        albumInfoDao.getAlbumInfo(albumName, artistName).collect {
+            assert(it.albumName == albumName)
+        }
+    }
+
+    @Test
+    fun testGetAlbumInfo() = runBlocking {
+        insertDummyAlbumInfo()
+
+        albumInfoDao.getAlbumInfo(albumName, artistName).collect {
+            assert(it.albumName == albumName)
+        }
+    }
+
+    private suspend fun insertDummyAlbumInfo() {
+        val albumInfo = AlbumInfoEntity(
+            0,
+            albumName = albumName,
+            artistName = artistName,
+            image = "albumImageUrl",
+            tracks = "tracks",
+            wiki = "wiki"
+        )
+        albumInfoDao.insert(albumInfo)
+    }
+
+    private suspend fun insertTopAlbum() {
+        val albums = List(1) {
             AlbumEntity(
                 0,
-                name = "Album $it",
-                artist = "Artist $it",
+                name = albumName,
+                artist = artistName,
                 image = "https://lastfm.freetls.fastly.net/i/u/34s/2a96cbd8b46e442fc41c2be3b5b7e943.png",
-                isBookmarked = false
+                isBookmarked = 1
             )
         }
         albumsDao.insertAll(albums)
-    }
-
-    private suspend fun finishTheJob(job: Deferred<Unit>) {
-        job.await()
-        job.cancelAndJoin()
     }
 
     private fun clearTables() {
         db.clearAllTables()
     }
 
+    private fun setupDb() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        db = Room.inMemoryDatabaseBuilder(
+            context,
+            AppDatabase::class.java
+        ).build()
+    }
+
     @After
-    @Throws(IOException::class)
     fun closeAndClearDB() {
         clearTables()
         db.close()
