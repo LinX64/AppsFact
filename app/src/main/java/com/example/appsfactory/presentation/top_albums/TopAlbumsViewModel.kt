@@ -39,7 +39,7 @@ class TopAlbumsViewModel @Inject constructor(
         when (it) {
             is ApiState.Loading -> _uiState.value = UiState.Loading
             is ApiState.Success -> _uiState.value = UiState.Success(it.data)
-            is ApiState.Error -> _uiState.value = UiState.Error(it.error.toString())
+            is ApiState.Error -> _uiState.value = UiState.Error(it.error)
         }
     }
 

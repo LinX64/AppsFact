@@ -15,6 +15,7 @@ import com.example.appsfactory.presentation.base.BaseViewModel
 import com.example.appsfactory.util.ApiState
 import com.example.appsfactory.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,7 +25,9 @@ class DetailViewModel @Inject constructor(
 ) : BaseViewModel<AlbumInfoEntity>() {
 
     fun getAlbumInfo(albumName: String, artistName: String) = viewModelScope.launch {
-        albumInfoUseCase.getAlbumInfo(albumName, artistName).collect { handleState(it) }
+        albumInfoUseCase.getAlbumInfo(albumName, artistName)
+            .distinctUntilChanged()
+            .collect { handleState(it) }
     }
 
     private fun handleState(it: ApiState<AlbumInfoEntity>) {

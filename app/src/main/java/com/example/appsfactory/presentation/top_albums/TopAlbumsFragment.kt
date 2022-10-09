@@ -86,8 +86,7 @@ class TopAlbumsFragment :
 
     private fun getTopAlbumsState() {
         viewLifecycleOwner.lifecycleScope.launch {
-            topAlbumsViewModel
-                .uiState
+            topAlbumsViewModel.uiState
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
                 .collect { uiState -> updateUI(uiState) }
         }

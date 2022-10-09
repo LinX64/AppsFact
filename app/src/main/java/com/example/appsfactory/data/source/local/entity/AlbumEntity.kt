@@ -16,5 +16,5 @@ data class AlbumEntity(
     @ColumnInfo(name = "image")
     val image: String,
     @ColumnInfo(name = "isBookmarked")
-    val isBookmarked: Boolean = false,
+    val isBookmarked: Int = 0,
 )

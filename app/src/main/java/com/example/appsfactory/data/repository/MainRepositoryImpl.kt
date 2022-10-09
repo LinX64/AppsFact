@@ -18,11 +18,11 @@ import com.example.appsfactory.domain.repository.MainRepository
 import com.example.appsfactory.util.ApiState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
+import okio.IOException
 
 class MainRepositoryImpl(
     private val apiService: ApiService,
     private val appDb: AppDatabase,
-    private val isNetworkAvailable: Boolean,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : MainRepository {
 
@@ -42,19 +42,25 @@ class MainRepositoryImpl(
             val response = apiService.getTopAlbumsBasedOnArtist(artistName).topalbums.album
             emit(ApiState.Success(response))
         }
-            .onEach {
-                if (it is ApiState.Success) {
-                    val albums = it.data.map { album ->
-                        AlbumEntity(
-                            album.playcount,
-                            album.name,
-                            album.artist.name,
-                            album.image[2].text
-                        )
-                    }
-                    appDb.topAlbumDao().insertAll(albums)
-                }
+            .onEach { saveToDb(it) }
+            .catch { e ->
+                if (e is IOException) emit(ApiState.Error("No Internet Connection")) else emit(
+                    ApiState.Error(e.message.toString())
+                )
             }
-            .catch { e -> emit(ApiState.Error(e.message.toString())) }
             .flowOn(ioDispatcher)
+
+    private suspend fun saveToDb(it: ApiState<List<TopAlbum>>) {
+        if (it is ApiState.Success) {
+            val albums = it.data.map { album ->
+                AlbumEntity(
+                    album.playcount,
+                    album.name,
+                    album.artist.name,
+                    album.image[2].text
+                )
+            }
+            appDb.topAlbumDao().insertAll(albums)
+        }
+    }
 }

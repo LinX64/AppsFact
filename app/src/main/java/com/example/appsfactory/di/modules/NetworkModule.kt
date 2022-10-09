@@ -8,7 +8,6 @@
 
 package com.example.appsfactory.di.modules
 
-import android.content.Context
 import androidx.viewbinding.BuildConfig
 import com.example.appsfactory.data.repository.AlbumInfoRepositoryImpl
 import com.example.appsfactory.data.repository.AlbumRepositoryImpl
@@ -20,11 +19,9 @@ import com.example.appsfactory.domain.repository.AlbumInfoRepository
 import com.example.appsfactory.domain.repository.AlbumRepository
 import com.example.appsfactory.domain.repository.MainRepository
 import com.example.appsfactory.util.Constants
-import com.example.appsfactory.util.isConnected
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -82,29 +79,23 @@ object NetworkModule {
     @Singleton
     fun provideMainRepository(
         apiService: ApiService,
-        appDatabase: AppDatabase,
-        isNetworkAvailable: Boolean
+        appDatabase: AppDatabase
     ): MainRepository =
-        MainRepositoryImpl(apiService, appDatabase, isNetworkAvailable, providesIoDispatcher())
+        MainRepositoryImpl(apiService, appDatabase, providesIoDispatcher())
 
     @Singleton
     @Provides
     fun provideAlbumInfoRepository(
         apiService: ApiService,
-        appDatabase: AppDatabase,
-        isNetworkAvailable: Boolean
+        appDatabase: AppDatabase
     ): AlbumInfoRepository =
-        AlbumInfoRepositoryImpl(apiService, appDatabase, isNetworkAvailable, providesIoDispatcher())
+        AlbumInfoRepositoryImpl(apiService, appDatabase, providesIoDispatcher())
 
     @Singleton
     @Provides
     fun provideAlbumRepository(
         albumsDao: TopAlbumsDao
     ): AlbumRepository = AlbumRepositoryImpl(albumsDao)
-
-    @Provides
-    @Singleton
-    fun provideIsNetworkAvailable(@ApplicationContext context: Context) = context.isConnected
 
     @IoDispatcher
     @Provides

@@ -21,7 +21,6 @@ import okio.IOException
 class AlbumInfoRepositoryImpl(
     private val apiService: ApiService,
     private val appDb: AppDatabase,
-    private val isNetworkAvailable: Boolean,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : AlbumInfoRepository {
 
@@ -31,9 +30,34 @@ class AlbumInfoRepositoryImpl(
     ): Flow<ApiState<AlbumInfoEntity>> = flow {
         emit(ApiState.Loading(true))
 
-        if (isNetworkAvailable) {
+        val album = apiService.getAlbumInfo(albumName, artistName).album
+        val albumEntity = AlbumInfoEntity(
+            album.playcount.toInt(),
+            album.name,
+            album.artist,
+            album.image[2].text,
+            album.tracks.track.toString(),
+            album.wiki.summary
+        )
+
+        emit(ApiState.Success(albumEntity))
+    }
+        .onEach { saveToDb(it, albumName, artistName) }
+        .catch { e ->
+            if (e is IOException) emit(ApiState.Error("No Internet Connection")) else emit(
+                ApiState.Error(e.message.toString())
+            )
+        }
+        .flowOn(ioDispatcher)
+
+    private suspend fun saveToDb(
+        it: ApiState<AlbumInfoEntity>,
+        albumName: String,
+        artistName: String
+    ) {
+        if (it is ApiState.Success) {
             val album = apiService.getAlbumInfo(albumName, artistName).album
-            val albumEntity = AlbumInfoEntity(
+            val albumInfoEntity = AlbumInfoEntity(
                 album.playcount.toInt(),
                 album.name,
                 album.artist,
@@ -42,20 +66,9 @@ class AlbumInfoRepositoryImpl(
                 album.wiki.summary
             )
 
-            appDb.albumInfoDao().insert(albumEntity)
-            emit(ApiState.Success(albumEntity))
+            appDb.albumInfoDao().insert(albumInfoEntity)
         }
-        // retrieve data from db if available
-        appDb.albumInfoDao().getAlbumInfo(albumName, artistName)
-            .filterNotNull()
-            .collect { emit(ApiState.Success(it)) }
     }
-        .catch { e ->
-            if (e is IOException) emit(ApiState.Error("No Internet Connection")) else emit(
-                ApiState.Error(e.message.toString())
-            )
-        }
-        .flowOn(ioDispatcher)
 
     override suspend fun delete() = appDb.albumInfoDao().deleteAll()
 }
