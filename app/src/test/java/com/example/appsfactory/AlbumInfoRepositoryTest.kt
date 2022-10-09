@@ -47,7 +47,7 @@ class AlbumInfoRepositoryTest {
             val mockResponse = StubData.mockGetAlbumInfoWithJson(getAlbumInfoResponse)
             val mockApiService = mockGetAlbumInfoCallWithResponse(mockResponse)
             val repository =
-                AlbumInfoRepositoryImpl(mockApiService, appDatabase, true, Dispatchers.IO)
+                AlbumInfoRepositoryImpl(mockApiService, appDatabase, Dispatchers.IO)
 
             //When
             val expected = mockResponse.album.name

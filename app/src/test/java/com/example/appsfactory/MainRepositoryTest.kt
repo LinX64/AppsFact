@@ -21,6 +21,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -42,6 +43,12 @@ class MainRepositoryTest {
 
     @Inject
     lateinit var albumsDao: TopAlbumsDao
+
+    @Before
+    fun setup() {
+        db = mock()
+        albumsDao = mock()
+    }
 
     @Test
     fun `WHEN Get Search Call Is Successful THEN Should check with Actual Name`(): Unit =
@@ -91,7 +98,7 @@ class MainRepositoryTest {
                 name = albumName,
                 artist = artistName,
                 image = "https://lastfm.freetls.fastly.net/i/u/34s/2a96cbd8b46e442fc41c2be3b5b7e943.png",
-                isBookmarked = false
+                isBookmarked = 1
             )
         }
         albumsDao.insertAll(albums)
