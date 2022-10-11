@@ -26,10 +26,35 @@ This project uses Clean Architecture with three different layers as recommended 
 The project consists of 4 different `Fragment`s with a single `Activity`. It uses one base `Fragment` along with a base `ViewModel` to avoid the repetition of state handling and `onCreateView()` method for `Fragment`.
 
 1. The mainScreen (`Fragment`) - loads saved albums from Database.
-2. AlbumInfo `Fragment` which accepts `albumName` and `artistName` as arguments and then makes the call to the server to get the specific album detail.
+2. AlbumInfo `Fragment` which accepts `id`, `albumName` and `artistName` as arguments and then makes the call to the server to get the specific album detail.
 3. Search Artist - where it searches for artists based on a name.
 4. Top albums - when user clicks on an album, the apps navigates to top albums to show the top albums of that specific artist.
 
+### NetworkBoundResource
+
+Durying my implementation and doing a bit research of which API and what best practice is perfect for offline caching, I ended up with [NetworkBoundResource](https://github.com/LinX64/AppsFactory/blob/master/app/src/main/java/com/example/appsfactory/util/NetworkBoundResource.kt) which is an inline function where we can handle all the situations with Flow inside the Respository. For instance, let's take a look at how we could implement the offline caching with this amazing `NetworkBoundResource`:
+
+```
+override suspend fun getAlbumInfo(
+        id: Int,
+        albumName: String,
+        artistName: String
+    ) = networkBoundResource(
+        query = {
+            albumInfoDao.getAlbumInfo(id)
+        },
+        fetch = {
+            apiService.fetchAlbumInfo(albumName, artistName).album.toEntity()
+        },
+        saveFetchResult = { albumInfo ->
+            appDb.withTransaction {
+                albumInfoDao.deleteAll()
+                albumInfoDao.insert(albumInfo)
+            }
+        }
+    ).flowOn(ioDispatcher)
+```
+This basically works with high order functions, crossinlines and an inline function with different stages for handling the offline caching, fetching the data from server, and etc.
 
 **Navigation:**
 
