@@ -6,5 +6,5 @@ import com.google.gson.annotations.SerializedName
 @Keep
 data class Tracks(
     @SerializedName("track")
-    val track: List<Track>
+    val track: List<Track>?
 )

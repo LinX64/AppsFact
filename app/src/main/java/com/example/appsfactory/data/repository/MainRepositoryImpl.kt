@@ -9,11 +9,11 @@
 package com.example.appsfactory.data.repository
 
 import com.example.appsfactory.data.source.local.AppDatabase
-import com.example.appsfactory.data.source.local.entity.AlbumEntity
 import com.example.appsfactory.data.source.remote.ApiService
 import com.example.appsfactory.di.modules.IoDispatcher
 import com.example.appsfactory.domain.model.artistList.Artistmatches
 import com.example.appsfactory.domain.model.top_albums.TopAlbum
+import com.example.appsfactory.domain.model.top_albums.toEntity
 import com.example.appsfactory.domain.repository.MainRepository
 import com.example.appsfactory.util.ApiState
 import kotlinx.coroutines.CoroutineDispatcher
@@ -52,14 +52,7 @@ class MainRepositoryImpl(
 
     private suspend fun saveToDb(it: ApiState<List<TopAlbum>>) {
         if (it is ApiState.Success) {
-            val albums = it.data?.map { album ->
-                AlbumEntity(
-                    album.playcount,
-                    album.name,
-                    album.artist.name,
-                    album.image[2].text
-                )
-            }
+            val albums = it.data?.toEntity()
             albums ?: return
             appDb.topAlbumDao().insertAll(albums)
         }

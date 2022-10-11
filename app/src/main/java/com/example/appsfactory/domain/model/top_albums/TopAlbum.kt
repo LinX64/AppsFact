@@ -18,7 +18,7 @@ data class TopAlbum(
     val url: String
 )
 
-fun List<TopAlbum>.asEntity(): List<AlbumEntity> {
+fun List<TopAlbum>.toEntity(): List<AlbumEntity> {
     return map {
         AlbumEntity(
             it.playcount,
