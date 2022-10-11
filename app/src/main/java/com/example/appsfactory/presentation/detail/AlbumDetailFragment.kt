@@ -13,8 +13,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
 import com.example.appsfactory.data.source.local.entity.AlbumInfoEntity
 import com.example.appsfactory.databinding.FragmentAlbumInfoBinding
@@ -39,17 +39,18 @@ class AlbumDetailFragment :
     }
 
     private fun getAlbumDetail() {
+        val id = arguments?.getInt("id")
         val albumName = arguments?.getString("albumName").toString()
         val artistName = arguments?.getString("artistName").toString()
 
-        detailViewModel.getAlbumInfo(albumName, artistName)
+        detailViewModel.getAlbumInfo(id!!, albumName, artistName)
     }
 
     private fun getAlbumDetailState() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                detailViewModel.uiState.collect { uiState -> updateUI(uiState) }
-            }
+            detailViewModel.uiState.flowWithLifecycle(
+                lifecycle, Lifecycle.State.STARTED
+            ).collect { state -> updateUI(state) }
         }
     }
 

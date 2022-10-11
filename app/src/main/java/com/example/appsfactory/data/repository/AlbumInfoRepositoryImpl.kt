@@ -8,15 +8,19 @@
 
 package com.example.appsfactory.data.repository
 
+import com.bumptech.glide.load.HttpException
 import com.example.appsfactory.data.source.local.AppDatabase
 import com.example.appsfactory.data.source.local.entity.AlbumInfoEntity
 import com.example.appsfactory.data.source.remote.ApiService
 import com.example.appsfactory.di.modules.IoDispatcher
+import com.example.appsfactory.domain.model.albumInfo.toEntity
 import com.example.appsfactory.domain.repository.AlbumInfoRepository
-import com.example.appsfactory.util.ApiState
+import com.example.appsfactory.util.Resource
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.*
-import okio.IOException
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import java.io.IOException
 
 class AlbumInfoRepositoryImpl(
     private val apiService: ApiService,
@@ -24,51 +28,29 @@ class AlbumInfoRepositoryImpl(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : AlbumInfoRepository {
 
+    private val albumInfoDao = appDb.albumInfoDao()
+
     override suspend fun getAlbumInfo(
+        id: Int,
         albumName: String,
         artistName: String
-    ): Flow<ApiState<AlbumInfoEntity>> = flow {
-        emit(ApiState.Loading(true))
+    ): Flow<Resource<AlbumInfoEntity>> = flow {
+        emit(Resource.Loading())
 
-        val album = apiService.getAlbumInfo(albumName, artistName).album
-        val albumEntity = AlbumInfoEntity(
-            album.playcount.toInt(),
-            album.name,
-            album.artist,
-            album.image[2].text,
-            album.tracks.track.toString(),
-            album.wiki.summary
-        )
+        val albumInfo = appDb.albumInfoDao().getAlbumInfo(id)
+        emit(Resource.Loading(data = albumInfo))
 
-        emit(ApiState.Success(albumEntity))
-    }
-        .onEach { saveToDb(it, albumName, artistName) }
-        .catch { e ->
-            if (e is IOException) emit(ApiState.Error("No Internet Connection")) else emit(
-                ApiState.Error(e.message.toString())
-            )
+        try {
+            val remoteAlbumInfo = apiService.fetchAlbumInfo(albumName, artistName).album
+            albumInfoDao.deleteAll()
+            albumInfoDao.insert(remoteAlbumInfo.toEntity())
+        } catch (e: HttpException) {
+            emit(Resource.Error(message = "Request failed! Please try again...", data = albumInfo))
+        } catch (e: IOException) {
+            emit(Resource.Error(message = "No Internet connection!", data = albumInfo))
         }
-        .flowOn(ioDispatcher)
 
-    private suspend fun saveToDb(
-        it: ApiState<AlbumInfoEntity>,
-        albumName: String,
-        artistName: String
-    ) {
-        if (it is ApiState.Success) {
-            val album = apiService.getAlbumInfo(albumName, artistName).album
-            val albumInfoEntity = AlbumInfoEntity(
-                album.playcount.toInt(),
-                album.name,
-                album.artist,
-                album.image[2].text,
-                album.tracks.track.toString(),
-                album.wiki.summary
-            )
-
-            appDb.albumInfoDao().insert(albumInfoEntity)
-        }
-    }
-
-    override suspend fun delete() = appDb.albumInfoDao().deleteAll()
+        val newAlbumInfo = appDb.albumInfoDao().getAlbumInfo(id)
+        emit(Resource.Success(data = newAlbumInfo))
+    }.flowOn(ioDispatcher)
 }

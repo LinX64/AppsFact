@@ -1,6 +1,7 @@
 package com.example.appsfactory.domain.model.albumInfo
 
 import androidx.annotation.Keep
+import com.example.appsfactory.data.source.local.entity.AlbumInfoEntity
 import com.google.gson.annotations.SerializedName
 
 @Keep
@@ -25,4 +26,13 @@ data class Album(
     val url: String,
     @SerializedName("wiki")
     val wiki: Wiki
+)
+
+fun Album.toEntity() = AlbumInfoEntity(
+    id = playcount.toInt(),
+    albumName = name,
+    artistName = artist,
+    image = image[2].text,
+    tracks = tracks.track.toString(),
+    wiki = wiki.content
 )

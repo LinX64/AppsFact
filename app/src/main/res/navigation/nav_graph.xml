@@ -55,6 +55,10 @@
         tools:layout="@layout/fragment_album_info">
 
         <argument
+            android:name="id"
+            app:argType="integer" />
+
+        <argument
             android:name="albumName"
             app:argType="string" />
 

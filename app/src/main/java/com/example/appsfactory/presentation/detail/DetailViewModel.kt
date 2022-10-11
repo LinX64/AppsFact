@@ -12,10 +12,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.appsfactory.data.source.local.entity.AlbumInfoEntity
 import com.example.appsfactory.domain.usecase.AlbumInfoUseCase
 import com.example.appsfactory.presentation.base.BaseViewModel
-import com.example.appsfactory.util.ApiState
+import com.example.appsfactory.util.Resource
 import com.example.appsfactory.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,17 +23,15 @@ class DetailViewModel @Inject constructor(
     private val albumInfoUseCase: AlbumInfoUseCase
 ) : BaseViewModel<AlbumInfoEntity>() {
 
-    fun getAlbumInfo(albumName: String, artistName: String) = viewModelScope.launch {
-        albumInfoUseCase.getAlbumInfo(albumName, artistName)
-            .distinctUntilChanged()
-            .collect { handleState(it) }
-    }
-
-    private fun handleState(it: ApiState<AlbumInfoEntity>) {
-        when (it) {
-            is ApiState.Success -> _uiState.value = UiState.Success(it.data)
-            is ApiState.Error -> _uiState.value = UiState.Error(it.error)
-            is ApiState.Loading -> _uiState.value = UiState.Loading
+    fun getAlbumInfo(id: Int, albumName: String, artistName: String) = viewModelScope.launch {
+        albumInfoUseCase.getAlbumInfo(id, albumName, artistName).collect {
+            when (it) {
+                is Resource.Loading -> _uiState.value = UiState.Loading
+                is Resource.Success -> {
+                    if (it.data != null) _uiState.value = UiState.Success(it.data)
+                }
+                is Resource.Error -> _uiState.value = UiState.Error(it.message.toString())
+            }
         }
     }
 }

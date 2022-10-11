@@ -44,11 +44,12 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     }
 
     private fun onAlbumClicked(album: AlbumEntity) {
+        val id = album.id
         val name = album.name
         val artistName = album.artist
 
         val action =
-            MainFragmentDirections.actionMainFragmentToDetailFragment(name, artistName)
+            MainFragmentDirections.actionMainFragmentToDetailFragment(id, name, artistName)
         findNavController().navigate(action)
     }
 

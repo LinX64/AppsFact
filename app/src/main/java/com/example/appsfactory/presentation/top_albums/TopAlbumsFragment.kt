@@ -63,10 +63,12 @@ class TopAlbumsFragment :
     }
 
     private fun onAlbumClicked(album: TopAlbum) {
+        val id = album.playcount
         val name = album.name
         val artist = album.artist.name
 
         val action = TopAlbumsFragmentDirections.actionTopAlbumsFragmentToDetailFragment(
+            id,
             name,
             artist
         )

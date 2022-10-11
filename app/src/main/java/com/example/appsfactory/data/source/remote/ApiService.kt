@@ -25,11 +25,10 @@ interface ApiService {
     ): TopAlbumsResponse
 
     @GET("?method=album.getinfo")
-    suspend fun getAlbumInfo(
+    suspend fun fetchAlbumInfo(
         @Query("album") albumName: String,
         @Query("artist") artistName: String,
         @Query("api_key") api_key: String = API_KEY,
         @Query("format") format: String = FORMAT
     ): AlbumInfoResponse
-
 }

@@ -8,10 +8,7 @@
 
 package com.example.appsfactory.domain.usecase
 
-import com.example.appsfactory.data.source.local.entity.AlbumInfoEntity
 import com.example.appsfactory.domain.repository.AlbumInfoRepository
-import com.example.appsfactory.util.ApiState
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class AlbumInfoUseCase @Inject constructor(
@@ -19,9 +16,8 @@ class AlbumInfoUseCase @Inject constructor(
 ) {
 
     suspend fun getAlbumInfo(
+        id: Int,
         albumName: String,
         artistName: String
-    ): Flow<ApiState<AlbumInfoEntity>> {
-        return albumInfoRepository.getAlbumInfo(albumName, artistName)
-    }
+    ) = albumInfoRepository.getAlbumInfo(id, albumName, artistName)
 }

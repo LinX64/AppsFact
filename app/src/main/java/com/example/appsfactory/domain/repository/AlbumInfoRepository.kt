@@ -9,12 +9,14 @@
 package com.example.appsfactory.domain.repository
 
 import com.example.appsfactory.data.source.local.entity.AlbumInfoEntity
-import com.example.appsfactory.util.ApiState
+import com.example.appsfactory.util.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface AlbumInfoRepository {
 
-    suspend fun getAlbumInfo(albumName: String, artistName: String): Flow<ApiState<AlbumInfoEntity>>
-
-    suspend fun delete()
+    suspend fun getAlbumInfo(
+        id: Int,
+        albumName: String,
+        artistName: String
+    ): Flow<Resource<AlbumInfoEntity>>
 }
