@@ -16,6 +16,7 @@ import com.example.appsfactory.data.source.local.dao.AlbumInfoDao
 import com.example.appsfactory.data.source.local.dao.TopAlbumsDao
 import com.example.appsfactory.data.source.local.entity.AlbumEntity
 import com.example.appsfactory.data.source.local.entity.AlbumInfoEntity
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -27,7 +28,7 @@ import javax.inject.Inject
 class DatabaseTest {
 
     private val artistName = "Justin Bieber"
-    private val albumName = "Purpose (Deluxe)"
+    private val mAlbumName = "Purpose (Deluxe)"
 
     @Inject
     lateinit var db: AppDatabase
@@ -50,9 +51,9 @@ class DatabaseTest {
     fun testInsertTopAlbum() = runBlocking {
         insertTopAlbum()
 
-        albumsDao.getBookmarkedAlbums().collect {
+        albumsDao.getBookmarkedAlbums().first().let {
             val expected = it.first().name
-            assert(expected == albumName)
+            assert(expected == mAlbumName)
         }
     }
 
@@ -60,17 +61,8 @@ class DatabaseTest {
     fun testDeleteAlbums() = runBlocking {
         clearTables()
 
-        albumsDao.getBookmarkedAlbums().collect {
+        albumsDao.getBookmarkedAlbums().first().let {
             assert(it.isEmpty())
-        }
-    }
-
-    @Test
-    fun testAlbumInfoInsert() = runBlocking {
-        insertDummyAlbumInfo()
-
-        albumInfoDao.getAlbumInfo(albumName, artistName).collect {
-            assert(it.albumName == albumName)
         }
     }
 
@@ -78,15 +70,15 @@ class DatabaseTest {
     fun testGetAlbumInfo() = runBlocking {
         insertDummyAlbumInfo()
 
-        albumInfoDao.getAlbumInfo(albumName, artistName).collect {
-            assert(it.albumName == albumName)
-        }
+        val expectedList = albumInfoDao.getAll()
+
+        assert(expectedList.isNotEmpty())
     }
 
     private suspend fun insertDummyAlbumInfo() {
         val albumInfo = AlbumInfoEntity(
-            0,
-            albumName = albumName,
+            1,
+            albumName = mAlbumName,
             artistName = artistName,
             image = "albumImageUrl",
             tracks = "tracks",
@@ -98,8 +90,8 @@ class DatabaseTest {
     private suspend fun insertTopAlbum() {
         val albums = List(1) {
             AlbumEntity(
-                0,
-                name = albumName,
+                1,
+                name = mAlbumName,
                 artist = artistName,
                 image = "https://lastfm.freetls.fastly.net/i/u/34s/2a96cbd8b46e442fc41c2be3b5b7e943.png",
                 isBookmarked = 1

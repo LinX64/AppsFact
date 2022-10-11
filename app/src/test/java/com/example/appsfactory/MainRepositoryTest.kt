@@ -19,6 +19,7 @@ import com.example.appsfactory.util.ApiState
 import com.example.appsfactory.util.StubData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -50,25 +51,24 @@ class MainRepositoryTest {
         albumsDao = mock()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `WHEN Get Search Call Is Successful THEN Should check with Actual Name`(): Unit =
-        runBlocking {
-            //Given
-            val mockResponse = StubData.mockGetSearchArtistWithJson(getSearchArtistResponse)
-            val mockApiService = mockGetSearchArtistCallWithResponse(mockResponse)
-            val repository = MainRepositoryImpl(mockApiService, db, Dispatchers.IO)
+    fun `WHEN Get Search Call Is Successful THEN Should check with Actual Name`() = runTest {
+        //Given
+        val mockResponse = StubData.mockGetSearchArtistWithJson(getSearchArtistResponse)
+        val mockApiService = mockGetSearchArtistCallWithResponse(mockResponse)
+        val repository = MainRepositoryImpl(mockApiService, db, Dispatchers.IO)
 
-            //When
-            val expectedJustin =
-                mockResponse.results.artistmatches.artist.find { it.name == artistName }?.name
-            repository.getArtist(artistName).collect {
-                //Then
-                if (it is ApiState.Success) {
-                    val actualName = it.data.artist.find { it.name == artistName }?.name
-                    assertEquals(actualName, expectedJustin)
-                }
+        insertDummyData()
+
+        //When
+        repository.getArtist(artistName).first().let {
+            if (it is ApiState.Success) {
+                val artistName = it.data?.artist?.get(0)?.name
+                assertEquals(artistName, artistName)
             }
         }
+    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
@@ -85,7 +85,7 @@ class MainRepositoryTest {
             repository.getTopAlbumsBasedOnArtist(artistName).collect { apiState ->
                 //Then
                 if (apiState is ApiState.Success) {
-                    val actualName = apiState.data.find { it.name == albumName }?.name
+                    val actualName = apiState.data?.find { it.name == albumName }?.name
                     assertEquals(actualName, expected)
                 }
             }

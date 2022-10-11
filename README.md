@@ -32,7 +32,12 @@ The project consists of 4 different `Fragment`s with a single `Activity`. It use
 
 ### NetworkBoundResource
 
-Durying my implementation and doing a bit research of which API and what best practice is perfect for offline caching, I ended up with [NetworkBoundResource](https://github.com/LinX64/AppsFactory/blob/master/app/src/main/java/com/example/appsfactory/util/NetworkBoundResource.kt) which is an inline function where we can handle all the situations with Flow inside the Respository. For instance, let's take a look at how we could implement the offline caching with this amazing `NetworkBoundResource`:
+During my implementation and doing a bit research of which API and what best practice is perfect for
+offline caching, I ended up
+with [NetworkBoundResource](https://github.com/LinX64/AppsFactory/blob/master/app/src/main/java/com/example/appsfactory/util/NetworkBoundResource.kt)
+which is an inline function where we can handle all the situations with Flow inside the Respository.
+For instance, let's take a look at how we could implement the offline caching with this
+amazing `NetworkBoundResource`:
 
 ```
 override suspend fun getAlbumInfo(
@@ -60,7 +65,7 @@ This basically works with high order functions, crossinlines and an inline funct
 
 <p align="center">
 <img src="https://i.imgur.com/zS63MnP.png" height="420" />
-</>
+</p>
 
 **Screens and UI:**
 
@@ -70,7 +75,22 @@ This basically works with high order functions, crossinlines and an inline funct
 <img src="https://i.imgur.com/uprWkdm.png" height="420" />
 <img src="https://i.imgur.com/Lj3Wzw4.png" height="420" />
 <img src="https://i.imgur.com/VuZxxGy.png" height="420" />
-  
+
 </p>
 
+### Unit Tests
 
+Unit tests are written for the `Repository`. For the `Repository` tests they are written
+using `Mockk` and `JUnit4`.
+
+### Instrumentation Tests
+
+Instrumentation tests are written for the `Activity` and `Fragment`. For the `Fragment` tests they
+are written using `Espresso` and `JUnit4`.
+
+### TODO
+
+- [ ] Use NetworkBoundResource for all repositories - unify the way of handling offline caching.
+- [ ] Add more tests for ViewModel
+- [ ] Add more tests for UseCases
+- [ ] Improvement for the UseCases

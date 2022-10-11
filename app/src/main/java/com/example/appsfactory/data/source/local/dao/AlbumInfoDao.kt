@@ -9,6 +9,9 @@ import com.example.appsfactory.data.source.local.entity.AlbumInfoEntity
 @Dao
 interface AlbumInfoDao {
 
+    @Query("SELECT * FROM album_info")
+    suspend fun getAll(): List<AlbumInfoEntity>
+
     @Query("SELECT * FROM album_info WHERE id = :id")
     suspend fun getAlbumInfo(id: Int): AlbumInfoEntity
 
