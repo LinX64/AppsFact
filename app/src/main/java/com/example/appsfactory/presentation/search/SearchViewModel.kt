@@ -32,8 +32,10 @@ class SearchViewModel @Inject constructor(
     private fun handleState(it: ApiState<Artistmatches>) {
         when (it) {
             is ApiState.Loading -> _uiState.value = UiState.Loading
-            is ApiState.Success -> _uiState.value = UiState.Success(it.data)
-            is ApiState.Error -> _uiState.value = UiState.Error(it.error.toString())
+            is ApiState.Success -> {
+                if (it.data != null) _uiState.value = UiState.Success(it.data)
+            }
+            is ApiState.Error -> _uiState.value = UiState.Error(it.message.toString())
         }
     }
 }

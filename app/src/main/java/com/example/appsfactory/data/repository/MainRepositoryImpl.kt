@@ -27,7 +27,7 @@ class MainRepositoryImpl(
 ) : MainRepository {
 
     override suspend fun getArtist(artistName: String): Flow<ApiState<Artistmatches>> = flow {
-        emit(ApiState.Loading(true))
+        emit(ApiState.Loading())
 
         val artist = apiService.getArtist(artistName).results.artistmatches
         emit(ApiState.Success(artist))
@@ -37,10 +37,10 @@ class MainRepositoryImpl(
 
     override suspend fun getTopAlbumsBasedOnArtist(artistName: String): Flow<ApiState<List<TopAlbum>>> =
         flow {
-            emit(ApiState.Loading(true))
+            emit(ApiState.Loading())
 
             val response = apiService.getTopAlbumsBasedOnArtist(artistName).topalbums.album
-            emit(ApiState.Success(response))
+            emit(ApiState.Success(data = response))
         }
             .onEach { saveToDb(it) }
             .catch { e ->
@@ -52,7 +52,7 @@ class MainRepositoryImpl(
 
     private suspend fun saveToDb(it: ApiState<List<TopAlbum>>) {
         if (it is ApiState.Success) {
-            val albums = it.data.map { album ->
+            val albums = it.data?.map { album ->
                 AlbumEntity(
                     album.playcount,
                     album.name,
@@ -60,6 +60,7 @@ class MainRepositoryImpl(
                     album.image[2].text
                 )
             }
+            albums ?: return
             appDb.topAlbumDao().insertAll(albums)
         }
     }

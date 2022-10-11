@@ -19,15 +19,15 @@ inline fun <ResultType, RequestType> networkBoundResource(
     val data = query().first()
 
     val flow = if (shouldFetch(data)) {
-        emit(Resource.Loading(data))
+        emit(ApiState.Loading(data))
 
         try {
             saveFetchResult(fetch())
-            query().map { Resource.Success(it) }
+            query().map { ApiState.Success(it) }
         } catch (throwable: Throwable) {
-            query().map { Resource.Error(throwable, it) }
+            query().map { ApiState.Error(throwable.message.toString(), it) }
         }
-    } else query().map { Resource.Success(it) }
+    } else query().map { ApiState.Success(it) }
 
     emitAll(flow)
 }

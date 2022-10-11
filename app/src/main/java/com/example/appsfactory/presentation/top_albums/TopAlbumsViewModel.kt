@@ -38,8 +38,12 @@ class TopAlbumsViewModel @Inject constructor(
     private fun handleState(it: ApiState<List<TopAlbum>>) {
         when (it) {
             is ApiState.Loading -> _uiState.value = UiState.Loading
-            is ApiState.Success -> _uiState.value = UiState.Success(it.data)
-            is ApiState.Error -> _uiState.value = UiState.Error(it.error)
+            is ApiState.Success -> {
+                if (!it.data.isNullOrEmpty()) {
+                    _uiState.value = UiState.Success(it.data)
+                }
+            }
+            is ApiState.Error -> _uiState.value = UiState.Error(it.message.toString())
         }
     }
 

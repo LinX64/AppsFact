@@ -31,6 +31,7 @@ class AlbumInfoRepositoryTest {
 
     private val artistName = "Justin Bieber"
     private val albumName = "Purpose (Deluxe)"
+    private val id = 1
 
     @Inject
     lateinit var appDatabase: AppDatabase
@@ -41,7 +42,7 @@ class AlbumInfoRepositoryTest {
     }
 
     @Test
-    fun `WHEN Get Album Info Call Is Successful THEN Should check with Actual Name`(): Unit =
+    fun `WHEN Get Album Info Call Is Successful THEN Should check with Actual Name`() =
         runBlocking {
             //Given
             val mockResponse = StubData.mockGetAlbumInfoWithJson(getAlbumInfoResponse)
@@ -51,9 +52,10 @@ class AlbumInfoRepositoryTest {
 
             //When
             val expected = mockResponse.album.name
-            repository.getAlbumInfo(artistName, albumName).collect {
+            repository.getAlbumInfo(id, artistName, albumName).collect {
                 if (it is ApiState.Success) {
-                    val actual = it.data.albumName
+                    val actual = it.data?.albumName
+
                     //Then
                     assertEquals(expected, actual)
                 }
@@ -63,7 +65,7 @@ class AlbumInfoRepositoryTest {
     private fun mockGetAlbumInfoCallWithResponse(res: AlbumInfoResponse): ApiService =
         runBlocking {
             return@runBlocking mock<ApiService> {
-                onBlocking { getAlbumInfo(artistName, albumName) }.thenReturn(res)
+                onBlocking { fetchAlbumInfo(artistName, albumName) }.thenReturn(res)
             }
         }
 }

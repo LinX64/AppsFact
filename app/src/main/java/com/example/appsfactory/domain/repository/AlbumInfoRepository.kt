@@ -9,7 +9,7 @@
 package com.example.appsfactory.domain.repository
 
 import com.example.appsfactory.data.source.local.entity.AlbumInfoEntity
-import com.example.appsfactory.util.Resource
+import com.example.appsfactory.util.ApiState
 import kotlinx.coroutines.flow.Flow
 
 interface AlbumInfoRepository {
@@ -18,5 +18,5 @@ interface AlbumInfoRepository {
         id: Int,
         albumName: String,
         artistName: String
-    ): Flow<Resource<AlbumInfoEntity>>
+    ): Flow<ApiState<AlbumInfoEntity>>
 }

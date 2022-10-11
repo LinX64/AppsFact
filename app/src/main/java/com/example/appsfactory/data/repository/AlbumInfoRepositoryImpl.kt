@@ -15,7 +15,7 @@ import com.example.appsfactory.data.source.remote.ApiService
 import com.example.appsfactory.di.modules.IoDispatcher
 import com.example.appsfactory.domain.model.albumInfo.toEntity
 import com.example.appsfactory.domain.repository.AlbumInfoRepository
-import com.example.appsfactory.util.Resource
+import com.example.appsfactory.util.ApiState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -34,23 +34,24 @@ class AlbumInfoRepositoryImpl(
         id: Int,
         albumName: String,
         artistName: String
-    ): Flow<Resource<AlbumInfoEntity>> = flow {
-        emit(Resource.Loading())
+    ): Flow<ApiState<AlbumInfoEntity>> = flow {
+        emit(ApiState.Loading())
 
         val albumInfo = appDb.albumInfoDao().getAlbumInfo(id)
-        emit(Resource.Loading(data = albumInfo))
+        emit(ApiState.Success(data = albumInfo))
 
         try {
             val remoteAlbumInfo = apiService.fetchAlbumInfo(albumName, artistName).album
+
             albumInfoDao.deleteAll()
             albumInfoDao.insert(remoteAlbumInfo.toEntity())
         } catch (e: HttpException) {
-            emit(Resource.Error(message = "Request failed! Please try again...", data = albumInfo))
+            emit(ApiState.Error(message = "Request failed! Please try again...", data = albumInfo))
         } catch (e: IOException) {
-            emit(Resource.Error(message = "No Internet connection!", data = albumInfo))
+            emit(ApiState.Error(message = "No Internet connection!", data = albumInfo))
         }
 
         val newAlbumInfo = appDb.albumInfoDao().getAlbumInfo(id)
-        emit(Resource.Success(data = newAlbumInfo))
+        emit(ApiState.Success(data = newAlbumInfo))
     }.flowOn(ioDispatcher)
 }

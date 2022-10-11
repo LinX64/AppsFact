@@ -12,7 +12,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.appsfactory.data.source.local.entity.AlbumInfoEntity
 import com.example.appsfactory.domain.usecase.AlbumInfoUseCase
 import com.example.appsfactory.presentation.base.BaseViewModel
-import com.example.appsfactory.util.Resource
+import com.example.appsfactory.util.ApiState
 import com.example.appsfactory.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -26,11 +26,11 @@ class DetailViewModel @Inject constructor(
     fun getAlbumInfo(id: Int, albumName: String, artistName: String) = viewModelScope.launch {
         albumInfoUseCase.getAlbumInfo(id, albumName, artistName).collect {
             when (it) {
-                is Resource.Loading -> _uiState.value = UiState.Loading
-                is Resource.Success -> {
+                is ApiState.Loading -> _uiState.value = UiState.Loading
+                is ApiState.Success -> {
                     if (it.data != null) _uiState.value = UiState.Success(it.data)
                 }
-                is Resource.Error -> _uiState.value = UiState.Error(it.message.toString())
+                is ApiState.Error -> _uiState.value = UiState.Error(it.message.toString())
             }
         }
     }
