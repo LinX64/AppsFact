@@ -25,7 +25,7 @@ data class Album(
     @SerializedName("url")
     val url: String,
     @SerializedName("wiki")
-    val wiki: Wiki
+    val wiki: Wiki?
 )
 
 fun Album.toEntity() = AlbumInfoEntity(
@@ -34,5 +34,5 @@ fun Album.toEntity() = AlbumInfoEntity(
     artistName = artist,
     image = image[2].text,
     tracks = tracks.track.toString(),
-    wiki = wiki.content
+    wiki = wiki?.summary ?: ""
 )

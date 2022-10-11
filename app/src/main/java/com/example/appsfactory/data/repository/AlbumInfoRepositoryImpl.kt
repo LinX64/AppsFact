@@ -38,20 +38,19 @@ class AlbumInfoRepositoryImpl(
         emit(ApiState.Loading())
 
         val albumInfo = appDb.albumInfoDao().getAlbumInfo(id)
-        emit(ApiState.Success(data = albumInfo))
+        emit(ApiState.Success(albumInfo))
 
         try {
-            val remoteAlbumInfo = apiService.fetchAlbumInfo(albumName, artistName).album
+            val remoteAlbumInfo = apiService.fetchAlbumInfo(albumName, artistName).album.toEntity()
+            albumInfoDao.insert(remoteAlbumInfo)
 
-            albumInfoDao.deleteAll()
-            albumInfoDao.insert(remoteAlbumInfo.toEntity())
         } catch (e: HttpException) {
-            emit(ApiState.Error(message = "Request failed! Please try again...", data = albumInfo))
+            emit(ApiState.Error("Request failed! Please try again...", albumInfo))
         } catch (e: IOException) {
-            emit(ApiState.Error(message = "No Internet connection!", data = albumInfo))
+            emit(ApiState.Error("No Internet connection!", albumInfo))
         }
 
         val newAlbumInfo = appDb.albumInfoDao().getAlbumInfo(id)
-        emit(ApiState.Success(data = newAlbumInfo))
+        emit(ApiState.Success(newAlbumInfo))
     }.flowOn(ioDispatcher)
 }

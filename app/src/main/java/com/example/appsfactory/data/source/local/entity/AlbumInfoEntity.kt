@@ -18,5 +18,5 @@ data class AlbumInfoEntity(
     @ColumnInfo(name = "tracks")
     val tracks: String,
     @ColumnInfo(name = "wiki")
-    val wiki: String
+    val wiki: String?
 )

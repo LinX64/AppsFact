@@ -6,9 +6,9 @@ import com.google.gson.annotations.SerializedName
 @Keep
 data class Wiki(
     @SerializedName("content")
-    val content: String,
+    val content: String?,
     @SerializedName("published")
     val published: String,
     @SerializedName("summary")
-    val summary: String
+    val summary: String?
 )
