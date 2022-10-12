@@ -81,7 +81,7 @@ This basically works with high order functions, crossinlines and an inline funct
 ### Unit Tests
 
 Unit tests are written for the `Repository`. For the `Repository` tests they are written
-using `Mockk` and `JUnit4`.
+using `Mock` and `JUnit4`.
 
 ### Instrumentation Tests
 
