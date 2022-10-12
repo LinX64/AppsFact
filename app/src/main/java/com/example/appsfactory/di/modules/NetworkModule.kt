@@ -73,7 +73,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideMoshiConverterFactory(): GsonConverterFactory = GsonConverterFactory.create()
+    fun provideGsonConverterFactory(): GsonConverterFactory = GsonConverterFactory.create()
 
     @Provides
     @Singleton
