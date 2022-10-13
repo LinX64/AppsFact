@@ -90,6 +90,8 @@ are written using `Espresso` and `JUnit4`.
 
 ### TODO
 
+- [ ] Remove suspend for the `Repository` functions with `Flow`.
+- [ ] Improve the BaseFragment and BaseViewModel.
 - [ ] Use NetworkBoundResource for all repositories - unify the way of handling offline caching.
 - [ ] Add more tests for ViewModel
 - [ ] Add more tests for UseCases
