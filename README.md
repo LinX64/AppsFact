@@ -93,6 +93,7 @@ are written using `Espresso` and `JUnit4`.
 - [ ] Remove suspend for the `Repository` functions with `Flow`.
 - [ ] Improve the BaseFragment and BaseViewModel. Reduce the boilerplate code.
 - [ ] Using NetworkBoundResource for the other `Repository` functions.
+- [ ] Using ListAdapter for the RecyclerView.
 - [ ] Add/Improve Unit tests.
 - [ ] Add more tests for ViewModel
 - [ ] Add more tests for UseCases
