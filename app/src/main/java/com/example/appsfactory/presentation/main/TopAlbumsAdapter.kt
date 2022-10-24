@@ -10,14 +10,15 @@ package com.example.appsfactory.presentation.main
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appsfactory.data.source.local.entity.AlbumEntity
 import com.example.appsfactory.databinding.AlbumsListItemBinding
 
 class TopAlbumsAdapter(
     private val onItemClicked: (AlbumEntity) -> Unit
-) : RecyclerView.Adapter<TopAlbumsAdapter.MyViewHolder>() {
-    private var albumsList = ArrayList<AlbumEntity>()
+) : ListAdapter<AlbumEntity, TopAlbumsAdapter.MyViewHolder>(MyDiffUtilClass()) {
 
     inner class MyViewHolder(
         private val binding: AlbumsListItemBinding,
@@ -32,6 +33,16 @@ class TopAlbumsAdapter(
         }
     }
 
+    private class MyDiffUtilClass : DiffUtil.ItemCallback<AlbumEntity>() {
+        override fun areItemsTheSame(oldItem: AlbumEntity, newItem: AlbumEntity): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: AlbumEntity, newItem: AlbumEntity): Boolean {
+            return oldItem == newItem
+        }
+    }
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -39,18 +50,10 @@ class TopAlbumsAdapter(
         val itemBinding =
             AlbumsListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(itemBinding) {
-            onItemClicked(albumsList[it])
+            onItemClicked(getItem(it))
         }
     }
 
-    override fun getItemCount() = albumsList.size
-
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) =
-        holder.bind(albumsList[position])
-
-    fun setData(albums: List<AlbumEntity>) {
-        albumsList.clear()
-        albumsList.addAll(albums)
-        notifyDataSetChanged()
-    }
+        holder.bind(getItem(position))
 }

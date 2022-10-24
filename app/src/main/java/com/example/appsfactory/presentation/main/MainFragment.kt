@@ -88,7 +88,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
         } else {
             binding.recyclerViewMain.visible()
             binding.emptyView.emptyViewLayout.gone()
-            topAlbumsAdapter.setData(localAlbums)
+            topAlbumsAdapter.submitList(localAlbums)
         }
     }
 }
