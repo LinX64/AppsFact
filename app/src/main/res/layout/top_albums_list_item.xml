@@ -89,6 +89,7 @@
                 android:background="@null"
                 android:minHeight="0dp"
                 android:visibility="invisible"
+                setBookmark="@{album.bookmarked}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_baseline_bookmark_24" />

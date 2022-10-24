@@ -16,6 +16,7 @@ buildscript {
     ext.nav_version = "2.5.2"
     ext.mockitoVersion = "4.7.0"
     ext.mockitoKotlin = "4.0.0"
+    ext.mockkVersion = "1.12.2"
 
     repositories {
         google()
