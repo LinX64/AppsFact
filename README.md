@@ -40,7 +40,7 @@ For instance, let's take a look at how we could implement the offline caching wi
 amazing `NetworkBoundResource`:
 
 ```
-override suspend fun getAlbumInfo(
+override fun getAlbumInfo(
         id: Int,
         albumName: String,
         artistName: String
