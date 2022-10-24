@@ -10,25 +10,35 @@ package com.example.appsfactory.presentation.search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appsfactory.databinding.ArtistListItemBinding
 import com.example.appsfactory.domain.model.artistList.Artist
 
 class SearchArtistAdapter(
     private val onItemClicked: (Artist) -> Unit
-) : RecyclerView.Adapter<SearchArtistAdapter.MyViewHolder>() {
-    private var artists = ArrayList<Artist>()
+) : ListAdapter<Artist, SearchArtistAdapter.MyViewHolder>(MainDiffUtil()) {
 
     inner class MyViewHolder(
         private val binding: ArtistListItemBinding,
         private val onItemClicked: (Int) -> Unit
-    ) :
-        RecyclerView.ViewHolder(binding.root) {
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(artist: Artist) {
             binding.artist = artist
             binding.executePendingBindings()
 
             binding.root.setOnClickListener { onItemClicked(bindingAdapterPosition) }
+        }
+    }
+
+    private class MainDiffUtil : DiffUtil.ItemCallback<Artist>() {
+        override fun areItemsTheSame(oldItem: Artist, newItem: Artist): Boolean {
+            return oldItem == newItem
+        }
+
+        override fun areContentsTheSame(oldItem: Artist, newItem: Artist): Boolean {
+            return oldItem == newItem
         }
     }
 
@@ -39,18 +49,10 @@ class SearchArtistAdapter(
         val itemBinding =
             ArtistListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(itemBinding) {
-            onItemClicked(artists[it])
+            onItemClicked(getItem(it))
         }
     }
 
-    override fun getItemCount() = artists.size
-
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) =
-        holder.bind(artists[position])
-
-    fun setData(artistList: List<Artist>) {
-        artists.clear()
-        artists.addAll(artistList)
-        notifyDataSetChanged()
-    }
+        holder.bind(getItem(position))
 }

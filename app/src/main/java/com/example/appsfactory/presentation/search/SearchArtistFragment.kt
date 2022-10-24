@@ -102,6 +102,6 @@ class SearchArtistFragment :
     }
 
     private fun submitList(artists: Artistmatches) {
-        searchArtistAdapter.setData(artists.artist)
+        searchArtistAdapter.submitList(artists.artist)
     }
 }

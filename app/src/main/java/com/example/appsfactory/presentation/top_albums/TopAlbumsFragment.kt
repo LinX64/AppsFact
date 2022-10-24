@@ -113,6 +113,6 @@ class TopAlbumsFragment :
     }
 
     private fun setAlbums(albums: List<TopAlbum>) {
-        topAlbumsAdapter.setData(albums)
+        topAlbumsAdapter.submitList(albums)
     }
 }

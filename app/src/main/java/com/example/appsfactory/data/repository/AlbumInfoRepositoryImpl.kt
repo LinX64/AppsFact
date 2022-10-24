@@ -30,14 +30,14 @@ class AlbumInfoRepositoryImpl(
 
     private val albumInfoDao = appDb.albumInfoDao()
 
-    override suspend fun getAlbumInfo(
+    override fun getAlbumInfo(
         id: Int,
         albumName: String,
         artistName: String
     ): Flow<ApiState<AlbumInfoEntity>> = flow {
         emit(ApiState.Loading())
 
-        val albumInfo = appDb.albumInfoDao().getAlbumInfo(id)
+        val albumInfo = albumInfoDao.getAlbumInfo(id)
         emit(ApiState.Success(albumInfo))
 
         try {

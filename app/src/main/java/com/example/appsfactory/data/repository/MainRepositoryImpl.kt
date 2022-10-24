@@ -26,7 +26,9 @@ class MainRepositoryImpl(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : MainRepository {
 
-    override suspend fun getArtist(artistName: String): Flow<ApiState<Artistmatches>> = flow {
+    private val topAlbumsDao = appDb.topAlbumDao()
+
+    override fun getArtist(artistName: String): Flow<ApiState<Artistmatches>> = flow {
         emit(ApiState.Loading())
 
         val artist = apiService.getArtist(artistName).results.artistmatches
@@ -35,7 +37,7 @@ class MainRepositoryImpl(
         .catch { e -> emit(ApiState.Error(e.message.toString())) }
         .flowOn(ioDispatcher)
 
-    override suspend fun getTopAlbumsBasedOnArtist(artistName: String): Flow<ApiState<List<TopAlbum>>> =
+    override fun getTopAlbumsBasedOnArtist(artistName: String): Flow<ApiState<List<TopAlbum>>> =
         flow {
             emit(ApiState.Loading())
 
@@ -54,7 +56,9 @@ class MainRepositoryImpl(
         if (it is ApiState.Success) {
             val albums = it.data?.toEntity()
             albums ?: return
-            appDb.topAlbumDao().insertAll(albums)
+            topAlbumsDao.insertAll(albums)
+
+            //TODO: Save only one Item to Db
         }
     }
 }

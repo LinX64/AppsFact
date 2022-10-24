@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface AlbumInfoRepository {
 
-    suspend fun getAlbumInfo(
+    fun getAlbumInfo(
         id: Int,
         albumName: String,
         artistName: String

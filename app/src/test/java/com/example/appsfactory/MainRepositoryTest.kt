@@ -19,7 +19,6 @@ import com.example.appsfactory.util.ApiState
 import com.example.appsfactory.util.StubData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -62,10 +61,10 @@ class MainRepositoryTest {
         insertDummyData()
 
         //When
-        repository.getArtist(artistName).first().let {
+        repository.getArtist(artistName).collect {
             if (it is ApiState.Success) {
-                val artistName = it.data?.artist?.get(0)?.name
-                assertEquals(artistName, artistName)
+                val expected = it.data?.artist?.get(0)?.name
+                assertEquals(expected, artistName)
             }
         }
     }
