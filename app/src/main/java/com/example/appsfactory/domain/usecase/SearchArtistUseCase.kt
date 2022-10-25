@@ -14,5 +14,5 @@ import javax.inject.Inject
 class SearchArtistUseCase @Inject constructor(
     private val mainRepository: MainRepository
 ) {
-    suspend fun getArtist(artistName: String) = mainRepository.getArtist(artistName)
+    fun getArtist(artistName: String) = mainRepository.getArtist(artistName)
 }

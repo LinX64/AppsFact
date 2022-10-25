@@ -14,6 +14,9 @@ interface TopAlbumsDao {
     fun getBookmarkedAlbums(): Flow<List<AlbumEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(album: AlbumEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(albums: List<AlbumEntity>)
 
     @Query("UPDATE albums SET isBookmarked = :isBookmarked WHERE id = :albumId")

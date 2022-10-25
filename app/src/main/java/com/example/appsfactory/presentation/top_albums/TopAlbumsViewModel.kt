@@ -11,6 +11,7 @@ package com.example.appsfactory.presentation.top_albums
 import androidx.lifecycle.viewModelScope
 import com.example.appsfactory.di.modules.IoDispatcher
 import com.example.appsfactory.domain.model.top_albums.TopAlbum
+import com.example.appsfactory.domain.model.top_albums.toAlbumEntity
 import com.example.appsfactory.domain.usecase.GetTopAlbumsUseCase
 import com.example.appsfactory.domain.usecase.LocalAlbumsUseCase
 import com.example.appsfactory.presentation.base.BaseViewModel
@@ -18,7 +19,6 @@ import com.example.appsfactory.util.ApiState
 import com.example.appsfactory.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,7 +31,6 @@ class TopAlbumsViewModel @Inject constructor(
 
     fun getTopAlbumsBasedOnArtist(artistName: String) = viewModelScope.launch {
         topAlbumsUseCase.getTopAlbumsBasedOnArtist(artistName)
-            .distinctUntilChanged()
             .collect { handleState(it) }
     }
 
@@ -48,7 +47,7 @@ class TopAlbumsViewModel @Inject constructor(
     }
 
     fun onBookmarkClicked(album: TopAlbum) = viewModelScope.launch(ioDispatcher) {
-        localAlbumsUseCase.update(album.playcount, 1)
+        localAlbumsUseCase.insert(album.toAlbumEntity())
     }
 
     fun onBookmarkRemoveClicked(album: TopAlbum) = viewModelScope.launch(ioDispatcher) {

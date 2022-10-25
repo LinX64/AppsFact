@@ -15,18 +15,13 @@ data class TopAlbum(
     @SerializedName("playcount")
     val playcount: Int,
     @SerializedName("url")
-    val url: String,
-    @SerializedName("isBookmarked")
-    var isBookmarked: Boolean = false
+    val url: String
 )
 
-fun List<TopAlbum>.toEntity(): List<AlbumEntity> {
-    return map {
-        AlbumEntity(
-            it.playcount,
-            it.name,
-            it.artist.name,
-            image = it.image[2].text
-        )
-    }
-}
+fun TopAlbum.toAlbumEntity() = AlbumEntity(
+    id = playcount,
+    name = name,
+    artist = artist.name,
+    image = image[2].text,
+    isBookmarked = 1
+)
