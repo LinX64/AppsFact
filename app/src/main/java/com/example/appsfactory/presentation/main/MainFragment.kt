@@ -10,7 +10,6 @@ package com.example.appsfactory.presentation.main
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -21,7 +20,6 @@ import com.example.appsfactory.databinding.FragmentMainBinding
 import com.example.appsfactory.presentation.base.BaseFragment
 import com.example.appsfactory.presentation.util.gone
 import com.example.appsfactory.presentation.util.visible
-import com.example.appsfactory.util.UiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -54,31 +52,12 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     }
 
     private fun getAlbums() {
-        mainViewModel.getAlbums()
-
         viewLifecycleOwner.lifecycleScope.launch {
             mainViewModel
-                .uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-                .collect { uiState -> updateUI(uiState) }
+                .mAlbums
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+                .collect { result -> submitList(result) }
         }
-    }
-
-    private fun updateUI(uiState: UiState<List<AlbumEntity>>) {
-        when (uiState) {
-            is UiState.Loading -> binding.mainProgressBar.visible()
-            is UiState.Success -> onSuccess(uiState)
-            is UiState.Error -> onError(uiState.error)
-        }
-    }
-
-    private fun onSuccess(uiState: UiState.Success<List<AlbumEntity>>) {
-        binding.mainProgressBar.gone()
-        submitList(uiState.data)
-    }
-
-    private fun onError(error: String) {
-        binding.mainProgressBar.gone()
-        Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
     }
 
     private fun submitList(localAlbums: List<AlbumEntity>) {

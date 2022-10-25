@@ -9,11 +9,14 @@
 package com.example.appsfactory.data.repository
 
 import com.example.appsfactory.data.source.local.dao.TopAlbumsDao
+import com.example.appsfactory.data.source.local.entity.AlbumEntity
 import com.example.appsfactory.domain.repository.AlbumRepository
 
 class AlbumRepositoryImpl(private val albumDao: TopAlbumsDao) : AlbumRepository {
 
     override fun getBookmarkedAlbums() = albumDao.getBookmarkedAlbums()
+
+    override suspend fun insert(album: AlbumEntity) = albumDao.insert(album)
 
     override suspend fun update(
         albumId: Int,

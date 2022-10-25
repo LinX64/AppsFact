@@ -15,6 +15,8 @@ interface AlbumRepository {
 
     fun getBookmarkedAlbums(): Flow<List<AlbumEntity>>
 
+    suspend fun insert(album: AlbumEntity)
+
     suspend fun update(albumId: Int, isBookmarked: Int)
 
     suspend fun delete(id: Int)

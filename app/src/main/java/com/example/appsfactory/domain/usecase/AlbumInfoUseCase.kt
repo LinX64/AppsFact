@@ -15,7 +15,7 @@ class AlbumInfoUseCase @Inject constructor(
     private val albumInfoRepository: AlbumInfoRepository
 ) {
 
-    suspend fun getAlbumInfo(
+    fun getAlbumInfo(
         id: Int,
         albumName: String,
         artistName: String
