@@ -56,7 +56,7 @@ class MainRepositoryTest {
         //Given
         val mockResponse = StubData.mockGetSearchArtistWithJson(getSearchArtistResponse)
         val mockApiService = mockGetSearchArtistCallWithResponse(mockResponse)
-        val repository = MainRepositoryImpl(mockApiService, db, Dispatchers.IO)
+        val repository = MainRepositoryImpl(mockApiService, Dispatchers.IO)
 
         insertDummyData()
 
@@ -77,7 +77,7 @@ class MainRepositoryTest {
 
             val mockResponse = StubData.mockGetTopAlbumWithJson(getTopAlbumResponse)
             val mockApiService = mockGetTopAlbumsCallWithResponse(mockResponse)
-            val repository = MainRepositoryImpl(mockApiService, db, Dispatchers.IO)
+            val repository = MainRepositoryImpl(mockApiService, Dispatchers.IO)
 
             //When
             val expected = mockResponse.topalbums.album.find { it.name == albumName }?.name

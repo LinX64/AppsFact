@@ -12,19 +12,28 @@ import androidx.lifecycle.viewModelScope
 import com.example.appsfactory.data.source.local.entity.AlbumEntity
 import com.example.appsfactory.domain.usecase.LocalAlbumsUseCase
 import com.example.appsfactory.presentation.base.BaseViewModel
-import com.example.appsfactory.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val albumsUseCase: LocalAlbumsUseCase
+    albumsUseCase: LocalAlbumsUseCase
 ) : BaseViewModel<List<AlbumEntity>>() {
 
-    fun getAlbums() = viewModelScope.launch {
-        albumsUseCase
-            .getBookmarkedAlbums()
-            .collect { album -> _uiState.value = UiState.Success(album) }
-    }
+    val mAlbums: StateFlow<List<AlbumEntity>> = albumsUseCase
+        .getBookmarkedAlbums()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = emptyList()
+        )
+
+}
+
+sealed interface AlbumsState {
+    object Loading : AlbumsState
+    data class Success(val albums: List<AlbumEntity>) : AlbumsState
 }

@@ -76,10 +76,9 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideMainRepository(
-        apiService: ApiService,
-        appDatabase: AppDatabase
+        apiService: ApiService
     ): MainRepository =
-        MainRepositoryImpl(apiService, appDatabase, providesIoDispatcher())
+        MainRepositoryImpl(apiService, providesIoDispatcher())
 
     @Singleton
     @Provides
