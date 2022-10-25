@@ -8,10 +8,10 @@
 
 package com.example.appsfactory.presentation.main
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appsfactory.data.source.local.entity.TopAlbumEntity
 import com.example.appsfactory.domain.usecase.LocalAlbumsUseCase
-import com.example.appsfactory.presentation.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -21,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     albumsUseCase: LocalAlbumsUseCase
-) : BaseViewModel<List<TopAlbumEntity>>() {
+) : ViewModel() {
 
     val mAlbums: StateFlow<List<TopAlbumEntity>> = albumsUseCase
         .getBookmarkedAlbums()

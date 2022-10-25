@@ -18,12 +18,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.appsfactory.databinding.FragmentArtistSearchBinding
 import com.example.appsfactory.domain.model.artistList.Artist
-import com.example.appsfactory.domain.model.artistList.Artistmatches
 import com.example.appsfactory.presentation.base.BaseFragment
 import com.example.appsfactory.presentation.util.hideSoftInput
-import com.example.appsfactory.presentation.util.inVisible
-import com.example.appsfactory.presentation.util.visible
-import com.example.appsfactory.util.UiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -69,39 +65,14 @@ class SearchArtistFragment :
     }
 
     private fun getArtistByName(artistName: String) {
-        searchViewModel.getArtist(artistName)
-
-        getArtistByNameState()
-    }
-
-    private fun getArtistByNameState() {
         viewLifecycleOwner.lifecycleScope.launch {
-            searchViewModel
-                .uiState
+            searchViewModel(artistName)
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-                .collect { uiState -> updateUI(uiState) }
+                .collect { result -> submitList(result) }
         }
     }
 
-    private fun updateUI(uiState: UiState<Artistmatches>) {
-        when (uiState) {
-            is UiState.Loading -> binding.progressBar.visible()
-            is UiState.Success -> onSuccess(uiState.data)
-            is UiState.Error -> onError(uiState)
-        }
-    }
-
-    private fun onSuccess(data: Artistmatches) {
-        binding.progressBar.inVisible()
-        submitList(data)
-    }
-
-    private fun onError(uiState: UiState.Error) {
-        Toast.makeText(requireContext(), uiState.error, Toast.LENGTH_SHORT).show()
-        binding.progressBar.inVisible()
-    }
-
-    private fun submitList(artists: Artistmatches) {
-        searchArtistAdapter.submitList(artists.artist)
+    private fun submitList(artists: List<Artist>) {
+        searchArtistAdapter.submitList(artists)
     }
 }

@@ -10,7 +10,7 @@ package com.example.appsfactory.data.repository
 
 import com.example.appsfactory.data.source.remote.ApiService
 import com.example.appsfactory.di.modules.IoDispatcher
-import com.example.appsfactory.domain.model.artistList.Artistmatches
+import com.example.appsfactory.domain.model.artistList.Artist
 import com.example.appsfactory.domain.model.top_albums.TopAlbum
 import com.example.appsfactory.domain.repository.MainRepository
 import com.example.appsfactory.util.ApiState
@@ -26,10 +26,10 @@ class MainRepositoryImpl(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : MainRepository {
 
-    override fun getArtist(artistName: String): Flow<ApiState<Artistmatches>> = flow {
+    override fun getArtist(artistName: String): Flow<ApiState<List<Artist>>> = flow {
         emit(ApiState.Loading())
 
-        val artist = apiService.getArtist(artistName).results.artistmatches
+        val artist = apiService.getArtist(artistName).results.artistmatches.artist
         emit(ApiState.Success(artist))
     }
         .catch { e -> emit(ApiState.Error(e.message.toString())) }

@@ -8,34 +8,28 @@
 
 package com.example.appsfactory.presentation.search
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.appsfactory.domain.model.artistList.Artistmatches
+import com.example.appsfactory.domain.model.artistList.Artist
 import com.example.appsfactory.domain.usecase.SearchArtistUseCase
-import com.example.appsfactory.presentation.base.BaseViewModel
 import com.example.appsfactory.util.ApiState
-import com.example.appsfactory.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val searchArtistUseCase: SearchArtistUseCase
-) : BaseViewModel<Artistmatches>() {
+) : ViewModel() {
 
-    fun getArtist(artistName: String) {
-        viewModelScope.launch {
-            searchArtistUseCase.getArtist(artistName).collect { handleState(it) }
-        }
-    }
-
-    private fun handleState(it: ApiState<Artistmatches>) {
-        when (it) {
-            is ApiState.Loading -> _uiState.value = UiState.Loading
-            is ApiState.Success -> {
-                if (it.data != null) _uiState.value = UiState.Success(it.data)
-            }
-            is ApiState.Error -> _uiState.value = UiState.Error(it.message.toString())
-        }
+    operator fun invoke(artistName: String): StateFlow<List<Artist>> {
+        return searchArtistUseCase(artistName)
+            .filterNot { it.data?.isEmpty() ?: true }
+            .map { if (it is ApiState.Success) it.data ?: emptyList() else emptyList() }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000),
+                initialValue = emptyList()
+            )
     }
 }
