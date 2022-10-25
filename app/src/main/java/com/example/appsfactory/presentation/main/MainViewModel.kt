@@ -30,10 +30,4 @@ class MainViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = emptyList()
         )
-
-}
-
-sealed interface AlbumsState {
-    object Loading : AlbumsState
-    data class Success(val albums: List<TopAlbumEntity>) : AlbumsState
 }
