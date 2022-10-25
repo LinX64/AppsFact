@@ -1,7 +1,7 @@
 package com.example.appsfactory.domain.model.top_albums
 
 import androidx.annotation.Keep
-import com.example.appsfactory.data.source.local.entity.AlbumEntity
+import com.example.appsfactory.data.source.local.entity.TopAlbumEntity
 import com.google.gson.annotations.SerializedName
 
 @Keep
@@ -18,7 +18,7 @@ data class TopAlbum(
     val url: String
 )
 
-fun TopAlbum.toAlbumEntity() = AlbumEntity(
+fun TopAlbum.toAlbumEntity() = TopAlbumEntity(
     id = playcount,
     name = name,
     artist = artist.name,

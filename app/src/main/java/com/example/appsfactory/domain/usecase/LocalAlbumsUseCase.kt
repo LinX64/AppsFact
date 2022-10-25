@@ -8,7 +8,7 @@
 
 package com.example.appsfactory.domain.usecase
 
-import com.example.appsfactory.data.source.local.entity.AlbumEntity
+import com.example.appsfactory.data.source.local.entity.TopAlbumEntity
 import com.example.appsfactory.domain.repository.AlbumRepository
 import javax.inject.Inject
 
@@ -22,7 +22,7 @@ class LocalAlbumsUseCase @Inject constructor(
         albumRepository.update(albumId, isBookmarked)
     }
 
-    suspend fun insert(album: AlbumEntity) {
+    suspend fun insert(album: TopAlbumEntity) {
         albumRepository.insert(album)
     }
 

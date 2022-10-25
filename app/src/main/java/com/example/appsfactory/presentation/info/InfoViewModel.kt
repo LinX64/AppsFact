@@ -6,7 +6,7 @@
  *
  */
 
-package com.example.appsfactory.presentation.detail
+package com.example.appsfactory.presentation.info
 
 import androidx.lifecycle.viewModelScope
 import com.example.appsfactory.data.source.local.entity.AlbumInfoEntity
@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class DetailViewModel @Inject constructor(
+class InfoViewModel @Inject constructor(
     private val albumInfoUseCase: AlbumInfoUseCase
 ) : BaseViewModel<AlbumInfoEntity>() {
 

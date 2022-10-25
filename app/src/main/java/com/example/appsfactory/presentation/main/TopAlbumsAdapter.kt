@@ -13,19 +13,19 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.appsfactory.data.source.local.entity.AlbumEntity
+import com.example.appsfactory.data.source.local.entity.TopAlbumEntity
 import com.example.appsfactory.databinding.AlbumsListItemBinding
 
 class TopAlbumsAdapter(
-    private val onItemClicked: (AlbumEntity) -> Unit
-) : ListAdapter<AlbumEntity, TopAlbumsAdapter.MyViewHolder>(MyDiffUtilClass()) {
+    private val onItemClicked: (TopAlbumEntity) -> Unit
+) : ListAdapter<TopAlbumEntity, TopAlbumsAdapter.MyViewHolder>(MyDiffUtilClass()) {
 
     inner class MyViewHolder(
         private val binding: AlbumsListItemBinding,
         private val onItemClicked: (Int) -> Unit
     ) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(album: AlbumEntity) {
+        fun bind(album: TopAlbumEntity) {
             binding.album = album
             binding.executePendingBindings()
 
@@ -33,12 +33,12 @@ class TopAlbumsAdapter(
         }
     }
 
-    private class MyDiffUtilClass : DiffUtil.ItemCallback<AlbumEntity>() {
-        override fun areItemsTheSame(oldItem: AlbumEntity, newItem: AlbumEntity): Boolean {
+    private class MyDiffUtilClass : DiffUtil.ItemCallback<TopAlbumEntity>() {
+        override fun areItemsTheSame(oldItem: TopAlbumEntity, newItem: TopAlbumEntity): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: AlbumEntity, newItem: AlbumEntity): Boolean {
+        override fun areContentsTheSame(oldItem: TopAlbumEntity, newItem: TopAlbumEntity): Boolean {
             return oldItem == newItem
         }
     }

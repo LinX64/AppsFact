@@ -15,7 +15,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.example.appsfactory.data.source.local.entity.AlbumEntity
+import com.example.appsfactory.data.source.local.entity.TopAlbumEntity
 import com.example.appsfactory.databinding.FragmentMainBinding
 import com.example.appsfactory.presentation.base.BaseFragment
 import com.example.appsfactory.presentation.util.gone
@@ -41,7 +41,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
         binding.recyclerViewMain.adapter = topAlbumsAdapter
     }
 
-    private fun onAlbumClicked(album: AlbumEntity) {
+    private fun onAlbumClicked(album: TopAlbumEntity) {
         val id = album.id
         val name = album.name
         val artistName = album.artist
@@ -60,7 +60,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
         }
     }
 
-    private fun submitList(localAlbums: List<AlbumEntity>) {
+    private fun submitList(localAlbums: List<TopAlbumEntity>) {
         if (localAlbums.isEmpty()) {
             binding.recyclerViewMain.gone()
             binding.emptyView.emptyViewLayout.visible()

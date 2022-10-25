@@ -7,7 +7,7 @@
 
         <variable
             name="album"
-            type="com.example.appsfactory.data.source.local.entity.AlbumEntity" />
+            type="com.example.appsfactory.data.source.local.entity.TopAlbumEntity" />
     </data>
 
     <androidx.cardview.widget.CardView

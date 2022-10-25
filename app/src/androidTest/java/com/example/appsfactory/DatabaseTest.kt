@@ -14,8 +14,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.appsfactory.data.source.local.AppDatabase
 import com.example.appsfactory.data.source.local.dao.AlbumInfoDao
 import com.example.appsfactory.data.source.local.dao.TopAlbumsDao
-import com.example.appsfactory.data.source.local.entity.AlbumEntity
 import com.example.appsfactory.data.source.local.entity.AlbumInfoEntity
+import com.example.appsfactory.data.source.local.entity.TopAlbumEntity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -89,7 +89,7 @@ class DatabaseTest {
 
     private suspend fun insertTopAlbum() {
         val albums = List(1) {
-            AlbumEntity(
+            TopAlbumEntity(
                 1,
                 name = mAlbumName,
                 artist = artistName,

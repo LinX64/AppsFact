@@ -4,12 +4,12 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.example.appsfactory.data.source.local.dao.AlbumInfoDao
 import com.example.appsfactory.data.source.local.dao.TopAlbumsDao
-import com.example.appsfactory.data.source.local.entity.AlbumEntity
 import com.example.appsfactory.data.source.local.entity.AlbumInfoEntity
+import com.example.appsfactory.data.source.local.entity.TopAlbumEntity
 
 @Database(
     version = 1,
-    entities = [AlbumEntity::class, AlbumInfoEntity::class],
+    entities = [TopAlbumEntity::class, AlbumInfoEntity::class],
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

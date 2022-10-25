@@ -6,7 +6,7 @@
  *
  */
 
-package com.example.appsfactory.presentation.detail
+package com.example.appsfactory.presentation.info
 
 import android.os.Bundle
 import android.view.View
@@ -26,10 +26,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AlbumDetailFragment :
+class AlbumInfoFragment :
     BaseFragment<FragmentAlbumInfoBinding>(FragmentAlbumInfoBinding::inflate) {
 
-    private val detailViewModel by activityViewModels<DetailViewModel>()
+    private val detailViewModel by activityViewModels<InfoViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -50,7 +50,7 @@
 
     <fragment
         android:id="@+id/detailFragment"
-        android:name="com.example.appsfactory.presentation.detail.AlbumDetailFragment"
+        android:name="com.example.appsfactory.presentation.info.AlbumInfoFragment"
         android:label="Album Detail"
         tools:layout="@layout/fragment_album_info">
 

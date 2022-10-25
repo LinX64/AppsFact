@@ -11,7 +11,7 @@ package com.example.appsfactory
 import com.example.appsfactory.data.repository.MainRepositoryImpl
 import com.example.appsfactory.data.source.local.AppDatabase
 import com.example.appsfactory.data.source.local.dao.TopAlbumsDao
-import com.example.appsfactory.data.source.local.entity.AlbumEntity
+import com.example.appsfactory.data.source.local.entity.TopAlbumEntity
 import com.example.appsfactory.data.source.remote.ApiService
 import com.example.appsfactory.domain.model.artistList.SearchArtistResponse
 import com.example.appsfactory.domain.model.top_albums.TopAlbumsResponse
@@ -92,7 +92,7 @@ class MainRepositoryTest {
 
     private suspend fun insertDummyData() {
         val albums = List(1) {
-            AlbumEntity(
+            TopAlbumEntity(
                 0,
                 name = albumName,
                 artist = artistName,

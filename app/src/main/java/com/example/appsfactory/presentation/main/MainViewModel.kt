@@ -9,7 +9,7 @@
 package com.example.appsfactory.presentation.main
 
 import androidx.lifecycle.viewModelScope
-import com.example.appsfactory.data.source.local.entity.AlbumEntity
+import com.example.appsfactory.data.source.local.entity.TopAlbumEntity
 import com.example.appsfactory.domain.usecase.LocalAlbumsUseCase
 import com.example.appsfactory.presentation.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,9 +21,9 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     albumsUseCase: LocalAlbumsUseCase
-) : BaseViewModel<List<AlbumEntity>>() {
+) : BaseViewModel<List<TopAlbumEntity>>() {
 
-    val mAlbums: StateFlow<List<AlbumEntity>> = albumsUseCase
+    val mAlbums: StateFlow<List<TopAlbumEntity>> = albumsUseCase
         .getBookmarkedAlbums()
         .stateIn(
             scope = viewModelScope,
@@ -35,5 +35,5 @@ class MainViewModel @Inject constructor(
 
 sealed interface AlbumsState {
     object Loading : AlbumsState
-    data class Success(val albums: List<AlbumEntity>) : AlbumsState
+    data class Success(val albums: List<TopAlbumEntity>) : AlbumsState
 }
