@@ -12,11 +12,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appsfactory.data.source.local.entity.AlbumInfoEntity
 import com.example.appsfactory.domain.usecase.AlbumInfoUseCase
-import com.example.appsfactory.presentation.info.AlbumInfoState.Loading
-import com.example.appsfactory.presentation.info.AlbumInfoState.Success
+import com.example.appsfactory.presentation.info.AlbumInfoState.*
 import com.example.appsfactory.util.ApiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,20 +30,23 @@ class InfoViewModel @Inject constructor(
         id: Int,
         albumName: String,
         artistName: String
-    ): StateFlow<AlbumInfoState> {
-        return albumInfoUseCase(id, albumName, artistName)
-            .filterNot { it.data == null }
-            .map {
-                if (it is ApiState.Success && it.data != null)
-                    Success(it.data)
-                else AlbumInfoState.Error(it.message.toString())
+    ): StateFlow<AlbumInfoState> = albumInfoUseCase(id, albumName, artistName)
+        .map { result ->
+            when (result) {
+                is ApiState.Success -> {
+                    val data = result.data
+                    if (data != null) Success(data)
+                    else Error("No data found")
+                }
+                is ApiState.Error -> Error(result.message.toString())
+                is ApiState.Loading -> Loading
             }
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = Loading
-            )
-    }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = Loading
+        )
 }
 
 sealed interface AlbumInfoState {

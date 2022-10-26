@@ -9,6 +9,7 @@
 package com.example.appsfactory.presentation.info
 
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -18,7 +19,6 @@ import com.example.appsfactory.data.source.local.entity.AlbumInfoEntity
 import com.example.appsfactory.databinding.FragmentAlbumInfoBinding
 import com.example.appsfactory.presentation.base.BaseFragment
 import com.example.appsfactory.presentation.util.gone
-import com.example.appsfactory.presentation.util.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -49,11 +49,12 @@ class AlbumInfoFragment :
     }
 
     private fun updateUI(albumState: AlbumInfoState) {
-        when (albumState) {
-            is AlbumInfoState.Loading -> binding.progressBar.visible()
-            is AlbumInfoState.Success -> onSuccess(albumState.data)
-            is AlbumInfoState.Error -> onError(albumState.message)
-        }
+        if (albumState is AlbumInfoState.Success) {
+            val albumInfo = albumState.data
+            onSuccess(albumInfo)
+        } else if (albumState is AlbumInfoState.Error) onError(albumState.message)
+
+        binding.progressBar.isVisible = albumState is AlbumInfoState.Loading
     }
 
     private fun onSuccess(album: AlbumInfoEntity) {

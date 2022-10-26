@@ -8,7 +8,7 @@
 
 package com.example.appsfactory.data.repository
 
-import com.bumptech.glide.load.HttpException
+import androidx.room.withTransaction
 import com.example.appsfactory.data.source.local.AppDatabase
 import com.example.appsfactory.data.source.local.entity.AlbumInfoEntity
 import com.example.appsfactory.data.source.remote.ApiService
@@ -16,11 +16,10 @@ import com.example.appsfactory.di.modules.IoDispatcher
 import com.example.appsfactory.domain.model.albumInfo.toEntity
 import com.example.appsfactory.domain.repository.AlbumInfoRepository
 import com.example.appsfactory.util.ApiState
+import com.example.appsfactory.util.networkBoundResource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import java.io.IOException
 
 class AlbumInfoRepositoryImpl(
     private val apiService: ApiService,
@@ -34,23 +33,19 @@ class AlbumInfoRepositoryImpl(
         id: Int,
         albumName: String,
         artistName: String
-    ): Flow<ApiState<AlbumInfoEntity>> = flow {
-        emit(ApiState.Loading())
-
-        val albumInfo = albumInfoDao.getAlbumInfo(id)
-        emit(ApiState.Success(albumInfo))
-
-        try {
-            val remoteAlbumInfo = apiService.fetchAlbumInfo(albumName, artistName).album.toEntity()
-            albumInfoDao.insert(remoteAlbumInfo)
-
-        } catch (e: HttpException) {
-            emit(ApiState.Error("Request failed! Please try again...", albumInfo))
-        } catch (e: IOException) {
-            emit(ApiState.Error("No Internet connection!", albumInfo))
+    ): Flow<ApiState<AlbumInfoEntity>> = networkBoundResource(
+        query = {
+            albumInfoDao.getAlbumInfo(id)
+        },
+        fetch = {
+            apiService.fetchAlbumInfo(albumName, artistName).album.toEntity()
+        },
+        saveFetchResult = { response ->
+            appDb.withTransaction {
+                albumInfoDao.deleteAll()
+                albumInfoDao.insert(response)
+            }
         }
 
-        val newAlbumInfo = appDb.albumInfoDao().getAlbumInfo(id)
-        emit(ApiState.Success(newAlbumInfo))
-    }.flowOn(ioDispatcher)
+    ).flowOn(ioDispatcher)
 }
