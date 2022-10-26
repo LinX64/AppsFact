@@ -8,10 +8,10 @@
 
 package com.example.appsfactory.presentation.info
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appsfactory.data.source.local.entity.AlbumInfoEntity
 import com.example.appsfactory.domain.usecase.AlbumInfoUseCase
-import com.example.appsfactory.presentation.base.BaseViewModel
 import com.example.appsfactory.presentation.info.AlbumInfoState.Loading
 import com.example.appsfactory.presentation.info.AlbumInfoState.Success
 import com.example.appsfactory.util.ApiState
@@ -25,7 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 class InfoViewModel @Inject constructor(
     private val albumInfoUseCase: AlbumInfoUseCase
-) : BaseViewModel<AlbumInfoEntity>() {
+) : ViewModel() {
 
     operator fun invoke(
         id: Int,
