@@ -10,13 +10,13 @@ package com.example.appsfactory.domain.usecase
 
 import com.example.appsfactory.domain.model.top_albums.TopAlbum
 import com.example.appsfactory.domain.repository.MainRepository
-import com.example.appsfactory.util.ApiState
+import com.example.appsfactory.util.ApiResult
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetTopAlbumsUseCase @Inject constructor(private val mainRepository: MainRepository) {
 
-    suspend fun getTopAlbumsBasedOnArtist(artistName: String): Flow<ApiState<List<TopAlbum>>> {
+    operator fun invoke(artistName: String): Flow<ApiResult<List<TopAlbum>>> {
         return mainRepository.getTopAlbumsBasedOnArtist(artistName)
     }
 }

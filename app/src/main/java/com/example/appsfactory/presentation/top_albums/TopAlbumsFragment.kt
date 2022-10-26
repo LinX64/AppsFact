@@ -19,9 +19,8 @@ import androidx.navigation.fragment.findNavController
 import com.example.appsfactory.databinding.FragmentTopAlbumsBinding
 import com.example.appsfactory.domain.model.top_albums.TopAlbum
 import com.example.appsfactory.presentation.base.BaseFragment
-import com.example.appsfactory.presentation.util.inVisible
+import com.example.appsfactory.presentation.util.gone
 import com.example.appsfactory.presentation.util.visible
-import com.example.appsfactory.util.UiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -81,38 +80,32 @@ class TopAlbumsFragment :
     }
 
     private fun observeTopAlbumsBasedOnArtistName(artistName: String) {
-        topAlbumsViewModel.getTopAlbumsBasedOnArtist(artistName)
-
-        getTopAlbumsState()
-    }
-
-    private fun getTopAlbumsState() {
         viewLifecycleOwner.lifecycleScope.launch {
-            topAlbumsViewModel.uiState
+            topAlbumsViewModel(artistName)
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
                 .collect { uiState -> updateUI(uiState) }
         }
     }
 
-    private fun updateUI(uiState: UiState<List<TopAlbum>>) {
-        when (uiState) {
-            is UiState.Loading -> binding.progressBar.visible()
-            is UiState.Success -> onSuccess(uiState.data)
-            is UiState.Error -> onError(uiState)
+    private fun updateUI(topAlbumsState: TopAlbumsState) {
+        when (topAlbumsState) {
+            is TopAlbumsState.Loading -> showLoading()
+            is TopAlbumsState.Success -> submitTopAlbums(topAlbumsState.data)
+            is TopAlbumsState.Error -> showError(topAlbumsState.message)
         }
     }
 
-    private fun onSuccess(data: List<TopAlbum>) {
-        binding.progressBar.inVisible()
-        setAlbums(data)
+    private fun showLoading() {
+        binding.progressBar.visible()
     }
 
-    private fun onError(uiState: UiState.Error) {
-        binding.progressBar.inVisible()
-        Toast.makeText(requireContext(), uiState.error, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun setAlbums(albums: List<TopAlbum>) {
+    private fun submitTopAlbums(albums: List<TopAlbum>) {
+        binding.progressBar.gone()
         topAlbumsAdapter.submitList(albums)
+    }
+
+    private fun showError(message: String) {
+        binding.progressBar.gone()
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 }

@@ -21,7 +21,6 @@ import com.example.appsfactory.databinding.FragmentAlbumInfoBinding
 import com.example.appsfactory.presentation.base.BaseFragment
 import com.example.appsfactory.presentation.util.gone
 import com.example.appsfactory.presentation.util.visible
-import com.example.appsfactory.util.UiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -35,7 +34,6 @@ class AlbumInfoFragment :
         super.onViewCreated(view, savedInstanceState)
 
         getAlbumDetail()
-        getAlbumDetailState()
     }
 
     private fun getAlbumDetail() {
@@ -43,22 +41,20 @@ class AlbumInfoFragment :
         val albumName = arguments?.getString("albumName").toString()
         val artistName = arguments?.getString("artistName").toString()
 
-        detailViewModel.getAlbumInfo(id!!, albumName, artistName)
-    }
+        id ?: return
 
-    private fun getAlbumDetailState() {
         viewLifecycleOwner.lifecycleScope.launch {
-            detailViewModel.uiState.flowWithLifecycle(
-                lifecycle, Lifecycle.State.STARTED
-            ).collect { state -> updateUI(state) }
+            detailViewModel(id, albumName, artistName)
+                .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+                .collect { state -> updateUI(state) }
         }
     }
 
-    private fun updateUI(uiState: UiState<AlbumInfoEntity>) {
-        when (uiState) {
-            is UiState.Loading -> binding.progressBar.visible()
-            is UiState.Success -> onSuccess(uiState.data)
-            is UiState.Error -> onError(uiState.error)
+    private fun updateUI(albumState: AlbumInfoState) {
+        when (albumState) {
+            is AlbumInfoState.Loading -> binding.progressBar.visible()
+            is AlbumInfoState.Success -> onSuccess(albumState.data)
+            is AlbumInfoState.Error -> onError(albumState.message)
         }
     }
 

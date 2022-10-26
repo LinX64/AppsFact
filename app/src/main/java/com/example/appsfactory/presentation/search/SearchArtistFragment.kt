@@ -19,7 +19,9 @@ import androidx.navigation.fragment.findNavController
 import com.example.appsfactory.databinding.FragmentArtistSearchBinding
 import com.example.appsfactory.domain.model.artistList.Artist
 import com.example.appsfactory.presentation.base.BaseFragment
+import com.example.appsfactory.presentation.util.gone
 import com.example.appsfactory.presentation.util.hideSoftInput
+import com.example.appsfactory.presentation.util.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -68,11 +70,29 @@ class SearchArtistFragment :
         viewLifecycleOwner.lifecycleScope.launch {
             searchViewModel(artistName)
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-                .collect { result -> submitList(result) }
+                .collect { result -> handleState(result) }
         }
     }
 
-    private fun submitList(artists: List<Artist>) {
-        searchArtistAdapter.submitList(artists)
+    private fun handleState(result: Any) {
+        when (result) {
+            is ArtistListState.Loading -> binding.progressBar.visible()
+            is ArtistListState.Success -> onSuccess(result)
+            is ArtistListState.Error -> onError(result)
+        }
+    }
+
+    private fun onSuccess(result: ArtistListState.Success) {
+        binding.progressBar.gone()
+        searchArtistAdapter.submitList(result.artists)
+    }
+
+    private fun onError(result: Any) {
+        binding.progressBar.gone()
+        Toast.makeText(
+            requireContext(),
+            result.toString(),
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }

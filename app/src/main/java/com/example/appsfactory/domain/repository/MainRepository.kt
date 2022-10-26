@@ -10,12 +10,12 @@ package com.example.appsfactory.domain.repository
 
 import com.example.appsfactory.domain.model.artistList.Artist
 import com.example.appsfactory.domain.model.top_albums.TopAlbum
-import com.example.appsfactory.util.ApiState
+import com.example.appsfactory.util.ApiResult
 import kotlinx.coroutines.flow.Flow
 
 interface MainRepository {
 
-    fun getArtist(artistName: String): Flow<ApiState<List<Artist>>>
+    fun getArtist(artistName: String): Flow<ApiResult<List<Artist>>>
 
-    fun getTopAlbumsBasedOnArtist(artistName: String): Flow<ApiState<List<TopAlbum>>>
+    fun getTopAlbumsBasedOnArtist(artistName: String): Flow<ApiResult<List<TopAlbum>>>
 }
