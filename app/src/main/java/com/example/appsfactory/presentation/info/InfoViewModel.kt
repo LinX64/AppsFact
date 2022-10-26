@@ -16,10 +16,7 @@ import com.example.appsfactory.presentation.info.AlbumInfoState.Loading
 import com.example.appsfactory.presentation.info.AlbumInfoState.Success
 import com.example.appsfactory.util.ApiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,8 +30,11 @@ class InfoViewModel @Inject constructor(
         artistName: String
     ): StateFlow<AlbumInfoState> {
         return albumInfoUseCase(id, albumName, artistName)
+            .filterNot { it.data == null }
             .map {
-                if (it is ApiState.Success && it.data != null) Success(it.data) else Success(it.data!!)
+                if (it is ApiState.Success && it.data != null)
+                    Success(it.data)
+                else AlbumInfoState.Error(it.message.toString())
             }
             .stateIn(
                 scope = viewModelScope,
