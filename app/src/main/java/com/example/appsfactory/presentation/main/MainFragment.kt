@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::inflate) {
 
     private val mainViewModel by activityViewModels<MainViewModel>()
-    private lateinit var topAlbumsAdapter: TopAlbumsAdapter
+    private lateinit var topAlbumsAdapter: TopAlbumAdapter
 
     override fun setupUI() {
         super.setupUI()
@@ -35,7 +35,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     }
 
     private fun setupRecyclerView() {
-        topAlbumsAdapter = TopAlbumsAdapter(this::onAlbumClicked)
+        topAlbumsAdapter = TopAlbumAdapter(this::onAlbumClicked)
         binding.recyclerViewMain.adapter = topAlbumsAdapter
     }
 

@@ -28,7 +28,7 @@ class SearchArtistFragment :
     BaseFragment<FragmentArtistSearchBinding>(FragmentArtistSearchBinding::inflate) {
 
     private val searchViewModel by activityViewModels<SearchViewModel>()
-    private lateinit var searchArtistAdapter: SearchArtistAdapter
+    private lateinit var searchArtistAdapter: SearchAdapter
 
     override fun setupUI() {
         super.setupUI()
@@ -38,7 +38,7 @@ class SearchArtistFragment :
     }
 
     private fun setupRecyclerView() {
-        searchArtistAdapter = SearchArtistAdapter(this::onArtistClicked)
+        searchArtistAdapter = SearchAdapter(this::onArtistClicked)
         binding.recyclerView.adapter = searchArtistAdapter
     }
 

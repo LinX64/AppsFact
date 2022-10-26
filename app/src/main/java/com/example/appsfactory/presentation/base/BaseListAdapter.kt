@@ -11,6 +11,7 @@ package com.example.appsfactory.presentation.base
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.LinearLayout.LayoutParams
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -41,16 +42,14 @@ abstract class BaseListAdapter<T : Any, VB : ViewBinding> :
 
     override fun onBindViewHolder(holder: ViewBindingVH<VB>, position: Int) {
         val item = getItem(position)
-        bind(holder.binding, position, item)
 
-        holder.binding.root.setOnClickListener {
-            onItemClickListener(item)
+        with(holder.binding) {
+            bind(this, position, item)
+            root.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
         }
     }
 
     abstract fun inflateView(inflater: LayoutInflater, viewType: Int): VB
 
     abstract fun bind(binding: VB, position: Int, item: T)
-
-    open fun onItemClickListener(item: T) {}
 }

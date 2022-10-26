@@ -6,7 +6,7 @@
     <data>
 
         <variable
-            name="album"
+            name="topAlbum"
             type="com.example.appsfactory.domain.model.top_albums.TopAlbum" />
     </data>
 
@@ -38,7 +38,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
                     android:lines="2"
-                    android:text="@{album.name}"
+                    android:text="@{topAlbum.name}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/artistImage"
                     app:layout_constraintTop_toTopOf="parent"
@@ -46,7 +46,7 @@
 
                 <ImageView
                     android:id="@+id/artistImage"
-                    loadImage="@{album.image[3].text}"
+                    loadImage="@{topAlbum.image[3].text}"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -61,7 +61,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="10dp"
-                    android:text="@{album.artist.name}"
+                    android:text="@{topAlbum.artist.name}"
                     app:layout_constraintStart_toEndOf="@+id/artistImage"
                     app:layout_constraintTop_toBottomOf="@+id/tvTitle"
                     tools:text="Justin Bieber" />
