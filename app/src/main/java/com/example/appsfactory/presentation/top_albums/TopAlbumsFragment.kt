@@ -33,7 +33,7 @@ class TopAlbumsFragment :
         super.setupUI()
 
         setupRecyclerView()
-        getArtistNameAndObserve()
+        getArtistNameAndUpdateUI()
     }
 
     private fun setupRecyclerView() {
@@ -67,12 +67,8 @@ class TopAlbumsFragment :
         findNavController().navigate(action)
     }
 
-    private fun getArtistNameAndObserve() {
-        val getArtistName = arguments?.getString("name")
-        if (getArtistName?.isNotEmpty() == true) observeTopAlbumsBasedOnArtistName(getArtistName)
-    }
-
-    private fun observeTopAlbumsBasedOnArtistName(artistName: String) {
+    private fun getArtistNameAndUpdateUI() {
+        val artistName = arguments?.getString("name").toString()
         viewLifecycleOwner.lifecycleScope.launch {
             topAlbumsViewModel(artistName)
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
