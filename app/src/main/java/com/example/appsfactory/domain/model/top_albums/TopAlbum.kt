@@ -15,7 +15,9 @@ data class TopAlbum(
     @SerializedName("playcount")
     val playcount: Int,
     @SerializedName("url")
-    val url: String
+    val url: String,
+    @SerializedName("isBookmarked")
+    var isBookmarked: Int = 0
 )
 
 fun TopAlbum.toAlbumEntity() = TopAlbumEntity(

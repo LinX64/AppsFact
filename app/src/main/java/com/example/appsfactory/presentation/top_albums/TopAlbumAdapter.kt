@@ -43,7 +43,20 @@ class TopAlbumAdapter(
 
                 onBookmarkRemove()
             }
+
+            setBookmarked(item, binding)
         }
+    }
+
+    private fun setBookmarked(
+        item: TopAlbum,
+        binding: TopAlbumsListItemBinding
+    ) = if (item.isBookmarked == 1) {
+        binding.bookmarkImageBtn.inVisible()
+        binding.bookmarkRemoveBtn.visible()
+    } else {
+        binding.bookmarkImageBtn.visible()
+        binding.bookmarkRemoveBtn.inVisible()
     }
 
     private fun TopAlbumsListItemBinding.onBookmark(it: View?) {

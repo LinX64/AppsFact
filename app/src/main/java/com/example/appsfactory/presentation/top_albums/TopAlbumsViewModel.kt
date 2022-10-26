@@ -15,12 +15,10 @@ import com.example.appsfactory.domain.model.top_albums.TopAlbum
 import com.example.appsfactory.domain.model.top_albums.toAlbumEntity
 import com.example.appsfactory.domain.usecase.GetTopAlbumsUseCase
 import com.example.appsfactory.domain.usecase.LocalAlbumsUseCase
-import com.example.appsfactory.presentation.top_albums.TopAlbumsState.*
-import com.example.appsfactory.util.ApiResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,20 +30,14 @@ class TopAlbumsViewModel @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
-    operator fun invoke(artistName: String) = topAlbumsUseCase(artistName)
-        .map { result -> handleState(result) }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = Loading
-        )
-
-    private fun handleState(result: ApiResult<List<TopAlbum>>) =
-        when (result) {
-            is ApiResult.Loading -> Loading
-            is ApiResult.Success -> Success(result.data)
-            is ApiResult.Error -> Error(result.exception.toString())
-        }
+    operator fun invoke(artistName: String): StateFlow<List<TopAlbum>> {
+        return topAlbumsUseCase(artistName)
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000),
+                initialValue = emptyList()
+            )
+    }
 
     fun onBookmarkClicked(album: TopAlbum) = viewModelScope.launch(ioDispatcher) {
         localAlbumsUseCase.insert(album.toAlbumEntity())
