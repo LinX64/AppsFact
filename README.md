@@ -23,7 +23,9 @@ This project uses Clean Architecture with three different layers as recommended 
 
 ### Solution
 
-The project consists of 4 different `Fragment`s with a single `Activity`. It uses one base `Fragment` along with a base `ViewModel` to avoid the repetition of state handling and `onCreateView()` method for `Fragment`.
+The project consists of 4 different `Fragment`s with a single `Activity`. It uses one
+base `Fragment` to avoid the repetition `onCreateView()` and `onViewCreated()` methods
+for `Fragment`s.
 
 1. The mainScreen (`Fragment`) - loads saved albums from Database.
 2. AlbumInfo `Fragment` which accepts `id`, `albumName` and `artistName` as arguments and then makes the call to the server to get the specific album detail.
@@ -35,7 +37,7 @@ The project consists of 4 different `Fragment`s with a single `Activity`. It use
 During my implementation and doing a bit research of which API and what best practice is perfect for
 offline caching, I ended up
 with [NetworkBoundResource](https://github.com/LinX64/AppsFactory/blob/master/app/src/main/java/com/example/appsfactory/util/NetworkBoundResource.kt)
-which is an inline function where we can handle all the situations with Flow inside the Respository.
+which is an inline function where we can handle all the situations with Flow inside the Repository.
 For instance, let's take a look at how we could implement the offline caching with this
 amazing `NetworkBoundResource`:
 
@@ -59,7 +61,9 @@ override fun getAlbumInfo(
         }
     ).flowOn(ioDispatcher)
 ```
-This basically works with high order functions, crossinlines and an inline function with different stages for handling the offline caching, fetching the data from server, and etc.
+
+This basically works with high order functions, cross inlines and an inline function with different
+stages for handling the offline caching, fetching the data from server, and etc.
 
 **Navigation:**
 
@@ -90,10 +94,10 @@ are written using `Espresso` and `JUnit4`.
 
 ### TODO
 
-- [ ] Remove suspend for the `Repository` functions with `Flow`.
-- [ ] Improve the BaseFragment and BaseViewModel. Reduce the boilerplate code.
 - [ ] Using NetworkBoundResource for the other `Repository` functions.
-- [ ] Using ListAdapter for the RecyclerView.
+
+** The tests should be reviews after the changes I've made with States
+
 - [ ] Add/Improve Unit tests.
 - [ ] Add more tests for ViewModel
 - [ ] Add more tests for UseCases
