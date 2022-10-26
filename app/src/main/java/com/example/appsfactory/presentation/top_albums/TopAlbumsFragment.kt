@@ -8,8 +8,6 @@
 
 package com.example.appsfactory.presentation.top_albums
 
-import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -31,15 +29,10 @@ class TopAlbumsFragment :
     private val topAlbumsViewModel by activityViewModels<TopAlbumsViewModel>()
     private lateinit var topAlbumsAdapter: TopAlbumAdapter
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun setupUI() {
+        super.setupUI()
 
-        setupUI()
-    }
-
-    private fun setupUI() {
         setupRecyclerView()
-
         getArtistNameAndObserve()
     }
 

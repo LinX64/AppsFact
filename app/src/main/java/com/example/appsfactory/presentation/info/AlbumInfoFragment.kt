@@ -8,8 +8,6 @@
 
 package com.example.appsfactory.presentation.info
 
-import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -30,8 +28,8 @@ class AlbumInfoFragment :
 
     private val detailViewModel by activityViewModels<InfoViewModel>()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun setupUI() {
+        super.setupUI()
 
         getAlbumDetail()
     }

@@ -8,8 +8,6 @@
 
 package com.example.appsfactory.presentation.main
 
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -29,14 +27,14 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     private val mainViewModel by activityViewModels<MainViewModel>()
     private lateinit var topAlbumsAdapter: TopAlbumsAdapter
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun setupUI() {
+        super.setupUI()
 
-        setupUI()
+        setupRecyclerView()
         getAlbums()
     }
 
-    private fun setupUI() {
+    private fun setupRecyclerView() {
         topAlbumsAdapter = TopAlbumsAdapter(this::onAlbumClicked)
         binding.recyclerViewMain.adapter = topAlbumsAdapter
     }

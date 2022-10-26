@@ -8,8 +8,6 @@
 
 package com.example.appsfactory.presentation.search
 
-import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -32,13 +30,9 @@ class SearchArtistFragment :
     private val searchViewModel by activityViewModels<SearchViewModel>()
     private lateinit var searchArtistAdapter: SearchArtistAdapter
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun setupUI() {
+        super.setupUI()
 
-        setupUI()
-    }
-
-    private fun setupUI() {
         setupSearch()
         setupRecyclerView()
     }
