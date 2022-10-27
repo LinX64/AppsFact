@@ -20,7 +20,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -36,19 +35,11 @@ class TopAlbumsViewModel @Inject constructor(
     private val artistName: String = savedStateHandle["artistName"] ?: ""
 
     val topAlbumsState: StateFlow<TopAlbumsState> = topAlbumsUseCase(artistName)
-        .map { state -> handleState(state) }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = TopAlbumsState.Loading
         )
-
-    private fun handleState(state: TopAlbumsState) =
-        when (state) {
-            is TopAlbumsState.Success -> TopAlbumsState.Success(state.data)
-            is TopAlbumsState.Error -> TopAlbumsState.Error(state.message)
-            is TopAlbumsState.Loading -> TopAlbumsState.Loading
-        }
 
     fun onBookmarkClicked(album: TopAlbum) = viewModelScope.launch(ioDispatcher) {
         localAlbumsUseCase.insert(album.toAlbumEntity())

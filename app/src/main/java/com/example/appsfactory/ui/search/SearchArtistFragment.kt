@@ -8,7 +8,7 @@
 
 package com.example.appsfactory.ui.search
 
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.appsfactory.databinding.FragmentArtistSearchBinding
 import com.example.appsfactory.domain.model.artistList.Artist
@@ -20,7 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class SearchArtistFragment :
     BaseFragment<FragmentArtistSearchBinding>(FragmentArtistSearchBinding::inflate) {
 
-    private val searchViewModel by activityViewModels<SearchViewModel>()
+    private val searchViewModel by viewModels<SearchViewModel>()
     private lateinit var searchArtistAdapter: SearchAdapter
 
     override fun setupUI() {
