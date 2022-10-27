@@ -5,7 +5,6 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
-import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -21,7 +20,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var myMenu: Menu
+    private lateinit var myMenuItem: MenuItem
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,13 +44,8 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            disableSearchAction(destination)
+            if (destination.id != R.id.mainFragment) myMenuItem.isVisible = false
         }
-    }
-
-    private fun disableSearchAction(destination: NavDestination) {
-        if (destination.id != R.id.mainFragment) myMenu.findItem(R.id.search_action).isVisible =
-            false
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -69,7 +63,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.main_menu, menu)
-        this.myMenu = menu!!
+        menu?.let { myMenuItem = it.findItem(R.id.search_action) }
         return true
     }
 }

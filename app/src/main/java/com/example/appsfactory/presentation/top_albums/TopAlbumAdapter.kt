@@ -14,6 +14,7 @@ import androidx.core.view.isVisible
 import com.example.appsfactory.databinding.TopAlbumsListItemBinding
 import com.example.appsfactory.domain.model.top_albums.TopAlbum
 import com.example.appsfactory.presentation.base.BaseListAdapter
+import com.example.appsfactory.presentation.util.gone
 import com.example.appsfactory.presentation.util.inVisible
 import com.example.appsfactory.presentation.util.visible
 
@@ -52,20 +53,20 @@ class TopAlbumAdapter(
         item: TopAlbum,
         binding: TopAlbumsListItemBinding
     ) = if (item.isBookmarked == 1) {
-        binding.bookmarkImageBtn.inVisible()
+        binding.bookmarkImageBtn.gone()
         binding.bookmarkRemoveBtn.visible()
     } else {
         binding.bookmarkImageBtn.visible()
-        binding.bookmarkRemoveBtn.inVisible()
+        binding.bookmarkRemoveBtn.gone()
     }
 
     private fun TopAlbumsListItemBinding.onBookmark(it: View?) {
         if (it?.isVisible == true) {
-            bookmarkImageBtn.inVisible()
+            bookmarkImageBtn.gone()
             bookmarkRemoveBtn.visible()
         } else {
             bookmarkImageBtn.visible()
-            bookmarkRemoveBtn.inVisible()
+            bookmarkRemoveBtn.gone()
         }
     }
 
