@@ -12,10 +12,9 @@ import com.example.appsfactory.data.source.local.entity.TopAlbumEntity
 import com.example.appsfactory.domain.model.top_albums.TopAlbum
 import com.example.appsfactory.domain.repository.AlbumRepository
 import com.example.appsfactory.domain.repository.MainRepository
+import com.example.appsfactory.presentation.top_albums.TopAlbumsState
 import com.example.appsfactory.util.ApiResult
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import java.util.Collections.emptyList
 import javax.inject.Inject
 
@@ -24,14 +23,17 @@ class GetTopAlbumsUseCase @Inject constructor(
     private val localAlbumRepository: AlbumRepository
 ) {
 
-    operator fun invoke(artistName: String): Flow<List<TopAlbum>> {
+    operator fun invoke(artistName: String): Flow<TopAlbumsState> {
         return mainRepository.getTopAlbumsBasedOnArtist(artistName)
+            .onStart { emit(ApiResult.Loading) }
             .map {
                 if (it is ApiResult.Success) it.data else emptyList()
             }
+            .filterNot { it.isEmpty() }
             .combine(localAlbumRepository.getBookmarkedAlbums()) { remoteAlbums, localAlbums ->
                 mapToTopAlbumEntity(remoteAlbums, localAlbums)
             }
+            .map { TopAlbumsState.Success(it) }
     }
 
     private fun mapToTopAlbumEntity(

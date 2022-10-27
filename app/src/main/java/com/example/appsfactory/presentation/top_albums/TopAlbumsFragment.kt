@@ -8,6 +8,7 @@
 
 package com.example.appsfactory.presentation.top_albums
 
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -17,6 +18,7 @@ import com.example.appsfactory.databinding.FragmentTopAlbumsBinding
 import com.example.appsfactory.domain.model.top_albums.TopAlbum
 import com.example.appsfactory.presentation.base.BaseFragment
 import com.example.appsfactory.presentation.util.gone
+import com.example.appsfactory.presentation.util.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -69,12 +71,29 @@ class TopAlbumsFragment :
         viewLifecycleOwner.lifecycleScope.launch {
             topAlbumsViewModel(artistName)
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-                .collect { uiState -> submitTopAlbums(uiState) }
+                .collect { uiState -> updateUi(uiState) }
         }
+    }
+
+    private fun updateUi(topAlbumsState: TopAlbumsState) {
+        when (topAlbumsState) {
+            is TopAlbumsState.Loading -> showLoading()
+            is TopAlbumsState.Success -> submitTopAlbums(topAlbumsState.data)
+            is TopAlbumsState.Error -> showError(topAlbumsState.message)
+        }
+    }
+
+    private fun showLoading() {
+        binding.progressBar.visible()
     }
 
     private fun submitTopAlbums(albums: List<TopAlbum>) {
         binding.progressBar.gone()
         topAlbumsAdapter.submitList(albums)
+    }
+
+    private fun showError(message: String) {
+        binding.progressBar.gone()
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 }
