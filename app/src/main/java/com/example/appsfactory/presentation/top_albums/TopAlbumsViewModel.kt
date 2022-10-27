@@ -45,7 +45,7 @@ class TopAlbumsViewModel @Inject constructor(
         when (state) {
             is TopAlbumsState.Success -> TopAlbumsState.Success(state.data)
             is TopAlbumsState.Error -> TopAlbumsState.Error(state.message)
-            TopAlbumsState.Loading -> TopAlbumsState.Loading
+            is TopAlbumsState.Loading -> TopAlbumsState.Loading
         }
 
     fun onBookmarkClicked(album: TopAlbum) = viewModelScope.launch(ioDispatcher) {

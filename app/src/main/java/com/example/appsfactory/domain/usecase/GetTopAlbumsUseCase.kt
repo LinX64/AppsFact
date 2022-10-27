@@ -33,7 +33,10 @@ class GetTopAlbumsUseCase @Inject constructor(
             .combine(localAlbumRepository.getBookmarkedAlbums()) { remoteAlbums, localAlbums ->
                 mapToTopAlbumEntity(remoteAlbums, localAlbums)
             }
-            .map { TopAlbumsState.Success(it) }
+            .map {
+                if (it.isNotEmpty()) TopAlbumsState.Success(it)
+                else TopAlbumsState.Error("No data found")
+            }
     }
 
     private fun mapToTopAlbumEntity(
