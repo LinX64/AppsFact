@@ -8,19 +8,16 @@
 
 package com.example.appsfactory.ui.info
 
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.appsfactory.data.source.local.entity.AlbumInfoEntity
 import com.example.appsfactory.databinding.FragmentAlbumInfoBinding
 import com.example.appsfactory.ui.base.BaseFragment
 import com.example.appsfactory.ui.util.gone
+import com.example.appsfactory.ui.util.observeWithLifecycle
+import com.example.appsfactory.ui.util.showSnackBar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class AlbumInfoFragment :
@@ -41,11 +38,7 @@ class AlbumInfoFragment :
 
         id ?: return
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            detailViewModel(id, albumName, artistName)
-                .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
-                .collect { state -> updateUI(state) }
-        }
+        detailViewModel(id, albumName, artistName).observeWithLifecycle(this) { updateUI(it) }
     }
 
     private fun updateUI(albumState: AlbumInfoState) {
@@ -73,6 +66,6 @@ class AlbumInfoFragment :
 
     private fun onError(error: String) {
         binding.progressBar.gone()
-        Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
+        showSnackBar(requireActivity(), error)
     }
 }

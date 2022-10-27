@@ -29,7 +29,13 @@ class SearchViewModel @Inject constructor(
 
     operator fun invoke(artistName: String): StateFlow<ArtistListState> {
         return searchArtistUseCase(artistName)
-            .map { result -> handleState(result) }
+            .map { result ->
+                when (result) {
+                    is ApiResult.Loading -> Loading
+                    is ApiResult.Success -> Success(result.data)
+                    is ApiResult.Error -> Error(result.exception.toString())
+                }
+            }
             .map { state -> state as ArtistListState }
             .stateIn(
                 scope = viewModelScope,
@@ -37,13 +43,6 @@ class SearchViewModel @Inject constructor(
                 initialValue = Loading
             )
     }
-
-    private fun handleState(result: ApiResult<List<Artist>>) =
-        when (result) {
-            is ApiResult.Loading -> Loading
-            is ApiResult.Success -> Success(result.data)
-            is ApiResult.Error -> Error(result.exception.toString())
-        }
 }
 
 sealed interface ArtistListState {

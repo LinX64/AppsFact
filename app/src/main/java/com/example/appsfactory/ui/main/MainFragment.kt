@@ -9,17 +9,14 @@
 package com.example.appsfactory.ui.main
 
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.appsfactory.data.source.local.entity.TopAlbumEntity
 import com.example.appsfactory.databinding.FragmentMainBinding
 import com.example.appsfactory.ui.base.BaseFragment
 import com.example.appsfactory.ui.util.gone
+import com.example.appsfactory.ui.util.observeWithLifecycle
 import com.example.appsfactory.ui.util.visible
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::inflate) {
@@ -53,13 +50,9 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
     }
 
     private fun getAlbums() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mainViewModel
-                    .mAlbums
-                    .collect { result -> submitList(result) }
-            }
-        }
+        mainViewModel
+            .mAlbums
+            .observeWithLifecycle(this) { submitList(it) }
     }
 
     private fun submitList(localAlbums: List<TopAlbumEntity>) {

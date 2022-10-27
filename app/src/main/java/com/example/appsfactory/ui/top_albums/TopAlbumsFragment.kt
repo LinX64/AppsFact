@@ -8,19 +8,16 @@
 
 package com.example.appsfactory.ui.top_albums
 
-import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.appsfactory.databinding.FragmentTopAlbumsBinding
 import com.example.appsfactory.domain.model.top_albums.TopAlbum
 import com.example.appsfactory.ui.base.BaseFragment
 import com.example.appsfactory.ui.util.gone
+import com.example.appsfactory.ui.util.observeWithLifecycle
+import com.example.appsfactory.ui.util.showSnackBar
 import com.example.appsfactory.ui.util.visible
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class TopAlbumsFragment :
@@ -63,12 +60,9 @@ class TopAlbumsFragment :
     }
 
     private fun getArtistNameAndUpdateUI() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            topAlbumsViewModel.topAlbumsState.flowWithLifecycle(
-                viewLifecycleOwner.lifecycle,
-                Lifecycle.State.STARTED
-            ).collect { updateUi(it) }
-        }
+        topAlbumsViewModel
+            .topAlbumsState
+            .observeWithLifecycle(this) { updateUi(it) }
     }
 
     private fun updateUi(topAlbumsState: TopAlbumsState) {
@@ -90,6 +84,6 @@ class TopAlbumsFragment :
 
     private fun showError(message: String) {
         binding.progressBar.gone()
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        showSnackBar(requireActivity(), message)
     }
 }
