@@ -42,16 +42,15 @@
             app:destination="@id/detailFragment" />
 
         <argument
-            android:name="name"
-            app:argType="string"
-            app:nullable="true" />
+            android:name="artistName"
+            app:argType="string" />
 
     </fragment>
 
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.example.appsfactory.presentation.info.AlbumInfoFragment"
-        android:label="Album Detail"
+        android:label="Album Info"
         tools:layout="@layout/fragment_album_info">
 
         <argument

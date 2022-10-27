@@ -8,6 +8,7 @@
 
 package com.example.appsfactory.presentation.top_albums
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appsfactory.di.modules.IoDispatcher
@@ -17,29 +18,29 @@ import com.example.appsfactory.domain.usecase.GetTopAlbumsUseCase
 import com.example.appsfactory.domain.usecase.LocalAlbumsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class TopAlbumsViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val topAlbumsUseCase: GetTopAlbumsUseCase,
     private val localAlbumsUseCase: LocalAlbumsUseCase,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
-    operator fun invoke(artistName: String): StateFlow<TopAlbumsState> {
-        return topAlbumsUseCase(artistName)
-            .map { state -> handleState(state) }
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5000),
-                initialValue = TopAlbumsState.Loading
-            )
-    }
+    private val artistName: String = savedStateHandle["artistName"] ?: ""
+
+    val topAlbumsState: StateFlow<TopAlbumsState> = topAlbumsUseCase(artistName)
+        .map { state -> handleState(state) }
+        .catch { e -> TopAlbumsState.Error(e.message.toString()) }
+        .flowOn(ioDispatcher)
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = TopAlbumsState.Loading
+        )
 
     private fun handleState(state: TopAlbumsState) =
         when (state) {
@@ -57,8 +58,3 @@ class TopAlbumsViewModel @Inject constructor(
     }
 }
 
-sealed interface TopAlbumsState {
-    object Loading : TopAlbumsState
-    data class Success(val data: List<TopAlbum>) : TopAlbumsState
-    data class Error(val message: String) : TopAlbumsState
-}

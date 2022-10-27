@@ -9,7 +9,7 @@
 package com.example.appsfactory.presentation.top_albums
 
 import android.widget.Toast
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 class TopAlbumsFragment :
     BaseFragment<FragmentTopAlbumsBinding>(FragmentTopAlbumsBinding::inflate) {
 
-    private val topAlbumsViewModel by activityViewModels<TopAlbumsViewModel>()
+    private val topAlbumsViewModel by viewModels<TopAlbumsViewModel>()
     private lateinit var topAlbumsAdapter: TopAlbumAdapter
 
     override fun setupUI() {
@@ -38,9 +38,7 @@ class TopAlbumsFragment :
 
     private fun setupRecyclerView() {
         topAlbumsAdapter = TopAlbumAdapter(
-            this::onAlbumClicked,
-            this::onBookmarkClicked,
-            this::onBookmarkRemoveClicked
+            this::onAlbumClicked, this::onBookmarkClicked, this::onBookmarkRemoveClicked
         )
         binding.recyclerViewTopAlbums.adapter = topAlbumsAdapter
     }
@@ -59,19 +57,17 @@ class TopAlbumsFragment :
         val artist = album.artist.name
 
         val action = TopAlbumsFragmentDirections.actionTopAlbumsFragmentToDetailFragment(
-            id,
-            name,
-            artist
+            id, name, artist
         )
         findNavController().navigate(action)
     }
 
     private fun getArtistNameAndUpdateUI() {
-        val artistName = arguments?.getString("name").toString()
         viewLifecycleOwner.lifecycleScope.launch {
-            topAlbumsViewModel(artistName)
-                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-                .collect { uiState -> updateUi(uiState) }
+            topAlbumsViewModel.topAlbumsState.flowWithLifecycle(
+                viewLifecycleOwner.lifecycle,
+                Lifecycle.State.STARTED
+            ).collect { updateUi(it) }
         }
     }
 

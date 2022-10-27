@@ -45,9 +45,3 @@ class SearchViewModel @Inject constructor(
             is ApiResult.Error -> Error(result.exception.toString())
         }
 }
-
-sealed interface ArtistListState {
-    object Loading : ArtistListState
-    data class Success(val artists: List<Artist>) : ArtistListState
-    data class Error(val message: String) : ArtistListState
-}

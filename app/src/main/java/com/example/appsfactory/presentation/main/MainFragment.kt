@@ -36,7 +36,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
 
     private fun setupRecyclerView() {
         topAlbumsAdapter = TopAlbumAdapter(this::onAlbumClicked)
-        binding.recyclerViewMain.adapter = topAlbumsAdapter
+        with(binding.recyclerViewMain) {
+            adapter = topAlbumsAdapter
+            setHasFixedSize(true)
+        }
     }
 
     private fun onAlbumClicked(album: TopAlbumEntity) {
