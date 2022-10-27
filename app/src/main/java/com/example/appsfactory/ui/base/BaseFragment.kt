@@ -26,10 +26,9 @@ abstract class BaseFragment<VB : ViewBinding>(private val inflate: Inflate<VB>) 
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        _binding = inflate(inflater, container, false)
-        return binding.root
-    }
+    ) = inflate(inflater, container, false)
+        .also { _binding = it }
+        .root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
