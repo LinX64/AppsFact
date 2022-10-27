@@ -20,7 +20,7 @@ by [Google](https://developer.android.com/topic/architecture?gclid=Cj0KCQjwnP-ZB
 
 - Data (data layer: exposing application data)
 - Domain (containing use-cases and business logic)
-- Presentation (or UI, displaying data to user)
+- UI (displaying data to user)
 
 ### Solution
 
