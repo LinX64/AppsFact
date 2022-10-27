@@ -59,3 +59,8 @@ class TopAlbumsViewModel @Inject constructor(
     }
 }
 
+sealed interface TopAlbumsState {
+    object Loading : TopAlbumsState
+    data class Success(val data: List<TopAlbum>) : TopAlbumsState
+    data class Error(val message: String) : TopAlbumsState
+}
