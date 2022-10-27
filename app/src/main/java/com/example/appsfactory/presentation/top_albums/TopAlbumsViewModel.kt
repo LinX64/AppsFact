@@ -18,7 +18,10 @@ import com.example.appsfactory.domain.usecase.GetTopAlbumsUseCase
 import com.example.appsfactory.domain.usecase.LocalAlbumsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -34,8 +37,6 @@ class TopAlbumsViewModel @Inject constructor(
 
     val topAlbumsState: StateFlow<TopAlbumsState> = topAlbumsUseCase(artistName)
         .map { state -> handleState(state) }
-        .catch { e -> TopAlbumsState.Error(e.message.toString()) }
-        .flowOn(ioDispatcher)
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
