@@ -10,8 +10,8 @@ package com.example.appsfactory.presentation.main
 
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.appsfactory.data.source.local.entity.TopAlbumEntity
 import com.example.appsfactory.databinding.FragmentMainBinding
@@ -54,10 +54,11 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
 
     private fun getAlbums() {
         viewLifecycleOwner.lifecycleScope.launch {
-            mainViewModel
-                .mAlbums
-                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-                .collect { result -> submitList(result) }
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mainViewModel
+                    .mAlbums
+                    .collect { result -> submitList(result) }
+            }
         }
     }
 
