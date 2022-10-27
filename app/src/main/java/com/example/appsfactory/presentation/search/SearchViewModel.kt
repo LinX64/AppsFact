@@ -17,6 +17,7 @@ import com.example.appsfactory.presentation.search.ArtistListState.Success
 import com.example.appsfactory.util.ApiResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
@@ -26,13 +27,16 @@ class SearchViewModel @Inject constructor(
     private val searchArtistUseCase: SearchArtistUseCase
 ) : ViewModel() {
 
-    operator fun invoke(artistName: String) = searchArtistUseCase(artistName)
-        .map { result -> handleState(result) }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = Loading
-        )
+    operator fun invoke(artistName: String): StateFlow<ArtistListState> {
+        return searchArtistUseCase(artistName)
+            .map { result -> handleState(result) }
+            .map { state -> state as ArtistListState }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000),
+                initialValue = Loading
+            )
+    }
 
     private fun handleState(result: ApiResult<List<Artist>>) =
         when (result) {

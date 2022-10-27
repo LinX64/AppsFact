@@ -31,22 +31,23 @@ class InfoViewModel @Inject constructor(
         albumName: String,
         artistName: String
     ): StateFlow<AlbumInfoState> = albumInfoUseCase(id, albumName, artistName)
-        .map { result ->
-            when (result) {
-                is ApiState.Success -> {
-                    val data = result.data
-                    if (data != null) Success(data)
-                    else Error("No data found")
-                }
-                is ApiState.Error -> Error(result.message.toString())
-                is ApiState.Loading -> Loading
-            }
-        }
+        .map { result -> handleState(result) }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = Loading
         )
+
+    private fun handleState(result: ApiState<AlbumInfoEntity>) =
+        when (result) {
+            is ApiState.Success -> {
+                val data = result.data
+                if (data != null) Success(data)
+                else Error("No data found")
+            }
+            is ApiState.Error -> Error(result.message.toString())
+            is ApiState.Loading -> Loading
+        }
 }
 
 sealed interface AlbumInfoState {

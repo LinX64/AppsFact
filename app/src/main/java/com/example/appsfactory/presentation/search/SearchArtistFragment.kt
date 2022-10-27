@@ -70,10 +70,14 @@ class SearchArtistFragment :
 
     private fun handleState(result: Any) {
         when (result) {
-            is ArtistListState.Loading -> binding.progressBar.visible()
+            is ArtistListState.Loading -> showLoading()
             is ArtistListState.Success -> onSuccess(result)
             is ArtistListState.Error -> onError(result)
         }
+    }
+
+    private fun showLoading() {
+        binding.progressBar.visible()
     }
 
     private fun onSuccess(result: ArtistListState.Success) {
