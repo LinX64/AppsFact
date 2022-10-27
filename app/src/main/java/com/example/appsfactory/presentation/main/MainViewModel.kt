@@ -27,7 +27,7 @@ class MainViewModel @Inject constructor(
         .getBookmarkedAlbums()
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
+            started = SharingStarted.WhileSubscribed(1_000),
             initialValue = emptyList()
         )
 }

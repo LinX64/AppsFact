@@ -25,7 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TopAlbumsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val topAlbumsUseCase: GetTopAlbumsUseCase,
+    topAlbumsUseCase: GetTopAlbumsUseCase,
     private val localAlbumsUseCase: LocalAlbumsUseCase,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {

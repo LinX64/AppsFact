@@ -8,7 +8,7 @@
 
 package com.example.appsfactory.presentation.main
 
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::inflate) {
 
-    private val mainViewModel by activityViewModels<MainViewModel>()
+    private val mainViewModel by viewModels<MainViewModel>()
     private lateinit var topAlbumsAdapter: TopAlbumAdapter
 
     override fun setupUI() {
