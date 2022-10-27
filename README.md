@@ -18,15 +18,14 @@
 This project uses Clean Architecture with three different layers as recommended
 by [Google](https://developer.android.com/topic/architecture?gclid=Cj0KCQjwnP-ZBhDiARIsAH3FSRcqhwDHkL89guXx0hxFBQPoMx0rabJWKBWiMJi-Fc9hJf5i4vwx6JwaAi_iEALw_wcB&gclsrc=aw.ds#recommended-app-arch):
 
-- Data
-- Domain
-- Presentation
+- Data (data layer: exposing application data)
+- Domain (containing use-cases and business logic)
+- Presentation (or UI, displaying data to user)
 
 ### Solution
 
 The project consists of 4 different `Fragment`s with a single `Activity`. It uses one
-base `Fragment` to avoid the repetition `onCreateView()` and `onViewCreated()` methods
-for `Fragment`s.
+base `Fragment` to avoid the repetition `onCreateView()` and `onViewCreated()` methods for `Fragment`s, as well as a `BaseAdapter` for Adapters.
 
 1. The mainScreen (`Fragment`) - loads saved albums from Database.
 2. AlbumInfo `Fragment` which accepts `id`, `albumName` and `artistName` as arguments and then makes
