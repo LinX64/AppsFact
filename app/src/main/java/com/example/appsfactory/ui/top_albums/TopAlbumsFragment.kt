@@ -6,7 +6,7 @@
  *
  */
 
-package com.example.appsfactory.presentation.top_albums
+package com.example.appsfactory.ui.top_albums
 
 import android.widget.Toast
 import androidx.fragment.app.viewModels
@@ -16,9 +16,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.appsfactory.databinding.FragmentTopAlbumsBinding
 import com.example.appsfactory.domain.model.top_albums.TopAlbum
-import com.example.appsfactory.presentation.base.BaseFragment
-import com.example.appsfactory.presentation.util.gone
-import com.example.appsfactory.presentation.util.visible
+import com.example.appsfactory.ui.base.BaseFragment
+import com.example.appsfactory.ui.util.gone
+import com.example.appsfactory.ui.util.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

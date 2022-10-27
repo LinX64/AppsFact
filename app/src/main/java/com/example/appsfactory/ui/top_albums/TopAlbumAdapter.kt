@@ -6,17 +6,17 @@
  *
  */
 
-package com.example.appsfactory.presentation.top_albums
+package com.example.appsfactory.ui.top_albums
 
 import android.view.LayoutInflater
 import android.view.View
 import androidx.core.view.isVisible
 import com.example.appsfactory.databinding.TopAlbumsListItemBinding
 import com.example.appsfactory.domain.model.top_albums.TopAlbum
-import com.example.appsfactory.presentation.base.BaseListAdapter
-import com.example.appsfactory.presentation.util.gone
-import com.example.appsfactory.presentation.util.inVisible
-import com.example.appsfactory.presentation.util.visible
+import com.example.appsfactory.ui.base.BaseListAdapter
+import com.example.appsfactory.ui.util.gone
+import com.example.appsfactory.ui.util.inVisible
+import com.example.appsfactory.ui.util.visible
 
 class TopAlbumAdapter(
     private val onItemClicked: (TopAlbum) -> Unit,

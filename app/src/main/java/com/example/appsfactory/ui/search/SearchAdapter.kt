@@ -6,12 +6,12 @@
  *
  */
 
-package com.example.appsfactory.presentation.search
+package com.example.appsfactory.ui.search
 
 import android.view.LayoutInflater
 import com.example.appsfactory.databinding.ArtistListItemBinding
 import com.example.appsfactory.domain.model.artistList.Artist
-import com.example.appsfactory.presentation.base.BaseListAdapter
+import com.example.appsfactory.ui.base.BaseListAdapter
 
 class SearchAdapter(val onItemClicked: (Artist) -> Unit) :
     BaseListAdapter<Artist, ArtistListItemBinding>() {

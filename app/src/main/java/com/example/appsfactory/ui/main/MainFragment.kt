@@ -6,7 +6,7 @@
  *
  */
 
-package com.example.appsfactory.presentation.main
+package com.example.appsfactory.ui.main
 
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -15,9 +15,9 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.appsfactory.data.source.local.entity.TopAlbumEntity
 import com.example.appsfactory.databinding.FragmentMainBinding
-import com.example.appsfactory.presentation.base.BaseFragment
-import com.example.appsfactory.presentation.util.gone
-import com.example.appsfactory.presentation.util.visible
+import com.example.appsfactory.ui.base.BaseFragment
+import com.example.appsfactory.ui.util.gone
+import com.example.appsfactory.ui.util.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

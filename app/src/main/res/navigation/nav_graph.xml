@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.example.appsfactory.presentation.main.MainFragment"
+        android:name="com.example.appsfactory.ui.main.MainFragment"
         android:label="Home"
         tools:layout="@layout/fragment_main">
         <action
@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/searchArtistFragment"
-        android:name="com.example.appsfactory.presentation.search.SearchArtistFragment"
+        android:name="com.example.appsfactory.ui.search.SearchArtistFragment"
         android:label="Search Artist"
         tools:layout="@layout/fragment_artist_search">
         <action
@@ -33,7 +33,7 @@
 
     <fragment
         android:id="@+id/topAlbumsFragment"
-        android:name="com.example.appsfactory.presentation.top_albums.TopAlbumsFragment"
+        android:name="com.example.appsfactory.ui.top_albums.TopAlbumsFragment"
         android:label="Top Albums"
         tools:layout="@layout/fragment_top_albums">
 
@@ -49,7 +49,7 @@
 
     <fragment
         android:id="@+id/detailFragment"
-        android:name="com.example.appsfactory.presentation.info.AlbumInfoFragment"
+        android:name="com.example.appsfactory.ui.info.AlbumInfoFragment"
         android:label="Album Info"
         tools:layout="@layout/fragment_album_info">
 

@@ -6,7 +6,7 @@
  *
  */
 
-package com.example.appsfactory.presentation.top_albums
+package com.example.appsfactory.ui.top_albums
 
 import com.example.appsfactory.domain.model.top_albums.TopAlbum
 

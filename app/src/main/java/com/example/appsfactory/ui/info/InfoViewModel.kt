@@ -6,13 +6,13 @@
  *
  */
 
-package com.example.appsfactory.presentation.info
+package com.example.appsfactory.ui.info
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appsfactory.data.source.local.entity.AlbumInfoEntity
 import com.example.appsfactory.domain.usecase.AlbumInfoUseCase
-import com.example.appsfactory.presentation.info.AlbumInfoState.*
+import com.example.appsfactory.ui.info.AlbumInfoState.*
 import com.example.appsfactory.util.ApiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted

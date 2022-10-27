@@ -6,7 +6,7 @@
  *
  */
 
-package com.example.appsfactory.presentation.top_albums
+package com.example.appsfactory.ui.top_albums
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

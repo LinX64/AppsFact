@@ -6,14 +6,14 @@
  *
  */
 
-package com.example.appsfactory.presentation.search
+package com.example.appsfactory.ui.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appsfactory.domain.model.artistList.Artist
 import com.example.appsfactory.domain.usecase.SearchArtistUseCase
-import com.example.appsfactory.presentation.search.ArtistListState.Loading
-import com.example.appsfactory.presentation.search.ArtistListState.Success
+import com.example.appsfactory.ui.search.ArtistListState.Loading
+import com.example.appsfactory.ui.search.ArtistListState.Success
 import com.example.appsfactory.util.ApiResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted

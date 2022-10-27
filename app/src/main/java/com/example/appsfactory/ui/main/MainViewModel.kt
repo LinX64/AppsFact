@@ -6,7 +6,7 @@
  *
  */
 
-package com.example.appsfactory.presentation.main
+package com.example.appsfactory.ui.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

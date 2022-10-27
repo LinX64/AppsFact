@@ -6,7 +6,7 @@
  *
  */
 
-package com.example.appsfactory.presentation.util
+package com.example.appsfactory.ui.util
 
 import android.content.Context
 import android.view.View

@@ -6,7 +6,7 @@
  *
  */
 
-package com.example.appsfactory.presentation.search
+package com.example.appsfactory.ui.search
 
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
@@ -16,10 +16,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.appsfactory.databinding.FragmentArtistSearchBinding
 import com.example.appsfactory.domain.model.artistList.Artist
-import com.example.appsfactory.presentation.base.BaseFragment
-import com.example.appsfactory.presentation.util.gone
-import com.example.appsfactory.presentation.util.hideSoftInput
-import com.example.appsfactory.presentation.util.visible
+import com.example.appsfactory.ui.base.BaseFragment
+import com.example.appsfactory.ui.util.gone
+import com.example.appsfactory.ui.util.hideSoftInput
+import com.example.appsfactory.ui.util.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

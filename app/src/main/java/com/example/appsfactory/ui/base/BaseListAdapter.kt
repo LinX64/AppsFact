@@ -6,7 +6,7 @@
  *
  */
 
-package com.example.appsfactory.presentation.base
+package com.example.appsfactory.ui.base
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater

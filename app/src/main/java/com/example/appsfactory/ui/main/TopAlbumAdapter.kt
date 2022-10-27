@@ -6,12 +6,12 @@
  *
  */
 
-package com.example.appsfactory.presentation.main
+package com.example.appsfactory.ui.main
 
 import android.view.LayoutInflater
 import com.example.appsfactory.data.source.local.entity.TopAlbumEntity
 import com.example.appsfactory.databinding.AlbumsListItemBinding
-import com.example.appsfactory.presentation.base.BaseListAdapter
+import com.example.appsfactory.ui.base.BaseListAdapter
 
 class TopAlbumAdapter(val onItemClick: (TopAlbumEntity) -> Unit) :
     BaseListAdapter<TopAlbumEntity, AlbumsListItemBinding>() {

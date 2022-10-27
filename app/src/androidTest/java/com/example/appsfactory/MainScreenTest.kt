@@ -12,7 +12,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.appsfactory.data.source.local.AppDatabase
 import com.example.appsfactory.data.source.local.dao.TopAlbumsDao
 import com.example.appsfactory.data.source.local.entity.TopAlbumEntity
-import com.example.appsfactory.presentation.MainActivity
+import com.example.appsfactory.ui.MainActivity
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.core.IsNot.not
 import org.junit.After

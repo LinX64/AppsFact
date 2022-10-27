@@ -13,7 +13,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.appsfactory.data.source.local.AppDatabase
 import com.example.appsfactory.data.source.local.dao.TopAlbumsDao
-import com.example.appsfactory.presentation.MainActivity
+import com.example.appsfactory.ui.MainActivity
 import com.example.appsfactory.util.assertions.RecyclerViewItemCountAssertion
 import com.example.appsfactory.util.clickOnFirstItem
 import com.example.appsfactory.util.waitAndRetry

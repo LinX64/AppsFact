@@ -6,7 +6,7 @@
  *
  */
 
-package com.example.appsfactory.presentation.util
+package com.example.appsfactory.ui.util
 
 import android.widget.ImageView
 import com.bumptech.glide.Glide

@@ -12,7 +12,7 @@ import com.example.appsfactory.data.source.local.entity.TopAlbumEntity
 import com.example.appsfactory.domain.model.top_albums.TopAlbum
 import com.example.appsfactory.domain.repository.AlbumRepository
 import com.example.appsfactory.domain.repository.MainRepository
-import com.example.appsfactory.presentation.top_albums.TopAlbumsState
+import com.example.appsfactory.ui.top_albums.TopAlbumsState
 import com.example.appsfactory.util.ApiResult
 import kotlinx.coroutines.flow.*
 import java.util.Collections.emptyList

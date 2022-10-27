@@ -6,7 +6,7 @@
  *
  */
 
-package com.example.appsfactory.presentation.search
+package com.example.appsfactory.ui.search
 
 import com.example.appsfactory.domain.model.artistList.Artist
 

@@ -6,7 +6,7 @@
  *
  */
 
-package com.example.appsfactory.presentation.info
+package com.example.appsfactory.ui.info
 
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -17,8 +17,8 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.appsfactory.data.source.local.entity.AlbumInfoEntity
 import com.example.appsfactory.databinding.FragmentAlbumInfoBinding
-import com.example.appsfactory.presentation.base.BaseFragment
-import com.example.appsfactory.presentation.util.gone
+import com.example.appsfactory.ui.base.BaseFragment
+import com.example.appsfactory.ui.util.gone
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
