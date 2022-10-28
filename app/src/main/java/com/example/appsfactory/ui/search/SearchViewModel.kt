@@ -13,12 +13,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.appsfactory.domain.model.artistList.Artist
 import com.example.appsfactory.domain.usecase.SearchArtistUseCase
 import com.example.appsfactory.ui.search.ArtistListState.Loading
-import com.example.appsfactory.ui.search.ArtistListState.Success
-import com.example.appsfactory.util.ApiResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
@@ -29,14 +26,6 @@ class SearchViewModel @Inject constructor(
 
     operator fun invoke(artistName: String): StateFlow<ArtistListState> {
         return searchArtistUseCase(artistName)
-            .map { result ->
-                when (result) {
-                    is ApiResult.Loading -> Loading
-                    is ApiResult.Success -> Success(result.data)
-                    is ApiResult.Error -> Error(result.exception.toString())
-                }
-            }
-            .map { state -> state as ArtistListState }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5000),
