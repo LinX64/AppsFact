@@ -24,6 +24,8 @@ class GetTopAlbumsUseCase @Inject constructor(
 ) {
 
     operator fun invoke(artistName: String): Flow<TopAlbumsState> {
+        val localAlbumRepository = localAlbumRepository.getBookmarkedAlbums()
+
         return mainRepository
             .getTopAlbumsBasedOnArtist(artistName)
             .onStart { emit(ApiResult.Loading) }
@@ -31,7 +33,7 @@ class GetTopAlbumsUseCase @Inject constructor(
                 if (it is ApiResult.Success) it.data else emptyList()
             }
             .filterNot { it.isEmpty() }
-            .combine(localAlbumRepository.getBookmarkedAlbums()) { remoteAlbums, localAlbums ->
+            .combine(localAlbumRepository) { remoteAlbums, localAlbums ->
                 mapToTopAlbumEntity(remoteAlbums, localAlbums)
             }
             .map { TopAlbumsState.Success(it) }

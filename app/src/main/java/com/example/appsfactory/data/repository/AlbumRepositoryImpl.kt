@@ -18,10 +18,5 @@ class AlbumRepositoryImpl(private val albumDao: TopAlbumsDao) : AlbumRepository 
 
     override suspend fun insert(album: TopAlbumEntity) = albumDao.insert(album)
 
-    override suspend fun update(
-        albumId: Int,
-        isBookmarked: Int
-    ) = albumDao.update(albumId, isBookmarked)
-
     override suspend fun delete(id: Int) = albumDao.deleteAlbum(id)
 }

@@ -17,7 +17,5 @@ interface AlbumRepository {
 
     suspend fun insert(album: TopAlbumEntity)
 
-    suspend fun update(albumId: Int, isBookmarked: Int)
-
     suspend fun delete(id: Int)
 }

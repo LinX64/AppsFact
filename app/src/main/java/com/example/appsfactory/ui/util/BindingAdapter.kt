@@ -20,9 +20,10 @@ object BindingAdapter {
     fun ImageView.loadImageFromList(imgUrlList: List<Image>) {
         val firstImgUrl = imgUrlList[0].text
 
-        if (firstImgUrl.isNotEmpty()) {
+        if (imgUrlList.isNotEmpty()) {
             Glide.with(this.context)
                 .load(firstImgUrl)
+                .placeholder(R.drawable.ic_baseline_cloud_off_48)
                 .into(this)
         } else Glide.with(this.context)
             .load(R.drawable.ic_baseline_cloud_off_48)
@@ -34,6 +35,7 @@ object BindingAdapter {
     fun ImageView.loadImage(imgUrl: String) {
         Glide.with(this.context)
             .load(imgUrl)
+            .placeholder(R.drawable.ic_baseline_cloud_off_48)
             .into(this)
     }
 }
