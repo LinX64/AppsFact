@@ -17,6 +17,7 @@ import com.example.appsfactory.ui.base.BaseFragment
 import com.example.appsfactory.ui.util.gone
 import com.example.appsfactory.ui.util.observeWithLifecycle
 import com.example.appsfactory.ui.util.showSnackBar
+import com.example.appsfactory.util.ApiState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -41,13 +42,13 @@ class AlbumInfoFragment :
         detailViewModel(id, albumName, artistName).observeWithLifecycle(this) { updateUI(it) }
     }
 
-    private fun updateUI(albumState: AlbumInfoState) {
-        if (albumState is AlbumInfoState.Success) {
-            val albumInfo = albumState.data
-            onSuccess(albumInfo)
-        } else if (albumState is AlbumInfoState.Error) onError(albumState.message)
+    private fun updateUI(apiState: ApiState<AlbumInfoEntity>) {
+        apiState.data?.let { onSuccess(it) }
 
-        binding.progressBar.isVisible = albumState is AlbumInfoState.Loading
+        binding.progressBar.isVisible = apiState is ApiState.Loading && apiState.data == null
+
+        val errorMessage = apiState.message ?: return
+        onError(errorMessage)
     }
 
     private fun onSuccess(album: AlbumInfoEntity) {

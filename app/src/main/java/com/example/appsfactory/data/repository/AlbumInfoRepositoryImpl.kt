@@ -10,15 +10,12 @@ package com.example.appsfactory.data.repository
 
 import androidx.room.withTransaction
 import com.example.appsfactory.data.source.local.AppDatabase
-import com.example.appsfactory.data.source.local.entity.AlbumInfoEntity
 import com.example.appsfactory.data.source.remote.ApiService
 import com.example.appsfactory.di.modules.IoDispatcher
 import com.example.appsfactory.domain.model.albumInfo.toEntity
 import com.example.appsfactory.domain.repository.AlbumInfoRepository
-import com.example.appsfactory.util.ApiState
 import com.example.appsfactory.util.networkBoundResource
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 
 class AlbumInfoRepositoryImpl(
@@ -33,7 +30,7 @@ class AlbumInfoRepositoryImpl(
         id: Int,
         albumName: String,
         artistName: String
-    ): Flow<ApiState<AlbumInfoEntity>> = networkBoundResource(
+    ) = networkBoundResource(
         query = {
             albumInfoDao.getAlbumInfo(id)
         },
@@ -46,6 +43,5 @@ class AlbumInfoRepositoryImpl(
                 albumInfoDao.insert(response)
             }
         }
-
     ).flowOn(ioDispatcher)
 }
