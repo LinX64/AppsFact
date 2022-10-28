@@ -14,7 +14,6 @@ import androidx.core.view.isVisible
 import com.example.appsfactory.databinding.TopAlbumsListItemBinding
 import com.example.appsfactory.domain.model.top_albums.TopAlbum
 import com.example.appsfactory.ui.base.BaseListAdapter
-import com.example.appsfactory.ui.util.gone
 import com.example.appsfactory.ui.util.inVisible
 import com.example.appsfactory.ui.util.visible
 
@@ -33,6 +32,8 @@ class TopAlbumAdapter(
             topAlbum = item
             executePendingBindings()
 
+            setBookmarked(item, binding)
+
             albumInfoCard.setOnClickListener { onItemClicked(getItem(position)) }
             bookmarkImageBtn.setOnClickListener {
                 topAlbum?.let(onBookmarkClicked)
@@ -44,8 +45,6 @@ class TopAlbumAdapter(
 
                 onBookmarkRemove()
             }
-
-            setBookmarked(item, binding)
         }
     }
 
@@ -53,20 +52,20 @@ class TopAlbumAdapter(
         item: TopAlbum,
         binding: TopAlbumsListItemBinding
     ) = if (item.isBookmarked == 1) {
-        binding.bookmarkImageBtn.gone()
+        binding.bookmarkImageBtn.inVisible()
         binding.bookmarkRemoveBtn.visible()
     } else {
         binding.bookmarkImageBtn.visible()
-        binding.bookmarkRemoveBtn.gone()
+        binding.bookmarkRemoveBtn.inVisible()
     }
 
     private fun TopAlbumsListItemBinding.onBookmark(it: View?) {
         if (it?.isVisible == true) {
-            bookmarkImageBtn.gone()
+            bookmarkImageBtn.inVisible()
             bookmarkRemoveBtn.visible()
         } else {
             bookmarkImageBtn.visible()
-            bookmarkRemoveBtn.gone()
+            bookmarkRemoveBtn.inVisible()
         }
     }
 
