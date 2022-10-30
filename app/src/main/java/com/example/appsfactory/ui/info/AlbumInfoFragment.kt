@@ -39,7 +39,8 @@ class AlbumInfoFragment :
 
         id ?: return
 
-        detailViewModel(id, albumName, artistName).observeWithLifecycle(this) { handleState(it) }
+        detailViewModel(id, albumName, artistName)
+            .observeWithLifecycle(this) { handleState(it) }
     }
 
     private fun handleState(it: UiState<AlbumInfoEntity>) {

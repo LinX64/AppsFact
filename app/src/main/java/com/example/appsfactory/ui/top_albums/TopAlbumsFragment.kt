@@ -17,6 +17,7 @@ import com.example.appsfactory.ui.util.gone
 import com.example.appsfactory.ui.util.observeWithLifecycle
 import com.example.appsfactory.ui.util.showSnackBar
 import com.example.appsfactory.ui.util.visible
+import com.example.appsfactory.util.UiState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -45,7 +46,7 @@ class TopAlbumsFragment :
     }
 
     private fun onBookmarkRemoveClicked(album: TopAlbum) {
-        topAlbumsViewModel.onBookmarkRemoveClicked(album)
+        topAlbumsViewModel.onBookmarkRemove(album)
     }
 
     private fun onAlbumClicked(album: TopAlbum) {
@@ -65,25 +66,33 @@ class TopAlbumsFragment :
             .observeWithLifecycle(this) { updateUi(it) }
     }
 
-    private fun updateUi(topAlbumsState: TopAlbumsState) {
+    private fun updateUi(topAlbumsState: UiState<List<TopAlbum>>) {
         when (topAlbumsState) {
-            is TopAlbumsState.Loading -> showLoading()
-            is TopAlbumsState.Success -> submitTopAlbums(topAlbumsState.data)
-            is TopAlbumsState.Error -> showError(topAlbumsState.message)
+            is UiState.Loading -> onLoading()
+            is UiState.Success -> submitTopAlbums(topAlbumsState.data)
+            is UiState.Error -> showError(topAlbumsState.error)
         }
     }
 
-    private fun showLoading() {
-        binding.progressBar.visible()
+    private fun onLoading() {
+        showProgressBar()
     }
 
     private fun submitTopAlbums(albums: List<TopAlbum>) {
-        binding.progressBar.gone()
+        hideProgressBar()
         topAlbumsAdapter.submitList(albums)
     }
 
     private fun showError(message: String) {
-        binding.progressBar.gone()
+        hideProgressBar()
         showSnackBar(requireActivity(), message)
+    }
+
+    private fun hideProgressBar() {
+        binding.progressBar.gone()
+    }
+
+    private fun showProgressBar() {
+        binding.progressBar.visible()
     }
 }

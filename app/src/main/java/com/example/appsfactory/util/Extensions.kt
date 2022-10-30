@@ -9,6 +9,10 @@
 package com.example.appsfactory.util
 
 import com.example.appsfactory.util.ApiState.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 
 fun <T> ApiState<T>.toUiState() = when (this) {
     is Success<T> -> UiState.Success(data)
@@ -16,3 +20,11 @@ fun <T> ApiState<T>.toUiState() = when (this) {
     is Loading -> UiState.Loading
 }
 
+fun <T> Flow<T>.stateInViewModel(
+    scope: CoroutineScope,
+    initialValue: T
+) = stateIn(
+    scope = scope,
+    started = SharingStarted.WhileSubscribed(5_000),
+    initialValue = initialValue
+)
