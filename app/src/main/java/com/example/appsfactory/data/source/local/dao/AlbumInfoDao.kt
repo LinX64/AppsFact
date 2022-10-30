@@ -13,7 +13,7 @@ interface AlbumInfoDao {
     @Query("SELECT * FROM album_info WHERE id = :id")
     fun getAlbumInfo(id: Int): Flow<AlbumInfoEntity>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(album: AlbumInfoEntity)
 
     @Query("DELETE FROM album_info")
