@@ -1,15 +1,15 @@
 /*
  * *
- *  * Created by Mohsen on 10/10/22, 1:26 AM
+ *  * Created by Mohsen on 10/26/22, 2:16 PM
  *  * Copyright (c) 2022 . All rights reserved.
- *  * Last modified 10/10/22, 1:26 AM
+ *  * Last modified 10/26/22, 2:16 PM
  *
  */
 
 package com.example.appsfactory.util
 
-sealed class ApiState<T>(val data: T? = null, val message: String? = null) {
-    class Loading<T>(data: T? = null) : ApiState<T>(data)
-    class Success<T>(data: T?) : ApiState<T>(data)
-    class Error<T>(message: String, data: T? = null) : ApiState<T>(data, message)
+sealed interface ApiState<out T> {
+    object Loading : ApiState<Nothing>
+    data class Success<T>(val data: T) : ApiState<T>
+    data class Error<T>(val error: String, val data: T? = null) : ApiState<T>
 }

@@ -15,7 +15,6 @@ import com.example.appsfactory.data.source.local.entity.TopAlbumEntity
 import com.example.appsfactory.data.source.remote.ApiService
 import com.example.appsfactory.domain.model.artistList.SearchArtistResponse
 import com.example.appsfactory.domain.model.top_albums.TopAlbumsResponse
-import com.example.appsfactory.util.ApiState
 import com.example.appsfactory.util.StubData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

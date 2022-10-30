@@ -1,9 +1,6 @@
 package com.example.appsfactory.data.source.local.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.example.appsfactory.data.source.local.entity.AlbumInfoEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -21,4 +18,7 @@ interface AlbumInfoDao {
 
     @Query("DELETE FROM album_info")
     suspend fun deleteAll()
+
+    @Delete
+    suspend fun deleteAlbum(album: AlbumInfoEntity)
 }

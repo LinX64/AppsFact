@@ -14,6 +14,7 @@ import com.example.appsfactory.databinding.FragmentArtistSearchBinding
 import com.example.appsfactory.domain.model.artistList.Artist
 import com.example.appsfactory.ui.base.BaseFragment
 import com.example.appsfactory.ui.util.*
+import com.example.appsfactory.util.UiState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -57,29 +58,32 @@ class SearchArtistFragment :
     }
 
     private fun getArtistByName(artistName: String) {
-        searchViewModel(artistName)
-            .observeWithLifecycle(this) { handleState(it) }
+        searchViewModel(artistName).observeWithLifecycle(this) { updateUI(it) }
     }
 
-    private fun handleState(result: Any) {
-        when (result) {
-            is ArtistListState.Loading -> showLoading()
-            is ArtistListState.Success -> onSuccess(result)
-            is ArtistListState.Error -> onError(result)
+    private fun updateUI(uiState: UiState<List<Artist>>) {
+        when (uiState) {
+            is UiState.Loading -> onLoading()
+            is UiState.Success -> onSuccess(uiState.data)
+            is UiState.Error -> onError(uiState.error)
         }
     }
 
-    private fun showLoading() {
+    private fun onSuccess(artistList: List<Artist>) {
+        hideLoading()
+        searchArtistAdapter.submitList(artistList)
+    }
+
+    private fun onLoading() {
         binding.progressBar.visible()
     }
 
-    private fun onSuccess(result: ArtistListState.Success) {
+    private fun hideLoading() {
         binding.progressBar.gone()
-        searchArtistAdapter.submitList(result.artists)
     }
 
-    private fun onError(result: Any) {
-        binding.progressBar.gone()
-        showSnackBar(requireActivity(), result.toString())
+    private fun onError(message: String) {
+        hideLoading()
+        showSnackBar(requireActivity(), message)
     }
 }

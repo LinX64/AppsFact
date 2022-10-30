@@ -37,10 +37,10 @@ class AlbumInfoRepositoryImpl(
         fetch = {
             apiService.fetchAlbumInfo(albumName, artistName).album.toEntity()
         },
-        saveFetchResult = { response ->
+        saveFetchResult = { album ->
             appDb.withTransaction {
-                albumInfoDao.deleteAll()
-                albumInfoDao.insert(response)
+                albumInfoDao.deleteAlbum(album)
+                albumInfoDao.insert(album)
             }
         }
     ).flowOn(ioDispatcher)

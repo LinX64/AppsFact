@@ -11,7 +11,7 @@ package com.example.appsfactory.data.repository
 import com.example.appsfactory.data.source.remote.ApiService
 import com.example.appsfactory.di.modules.IoDispatcher
 import com.example.appsfactory.domain.repository.MainRepository
-import com.example.appsfactory.util.ApiResult
+import com.example.appsfactory.util.ApiState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -23,20 +23,20 @@ class MainRepositoryImpl(
 ) : MainRepository {
 
     override fun getArtist(artistName: String) = flow {
-        emit(ApiResult.Loading)
+        emit(ApiState.Loading)
 
         val artist = apiService.getArtist(artistName).results.artistmatches.artist
-        emit(ApiResult.Success(artist))
+        emit(ApiState.Success(artist))
     }
-        .catch { e -> emit(ApiResult.Error(e.message)) }
+        .catch { e -> emit(ApiState.Error(e.message.toString())) }
         .flowOn(ioDispatcher)
 
     override fun getTopAlbumsBasedOnArtist(artistName: String) = flow {
-        emit(ApiResult.Loading)
+        emit(ApiState.Loading)
 
         val response = apiService.getTopAlbumsBasedOnArtist(artistName).topalbums.album
-        emit(ApiResult.Success(response))
+        emit(ApiState.Success(response))
     }
-        .catch { e -> emit(ApiResult.Error(e.message)) }
+        .catch { e -> emit(ApiState.Error(e.message.toString())) }
         .flowOn(ioDispatcher)
 }

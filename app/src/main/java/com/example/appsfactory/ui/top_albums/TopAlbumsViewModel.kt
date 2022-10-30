@@ -16,10 +16,12 @@ import com.example.appsfactory.domain.model.top_albums.TopAlbum
 import com.example.appsfactory.domain.model.top_albums.toAlbumEntity
 import com.example.appsfactory.domain.usecase.GetTopAlbumsUseCase
 import com.example.appsfactory.domain.usecase.LocalAlbumsUseCase
+import com.example.appsfactory.util.UiState
+import com.example.appsfactory.util.toUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -34,11 +36,12 @@ class TopAlbumsViewModel @Inject constructor(
 
     private val artistName: String = savedStateHandle["artistName"] ?: ""
 
-    val topAlbumsState: StateFlow<TopAlbumsState> = topAlbumsUseCase(artistName)
+    val topAlbumsState = topAlbumsUseCase(artistName)
+        .map { it.toUiState() }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = TopAlbumsState.Loading
+            initialValue = UiState.Loading
         )
 
     fun onBookmarkClicked(album: TopAlbum) = viewModelScope.launch(ioDispatcher) {
@@ -48,10 +51,4 @@ class TopAlbumsViewModel @Inject constructor(
     fun onBookmarkRemoveClicked(album: TopAlbum) = viewModelScope.launch(ioDispatcher) {
         localAlbumsUseCase.delete(album.playcount)
     }
-}
-
-sealed interface TopAlbumsState {
-    object Loading : TopAlbumsState
-    data class Success(val data: List<TopAlbum>) : TopAlbumsState
-    data class Error(val message: String) : TopAlbumsState
 }

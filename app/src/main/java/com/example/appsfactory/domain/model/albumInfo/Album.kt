@@ -18,8 +18,8 @@ data class Album(
     val name: String,
     @SerializedName("playcount")
     val playcount: String,
-    @SerializedName("tags")
-    val tags: Tags,
+    @SerializedName("tags", alternate = [""])
+    val tags: Tags?,
     @SerializedName("tracks")
     val tracks: Tracks?,
     @SerializedName("url")
