@@ -17,8 +17,9 @@ import com.example.appsfactory.domain.repository.AlbumInfoRepository
 import com.example.appsfactory.util.networkBoundResource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.flowOn
+import javax.inject.Inject
 
-class AlbumInfoRepositoryImpl(
+class AlbumInfoRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
     private val appDb: AppDatabase,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher

@@ -1,24 +1,15 @@
 /*
  * *
- *  * Created by Mohsen on 10/4/22, 1:34 PM
+ *  * Created by Mohsen on 10/31/22, 3:18 PM
  *  * Copyright (c) 2022 . All rights reserved.
- *  * Last modified 10/4/22, 1:34 PM
+ *  * Last modified 10/31/22, 3:18 PM
  *
  */
 
 package com.example.appsfactory.di.modules
 
 import androidx.viewbinding.BuildConfig
-import com.example.appsfactory.data.repository.AlbumInfoRepositoryImpl
-import com.example.appsfactory.data.repository.AlbumRepositoryImpl
-import com.example.appsfactory.data.repository.MainRepositoryImpl
-import com.example.appsfactory.data.source.local.AppDatabase
-import com.example.appsfactory.data.source.local.dao.TopAlbumsDao
 import com.example.appsfactory.data.source.remote.ApiService
-import com.example.appsfactory.di.modules.DispatcherModule.providesIoDispatcher
-import com.example.appsfactory.domain.repository.AlbumInfoRepository
-import com.example.appsfactory.domain.repository.AlbumRepository
-import com.example.appsfactory.domain.repository.MainRepository
 import com.example.appsfactory.util.Constants
 import dagger.Module
 import dagger.Provides
@@ -37,6 +28,10 @@ object NetworkModule {
 
     @Provides
     fun provideBaseUrl() = Constants.BASE_URL
+
+    @Provides
+    @Singleton
+    fun provideGsonConverterFactory(): GsonConverterFactory = GsonConverterFactory.create()
 
     @Provides
     @Singleton
@@ -68,29 +63,4 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideApiService(retrofit: Retrofit): ApiService = retrofit.create(ApiService::class.java)
-
-    @Provides
-    @Singleton
-    fun provideGsonConverterFactory(): GsonConverterFactory = GsonConverterFactory.create()
-
-    @Provides
-    @Singleton
-    fun provideMainRepository(
-        apiService: ApiService
-    ): MainRepository =
-        MainRepositoryImpl(apiService, providesIoDispatcher())
-
-    @Singleton
-    @Provides
-    fun provideAlbumInfoRepository(
-        apiService: ApiService,
-        appDatabase: AppDatabase
-    ): AlbumInfoRepository =
-        AlbumInfoRepositoryImpl(apiService, appDatabase, providesIoDispatcher())
-
-    @Singleton
-    @Provides
-    fun provideAlbumRepository(
-        albumsDao: TopAlbumsDao
-    ): AlbumRepository = AlbumRepositoryImpl(albumsDao)
 }

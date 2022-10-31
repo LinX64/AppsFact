@@ -11,8 +11,10 @@ package com.example.appsfactory.data.repository
 import com.example.appsfactory.data.source.local.dao.TopAlbumsDao
 import com.example.appsfactory.data.source.local.entity.TopAlbumEntity
 import com.example.appsfactory.domain.repository.AlbumRepository
+import javax.inject.Inject
 
-class AlbumRepositoryImpl(private val albumDao: TopAlbumsDao) : AlbumRepository {
+class AlbumRepositoryImpl @Inject constructor(private val albumDao: TopAlbumsDao) :
+    AlbumRepository {
 
     override fun getBookmarkedAlbums() = albumDao.getBookmarkedAlbums()
 

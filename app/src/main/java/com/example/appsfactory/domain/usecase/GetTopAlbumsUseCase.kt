@@ -8,16 +8,12 @@
 
 package com.example.appsfactory.domain.usecase
 
-import com.example.appsfactory.data.source.local.entity.TopAlbumEntity
 import com.example.appsfactory.domain.model.top_albums.TopAlbum
 import com.example.appsfactory.domain.repository.AlbumRepository
 import com.example.appsfactory.domain.repository.MainRepository
 import com.example.appsfactory.util.ApiState
 import com.example.appsfactory.util.ApiState.Success
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
-import java.util.Collections.emptyList
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 class GetTopAlbumsUseCase @Inject constructor(
@@ -29,27 +25,15 @@ class GetTopAlbumsUseCase @Inject constructor(
         val bookmarkedAlbums = localAlbumRepository.getBookmarkedAlbums()
         val remoteTopAlbums = mainRepository.getTopAlbumsBasedOnArtist(artistName)
 
-        val combinedResponses = combinedResponses(remoteTopAlbums, bookmarkedAlbums)
-            .map { Success(it) }
-        // TODO: should be mapped to ApiState to be able to handle errors
-        return combinedResponses
-    }
-
-    private fun combinedResponses(
-        remoteTopAlbums: Flow<ApiState<List<TopAlbum>>>,
-        bookmarkedAlbums: Flow<List<TopAlbumEntity>>
-    ): Flow<List<TopAlbum>> = remoteTopAlbums
-        .map { apiState ->
-            if (apiState is Success) apiState.data else emptyList()
+        return combine(remoteTopAlbums, bookmarkedAlbums) { topAlbums, bookmarked ->
+            topAlbums.map { topAlbum ->
+                val isBookmarked =
+                    bookmarked.find { it.name == topAlbum.name }?.isBookmarked ?: 0
+                topAlbum.copy(isBookmarked = isBookmarked)
+            }
         }
-        .combine(bookmarkedAlbums) { remoteAlbums, localAlbums ->
-            mapToTopAlbumEntity(remoteAlbums, localAlbums)
-        }
-
-    private fun mapToTopAlbumEntity(
-        remoteAlbums: List<TopAlbum>, localAlbums: List<TopAlbumEntity>
-    ) = remoteAlbums.map { topAlbum ->
-        val isBookmarked = localAlbums.find { it.name == topAlbum.name }?.isBookmarked ?: 0
-        topAlbum.copy(isBookmarked = isBookmarked)
+            .map<List<TopAlbum>, ApiState<List<TopAlbum>>> { Success(it) }
+            .onStart { emit(ApiState.Loading) }
+            .catch { e -> emit(ApiState.Error<Nothing>(e.message ?: "Unknown Error")) }
     }
 }

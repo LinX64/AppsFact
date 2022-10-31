@@ -16,8 +16,9 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import javax.inject.Inject
 
-class MainRepositoryImpl(
+class MainRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : MainRepository {
@@ -32,11 +33,7 @@ class MainRepositoryImpl(
         .flowOn(ioDispatcher)
 
     override fun getTopAlbumsBasedOnArtist(artistName: String) = flow {
-        emit(ApiState.Loading)
-
         val response = apiService.getTopAlbumsBasedOnArtist(artistName).topalbums.album
-        emit(ApiState.Success(response))
-    }
-        .catch { e -> emit(ApiState.Error(e.message.toString())) }
-        .flowOn(ioDispatcher)
+        emit(response)
+    }.flowOn(ioDispatcher)
 }
