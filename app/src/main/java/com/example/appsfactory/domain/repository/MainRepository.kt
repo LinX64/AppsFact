@@ -18,4 +18,6 @@ interface MainRepository {
     fun getArtist(artistName: String): Flow<ApiState<List<Artist>>>
 
     fun getTopAlbumsBasedOnArtist(artistName: String): Flow<ApiState<List<TopAlbum>>>
+
+    fun getTopAlbumsBasedOnArtist2(artistName: String): Flow<List<TopAlbum>>
 }

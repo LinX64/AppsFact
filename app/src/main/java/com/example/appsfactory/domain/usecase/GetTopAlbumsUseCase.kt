@@ -14,9 +14,7 @@ import com.example.appsfactory.domain.repository.AlbumRepository
 import com.example.appsfactory.domain.repository.MainRepository
 import com.example.appsfactory.util.ApiState
 import com.example.appsfactory.util.ApiState.Success
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import java.util.Collections.emptyList
 import javax.inject.Inject
 
@@ -27,12 +25,25 @@ class GetTopAlbumsUseCase @Inject constructor(
 
     operator fun invoke(artistName: String): Flow<ApiState<List<TopAlbum>>> {
         val bookmarkedAlbums = localAlbumRepository.getBookmarkedAlbums()
-        val remoteTopAlbums = mainRepository.getTopAlbumsBasedOnArtist(artistName)
+        val remoteTopAlbums = mainRepository.getTopAlbumsBasedOnArtist2(artistName)
 
-        val combinedResponses = combinedResponses(remoteTopAlbums, bookmarkedAlbums)
-            .map { Success(it) }
-        // TODO: should be mapped to ApiState to be able to handle errors
-        return combinedResponses
+
+        return combine(remoteTopAlbums, bookmarkedAlbums) { topAlbums, bookmarked ->
+            topAlbums.map { topAlbum ->
+                val isBookmarked =
+                    bookmarked.find { it.name == topAlbum.name }?.isBookmarked ?: 0
+                topAlbum.copy(isBookmarked = isBookmarked)
+            }
+            Success(topAlbums)
+        }
+            .onStart { ApiState.Loading }
+            .catch { e -> ApiState.Error<Nothing>(e.message.toString()) }
+
+
+//        val combinedResponses = combinedResponses(remoteTopAlbums, bookmarkedAlbums)
+//            .map { Success(it) }
+//        // TODO: should be mapped to ApiState to be able to handle errors
+//        return combinedResponses
     }
 
     private fun combinedResponses(

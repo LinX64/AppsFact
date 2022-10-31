@@ -39,4 +39,9 @@ class MainRepositoryImpl(
     }
         .catch { e -> emit(ApiState.Error(e.message.toString())) }
         .flowOn(ioDispatcher)
+
+    override fun getTopAlbumsBasedOnArtist2(artistName: String) = flow {
+        val response = apiService.getTopAlbumsBasedOnArtist(artistName).topalbums.album
+        emit(response)
+    }.flowOn(ioDispatcher)
 }
