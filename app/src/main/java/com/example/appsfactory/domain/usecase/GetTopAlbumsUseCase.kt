@@ -29,12 +29,12 @@ class GetTopAlbumsUseCase @Inject constructor(
 
 
         return combine(remoteTopAlbums, bookmarkedAlbums) { topAlbums, bookmarked ->
-            topAlbums.map { topAlbum ->
+            val bookedTopAlbums = topAlbums.map { topAlbum ->
                 val isBookmarked =
                     bookmarked.find { it.name == topAlbum.name }?.isBookmarked ?: 0
                 topAlbum.copy(isBookmarked = isBookmarked)
             }
-            Success(topAlbums)
+            Success(bookedTopAlbums)
         }
             .onStart { ApiState.Loading }
             .catch { e -> ApiState.Error<Nothing>(e.message.toString()) }
