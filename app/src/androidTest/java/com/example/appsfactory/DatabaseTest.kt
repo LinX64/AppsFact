@@ -88,16 +88,15 @@ class DatabaseTest {
     }
 
     private suspend fun insertTopAlbum() {
-        val albums = List(1) {
-            TopAlbumEntity(
-                1,
-                name = mAlbumName,
-                artist = artistName,
-                image = "https://lastfm.freetls.fastly.net/i/u/34s/2a96cbd8b46e442fc41c2be3b5b7e943.png",
-                isBookmarked = 1
-            )
-        }
-        albumsDao.insertAll(albums)
+        val albums = TopAlbumEntity(
+            1,
+            name = mAlbumName,
+            artist = artistName,
+            image = "https://lastfm.freetls.fastly.net/i/u/34s/2a96cbd8b46e442fc41c2be3b5b7e943.png",
+            isBookmarked = 1
+        )
+
+        albumsDao.insert(albums)
     }
 
     private fun clearTables() {
