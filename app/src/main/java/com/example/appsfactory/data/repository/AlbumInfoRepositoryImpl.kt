@@ -11,18 +11,14 @@ package com.example.appsfactory.data.repository
 import androidx.room.withTransaction
 import com.example.appsfactory.data.source.local.AppDatabase
 import com.example.appsfactory.data.source.remote.ApiService
-import com.example.appsfactory.di.modules.IoDispatcher
 import com.example.appsfactory.domain.model.albumInfo.toEntity
 import com.example.appsfactory.domain.repository.AlbumInfoRepository
 import com.example.appsfactory.util.networkBoundResource
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class AlbumInfoRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
-    private val appDb: AppDatabase,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    private val appDb: AppDatabase
 ) : AlbumInfoRepository {
 
     private val albumInfoDao = appDb.albumInfoDao()
@@ -44,5 +40,5 @@ class AlbumInfoRepositoryImpl @Inject constructor(
                 albumInfoDao.insert(album)
             }
         }
-    ).flowOn(ioDispatcher)
+    )
 }
