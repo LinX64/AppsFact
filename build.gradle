@@ -17,6 +17,7 @@ buildscript {
     ext.mockitoVersion = '4.8.1'
     ext.mockitoKotlin = "4.0.0"
     ext.mockkVersion = '1.13.2'
+    ext.detektVersion = '1.18.1'
 
     repositories {
         google()
@@ -28,6 +29,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20"
         classpath 'com.google.dagger:hilt-android-gradle-plugin:2.44'
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
+        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detektVersion"
     }
 }
 
