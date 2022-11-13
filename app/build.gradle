@@ -98,7 +98,7 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit-ktx:$androidXTestExtKotlinRunnerVersion"
     androidTestImplementation "androidx.test:rules:$androidXTestRulesVersion"
     androidTestImplementation "androidx.room:room-testing:$room_version"
-    androidTestImplementation "androidx.navigation:navigation-testing:2.6.0-alpha03"
+    androidTestImplementation 'androidx.navigation:navigation-testing:2.6.0-alpha04'
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion"
     androidTestImplementation "org.awaitility:awaitility:4.2.0"
