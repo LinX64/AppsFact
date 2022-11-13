@@ -9,12 +9,12 @@
 package com.example.appsfactory
 
 import com.example.appsfactory.data.repository.MainRepositoryImpl
-import com.example.appsfactory.data.source.local.AppDatabase
 import com.example.appsfactory.data.source.local.dao.TopAlbumsDao
 import com.example.appsfactory.data.source.local.entity.TopAlbumEntity
 import com.example.appsfactory.data.source.remote.ApiService
 import com.example.appsfactory.domain.model.artistList.SearchArtistResponse
 import com.example.appsfactory.domain.model.top_albums.TopAlbumsResponse
+import com.example.appsfactory.util.ApiState
 import com.example.appsfactory.util.StubData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -38,20 +38,16 @@ class MainRepositoryTest {
     private val albumName = "Purpose (Deluxe)"
 
     @Inject
-    lateinit var db: AppDatabase
-
-    @Inject
     lateinit var albumsDao: TopAlbumsDao
 
     @Before
     fun setup() {
-        db = mock()
         albumsDao = mock()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `WHEN Get Search Call Is Successful THEN Should check with Actual Name`() = runTest {
+    fun `WHEN Get SearchArtist Call Is Successful THEN Should check with Actual Name`() = runTest {
         //Given
         val mockResponse = StubData.mockGetSearchArtistWithJson(getSearchArtistResponse)
         val mockApiService = mockGetSearchArtistCallWithResponse(mockResponse)
@@ -62,7 +58,8 @@ class MainRepositoryTest {
         //When
         repository.getArtist(artistName).collect {
             if (it is ApiState.Success) {
-                val expected = it.data?.artist?.get(0)?.name
+                //Then
+                val expected = it.data[0].name
                 assertEquals(expected, artistName)
             }
         }
@@ -79,27 +76,22 @@ class MainRepositoryTest {
             val repository = MainRepositoryImpl(mockApiService, Dispatchers.IO)
 
             //When
-            val expected = mockResponse.topalbums.album.find { it.name == albumName }?.name
             repository.getTopAlbumsBasedOnArtist(artistName).collect { apiState ->
                 //Then
-                if (apiState is ApiState.Success) {
-                    val actualName = apiState.data?.find { it.name == albumName }?.name
-                    assertEquals(actualName, expected)
-                }
+                val expectedName = apiState.find { it.name == albumName }?.name
+                assertEquals(expectedName, albumName)
             }
         }
 
     private suspend fun insertDummyData() {
-        val albums = List(1) {
-            TopAlbumEntity(
-                0,
-                name = albumName,
-                artist = artistName,
-                image = "https://lastfm.freetls.fastly.net/i/u/34s/2a96cbd8b46e442fc41c2be3b5b7e943.png",
-                isBookmarked = 1
-            )
-        }
-        albumsDao.insertAll(albums)
+        val album = TopAlbumEntity(
+            0,
+            name = albumName,
+            artist = artistName,
+            image = "https://lastfm.freetls.fastly.net/i/u/34s/2a96cbd8b46e442fc41c2be3b5b7e943.png",
+            isBookmarked = 1
+        )
+        albumsDao.insert(album)
     }
 
     private fun mockGetSearchArtistCallWithResponse(res: SearchArtistResponse): ApiService =
