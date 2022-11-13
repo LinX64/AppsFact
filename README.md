@@ -63,7 +63,6 @@ are written using `Espresso` and `JUnit4`.
 
 ### TODO
 
-- Fix the crash with Menu in `MainActivity`.
-- Fix the crash with no tracks in albums.
 - Add more tests for the `ViewModel` and `Repository`.
 - Add/Improve Unit tests.
+- Handle errors within the albums.
