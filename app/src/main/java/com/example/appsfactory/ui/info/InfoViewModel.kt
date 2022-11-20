@@ -29,5 +29,5 @@ class InfoViewModel @Inject constructor(
         artistName: String
     ) = albumInfoUseCase(id, albumName, artistName)
         .map { it.toUiState() }
-        .stateInViewModel(viewModelScope, UiState.Loading)
+        .stateInViewModel(viewModelScope, initialValue = UiState.Loading)
 }

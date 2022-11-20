@@ -24,5 +24,5 @@ class MainViewModel @Inject constructor(
 
     val mAlbums: StateFlow<List<TopAlbumEntity>> = albumsUseCase
         .getBookmarkedAlbums()
-        .stateInViewModel(viewModelScope, emptyList())
+        .stateInViewModel(viewModelScope, initialValue = emptyList())
 }

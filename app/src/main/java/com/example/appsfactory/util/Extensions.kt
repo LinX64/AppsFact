@@ -21,10 +21,7 @@ fun <T> ApiState<T>.toUiState() = when (this) {
 }
 
 fun <T> Flow<T>.stateInViewModel(
-    scope: CoroutineScope,
+    viewModelScope: CoroutineScope,
+    started: SharingStarted = SharingStarted.WhileSubscribed(5_000),
     initialValue: T
-) = stateIn(
-    scope = scope,
-    started = SharingStarted.WhileSubscribed(5_000),
-    initialValue = initialValue
-)
+) = stateIn(viewModelScope, started, initialValue)

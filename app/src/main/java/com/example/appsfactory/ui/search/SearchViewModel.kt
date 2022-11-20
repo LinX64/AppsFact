@@ -25,5 +25,5 @@ class SearchViewModel @Inject constructor(
 
     operator fun invoke(artistName: String) = searchArtistUseCase(artistName)
         .map { it.toUiState() }
-        .stateInViewModel(viewModelScope, UiState.Loading)
+        .stateInViewModel(viewModelScope, initialValue = UiState.Loading)
 }

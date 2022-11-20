@@ -36,7 +36,7 @@ class TopAlbumsViewModel @Inject constructor(
     private val artistName: String = savedStateHandle["artistName"] ?: ""
     val topAlbumsState = topAlbumsUseCase(artistName)
         .map { it.toUiState() }
-        .stateInViewModel(viewModelScope, UiState.Loading)
+        .stateInViewModel(viewModelScope, initialValue = UiState.Loading)
 
     fun onBookmarkClicked(album: TopAlbum) = viewModelScope.launch(ioDispatcher) {
         localAlbumsUseCase.insert(album.toAlbumEntity())
