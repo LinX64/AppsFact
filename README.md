@@ -1,4 +1,4 @@
-# AppsFactory - Music management
+# AppsFact - Music management
 
 ### Tech stacks
 
